@@ -8,4 +8,3 @@
 # How to use Docify?
 Go to our platform, which will be ready in a few weeks
 
-
