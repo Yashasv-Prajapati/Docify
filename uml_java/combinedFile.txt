@@ -1,0 +1,102 @@
+// Test class with inheritance
+public class ChildClass extends TestClass {
+    private boolean flag;
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public boolean getFlag() {
+        return flag;
+    }
+}
+// Test class with generic types
+public class GenericTestClass<T> {
+    private T genericAttribute;
+
+    public void setGenericAttribute(T genericAttribute) {
+        this.genericAttribute = genericAttribute;
+    }
+
+    public T getGenericAttribute() {
+        return genericAttribute;
+    }
+}
+// Test class with interface implementation
+interface TestInterface {
+    void interfaceMethod();
+}
+
+public class InterfaceImplementation implements TestInterface {
+    @Override
+    public void interfaceMethod() {
+        System.out.println("Interface method implementation");
+    }
+}
+public class MultithreadingExample {
+    public static void main(String[] args) {
+        Thread thread1 = new Thread(new MyRunnable());
+        Thread thread2 = new MyThread();
+        thread1.start();
+        thread2.start();
+    }
+    
+    static class MyRunnable implements Runnable {
+        @Override
+        public void run() {
+            System.out.println("Runnable thread running");
+        }
+    }
+    
+    static class MyThread extends Thread {
+        @Override
+        public void run() {
+            System.out.println("Extended Thread running");
+        }
+    }
+}
+public class Outer {
+    private int outerAttribute;
+    
+    public class Inner {
+        private int innerAttribute;
+
+        public void innerMethod() {
+            System.out.println("Inner method");
+        }
+    }
+}
+// Test class with static method and final attribute
+public class StaticFinalTest {
+    public static final int CONSTANT_VALUE = 10;
+
+    public static void staticMethod() {
+        System.out.println("Static method");
+    }
+}
+// Test class with simple attributes and methods
+public class TestClass {
+    private int number;
+    private String text;
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void printDetails() {
+        System.out.println("Number: " + number);
+        System.out.println("Text: " + text);
+    }
+}
