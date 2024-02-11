@@ -21,7 +21,7 @@ export default function Nav() {
           Settings
         </Link>
         <Link className='w-full text-gray-500 dark:text-gray-400' href='#'>
-          Log Out
+          Logout
         </Link>
       </nav>
       <div className='flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4'>
