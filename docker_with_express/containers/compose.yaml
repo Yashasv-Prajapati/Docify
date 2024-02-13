@@ -1,0 +1,7 @@
+services:
+  pyanalyzer2:
+    build: .
+    ports:
+      - "8000:5000"
+    volumes:
+      - ./received:/app/send:rw
