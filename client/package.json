@@ -46,9 +46,10 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
-      "cd client && prettier --write --cache",
-      "cd client && eslint --fix"
+      "dir",
+      "cd client && npx prettier . --write --cache",
+      "cd client && npx eslint . --fix"
     ],
-    "**/*.{css,json,md}": "cd client && prettier --write --cache"
+    "**/*.{css,json,md}": "cd client && prettier . --write --cache"
   }
 }
