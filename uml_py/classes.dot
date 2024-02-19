@@ -1,0 +1,9 @@
+digraph "classes" {
+rankdir=BT
+charset="utf-8"
+".merged_py_file.Bar" [color="black", fontcolor="black", label=<{.merged_py_file.Bar|<br ALIGN="LEFT"/>|}>, shape="record", style="solid"];
+".merged_py_file.Foo" [color="black", fontcolor="black", label=<{.merged_py_file.Foo|<br ALIGN="LEFT"/>|print_foo()<br ALIGN="LEFT"/>}>, shape="record", style="solid"];
+".merged_py_file.Test" [color="black", fontcolor="black", label=<{.merged_py_file.Test|foo : int<br ALIGN="LEFT"/>test : str<br ALIGN="LEFT"/>|print_foo()<br ALIGN="LEFT"/>print_test()<br ALIGN="LEFT"/>}>, shape="record", style="solid"];
+".merged_py_file.Bar" -> ".merged_py_file.Foo" [arrowhead="empty", arrowtail="none"];
+".merged_py_file.Test" -> ".merged_py_file.Foo" [arrowhead="empty", arrowtail="none"];
+}
