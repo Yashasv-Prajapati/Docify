@@ -1,0 +1,19 @@
+FROM ubuntu:22.04
+WORKDIR /app
+COPY . /app
+RUN apt-get update 
+RUN apt-get install -y python3 
+RUN apt-get install -y python3-pip
+RUN apt-get install -y git
+RUN apt-get install -y graphviz
+RUN pip3 install -r requirements.txt
+RUN git config --global user.name "t05" 
+RUN git clone https://github.com/sarvo314/StepsByKnightVisualiser.git 
+# RUN python3 Docify-Combiner.py
+# RUN pyreverse -ASmy .merged_py_file.py
+# RUN echo "Running pyreverse" && pyreverse -ASmy .merged_py_file.py || echo "pyreverse failed"
+# RUN dot -Tpdf classes.dot -o output.pdf
+# CMD ["ls"]
+# CMD ["python3", "Docify-Combiner.py"]
+# CMD ["ls"]
+CMD python3 Docify-Combiner.py && pyreverse -ASmy .merged_py_file.py && dot -Tpdf classes.dot -o output.pdf
