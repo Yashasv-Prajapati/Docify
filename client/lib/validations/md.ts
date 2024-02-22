@@ -5,3 +5,7 @@ export const MarkdownFileSchema = z.object({
   authorId: z.string(),
   projectId: z.string().url(),
 });
+
+export const CoverageToMdSchema = z.object({
+  htmlStr: z.string(),
+});
