@@ -8,26 +8,24 @@ import { navVariants } from '../utils/motion';
 const Navbar = () => (
   <motion.nav
     variants={navVariants}
-    initial="hidden"
-    whileInView="show"
-    className={`${styles.xPaddings} py-4 relative border-b-2 border-[#7184f0] `}
+    initial='hidden'
+    whileInView='show'
+    className={`${styles.xPaddings} relative border-b-2 border-[#7184f0] py-4 `}
   >
-    <div className="absolute w-[50%] inset-0 gradient-01" />
-    <div
-      className={`${styles.innerWidth} mx-auto flex justify-between gap-8`}
-    >
+    <div className='gradient-01 absolute inset-0 w-[50%]' />
+    <div className={`${styles.innerWidth} mx-auto flex justify-between gap-8`}>
       <img
-        src="/logo-no-background.png"
-        alt="search"
-        className="w-2/12 object-contain"
+        src='/logo-no-background.png'
+        alt='search'
+        className='w-2/12 object-contain'
       />
       {/* <h2 className="font-extrabold text-[24px] leading-[30.24px] text-white">
         Docify
       </h2> */}
       <img
-        src="/menu.svg"
-        alt="menu"
-        className="w-[24px] h-[24px] object-contain cursor-pointer"
+        src='/menu.svg'
+        alt='menu'
+        className='size-[24px] cursor-pointer object-contain'
       />
     </div>
   </motion.nav>
