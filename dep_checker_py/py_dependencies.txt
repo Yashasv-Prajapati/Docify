@@ -1,0 +1,5 @@
+Dependencies for ../uml_py\.merged_py_file.py: None
+Dependencies for ../uml_py\Docify-Combiner.py: {'os'}
+Dependencies for ../uml_py\source_directory\A.py: None
+Dependencies for ../uml_py\source_directory\B.py: None
+Dependencies for ../uml_py\source_directory\__init__.py: None
