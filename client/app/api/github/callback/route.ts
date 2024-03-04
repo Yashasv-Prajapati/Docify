@@ -1,5 +1,9 @@
+import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
 import * as z from 'zod';
+
+import { db } from '@/lib/db';
 
 const routeContextSchema = z.object({
   params: z.object({
@@ -11,17 +15,41 @@ export async function GET(
   request: NextRequest,
   context: z.infer<typeof routeContextSchema>
 ) {
-  const code = request.nextUrl.searchParams.get('code');
-  console.log(code);
-  const uri = `https://github.com/login/oauth/access_token?client_id=${process.env.GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_CLIENT_SECRET}&code=${code}`;
+  // http://localhost:3000/api/github/callback?code=f3bc6f14850dd2cfe5bb&installation_id=47694144&setup_action=install
 
-  const response = await fetch(uri, {
-    method: 'post',
+  const code = request.nextUrl.searchParams.get('code');
+  const installation_id = request.nextUrl.searchParams.get('installation_id');
+
+  // you got the code and installation id, now you can use it to get the access token
+  const uri = `https://github.com/login/oauth/access_token`;
+
+  const response = await axios.post(uri, {
+    client_id: process.env.GITHUB_CLIENT_ID,
+    client_secret: process.env.GITHUB_CLIENT_SECRET,
+    code: code,
   });
 
-  // const data = await response.json()
-  const data = await response.text();
-  console.log(response);
+  const parsed_data = new URLSearchParams(response.data);
+  const access_token = parsed_data.get('access_token');
+  const refresh_token = parsed_data.get('refresh_token');
 
-  return NextResponse.json({ message: `Got code ${data}` }, { status: 200 });
+  if (
+    access_token === null ||
+    refresh_token === null ||
+    installation_id === null
+  ) {
+    return redirect('/not-found');
+  }
+
+  // store the access token and refresh token in the database, along with the installation id to interact with the github api
+  await db.user.create({
+    data: {
+      username: 'test',
+      github_access_token: access_token,
+      github_refresh_token: refresh_token,
+      github_installation_id: installation_id,
+    },
+  });
+
+  return redirect('/new');
 }

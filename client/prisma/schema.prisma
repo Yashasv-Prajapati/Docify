@@ -4,11 +4,15 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
+  relationMode = "prisma"
 }
 
 model User {
   id       String         @id @default(cuid())
+  github_access_token    String  @unique
+  github_installation_id  String @unique
+  github_refresh_token    String
   username String         @unique
   projects Project[]
   files    MarkdownFile[]
