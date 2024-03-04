@@ -1,7 +1,10 @@
 // Page for new Project
 
 import React from 'react';
+import axios, { AxiosResponse } from 'axios';
+import { GetTokenParams } from 'next-auth/jwt';
 
+import { db } from '@/lib/db';
 import Wrapper from '@/components/wrapper';
 import Navbar from '@/components/Navbar';
 
@@ -17,16 +20,53 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export default async function Page() {
-  const username = 'Yashasv-Prajapati';
-  const GITHUB_API_BASE_URL = 'https://api.github.com';
+interface GithubRepository {
+  id: string;
+  name: string;
+  clone_url: string;
+}
 
-  const uri = `${GITHUB_API_BASE_URL}/users/${username}/repos`;
+const GITHUB_API_BASE_URL = 'https://api.github.com';
 
-  const response = await fetch(uri, {
-    method: 'get',
+async function get_repositories(
+  github_access_token: string | undefined
+): Promise<Array<GithubRepository> | undefined> {
+  const user = await db.user.findUnique({
+    where: {
+      username: 'test',
+    },
+    select: {
+      github_access_token: true,
+      github_installation_id: true,
+    },
   });
-  const data = await response.json();
+  const installation_id = user?.github_installation_id;
+  const access_token = user?.github_access_token;
+
+  const requestOptions = {
+    headers: {
+      Authorization: `token ${access_token}`,
+      Accept: 'application/vnd.github.v3+json',
+      'User-Agent': 'Your-App',
+      'X-GitHub-Installation-Id': installation_id,
+    },
+  };
+
+  const uri = `${GITHUB_API_BASE_URL}/user/repos`;
+
+  try {
+    const response: AxiosResponse = await axios.get(uri, requestOptions);
+    return response.data;
+  } catch (err) {
+    return undefined;
+  }
+}
+
+export default async function Page() {
+  // const user = getCurrentUser();
+  const github_access_token = process.env.GITHUB_ACCESS_TOKEN;
+
+  const data = await get_repositories(github_access_token);
 
   return (
     <div className="bg-[#1b222f] overflow-hidden">
@@ -53,9 +93,11 @@ export default async function Page() {
               </form>
 
               <div>
-                {data.map((repo: { name: string, clone_url: string }, index: number) => (
+                { data && data.length>0
+                 ?
+                  data.map((repo: { name: string, clone_url: string, id:string }, index: number) => (
                   <div
-                    key={index}
+                    key={id}
                     className="m-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
                   >
                     <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
@@ -75,7 +117,8 @@ export default async function Page() {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))
+                : null}
               </div>
 
             </CardContent>
