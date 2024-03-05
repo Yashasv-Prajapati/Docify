@@ -1,6 +1,10 @@
+'use client';
 import { Badge } from '@/components/ui/badge';
+
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+// import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -48,8 +52,25 @@ const projects = [
     date: '1d ago',
   },
 ];
+const handleUmlClick = async () => {
+  console.log("UML Clicked");
+  const res = await fetch('/api/uml/generate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // body: JSON.stringify({user:'pirocomder',repoName:'test2'}),
+    body: JSON.stringify({ user: 'pirocomder', repoName: 'test2' }),
+  });
+  const data = await res.json();
+  console.log(data);
+}
 
 export default function Component() {
+
+  // const router = useRouter();
+
+
   return (
     <div key='1' className='flex h-screen flex-col'>
       <Nav />
@@ -152,7 +173,9 @@ export default function Component() {
                     <DropdownMenuItem>Generate Readme</DropdownMenuItem>
                     <DropdownMenuItem>Test Plan</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>UML Diagram</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <button onClick={handleUmlClick}>UML Diagram</button>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
