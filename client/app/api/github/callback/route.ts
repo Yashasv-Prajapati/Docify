@@ -11,6 +11,14 @@ const routeContextSchema = z.object({
   }),
 });
 
+interface GithubUserDetails{
+  login: string;
+  id: number;
+  node_id: string;
+  avatar_url: string;
+  
+}
+
 export async function GET(
   request: NextRequest,
   context: z.infer<typeof routeContextSchema>
@@ -41,10 +49,20 @@ export async function GET(
     return redirect('/not-found');
   }
 
+  // now fetch user details
+  const user_response = await axios.get('https://api.github.com/user', {
+    headers: {
+      Authorization: `token ${access_token}`,
+    },
+  });
+
+  const userData = user_response.data;
+  console.log(userData)
+
   // store the access token and refresh token in the database, along with the installation id to interact with the github api
   await db.user.create({
     data: {
-      username: 'test',
+      username: userData.login,
       github_access_token: access_token,
       github_refresh_token: refresh_token,
       github_installation_id: installation_id,

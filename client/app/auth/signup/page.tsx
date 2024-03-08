@@ -3,11 +3,19 @@ import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 
 import { Navbar } from '../../../components/index';
+import axios from 'axios';
 
 function Signup() {
   const appId = process.env.GITHUB_APP_ID;
-  const redirectUri = 'http://localhost:3000/api/github/callback'; // Redirect URI configured in your GitHub App settings
-  const installationUrl = `https://github.com/apps/docify-wiki/installations/new?target_id=${appId}&target_type=app`;
+  // const installationUrl = `https://github.com/apps/docify-wiki/installations/new?target_id=${appId}&target_type=app&redirect_if_installed=true`;
+
+  const client_id = process.env.GITHUB_CLIENT_ID;
+  const redirect_uri = process.env.GITHUB_REDIRECT_URI;
+  const scope = 'user'; // Add additional scopes as needed
+  console.log(client_id, redirect_uri, scope);
+  const installationUrl =`https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`
+
+
 
   return (
     <div className='overflow-hidden bg-[#1b222f]'>
@@ -17,7 +25,7 @@ function Signup() {
           <h1 className='mb-4 text-2xl font-extrabold leading-none tracking-tight text-white md:text-3xl lg:text-4xl'>
             Let&apos;s build something new.
           </h1>
-          <div className='mb-16 text-lg font-normal text-gray-500 lg:text-xl xl:px-48 dark:text-gray-400 '>
+          <div className='mb-16 text-lg font-normal text-gray-500 dark:text-gray-400 lg:text-xl xl:px-48 '>
             To get the insights, import an existing Git Repository.
           </div>
           <svg
@@ -37,6 +45,8 @@ function Signup() {
             className={buttonVariants({
               size: 'sm',
             })}
+            target='_blank'
+            rel='noreferrer noopener'
             href={installationUrl}
           >
             Sign in with Github
