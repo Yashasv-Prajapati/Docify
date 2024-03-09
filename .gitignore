@@ -1,0 +1,13 @@
+node_modules
+
+
+package-lock.json
+/package-lock.json
+package-lock*.json
+
+.env
+.env*.local
+**/.DS_Store
+
+dev.db*
+

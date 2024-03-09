@@ -1,0 +1,3 @@
+The python program prints the occurence of the word the in this file,
+ans sends the output txt in json format to the received folder.
+Also sends dummy image.

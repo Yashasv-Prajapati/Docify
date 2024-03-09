@@ -4,20 +4,35 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
+  relationMode = "prisma"
 }
 
 model User {
-  id       String    @id @default(cuid())
-  username String    @unique
+  id       String         @id @default(cuid())
+  github_access_token    String  @unique
+  github_installation_id  String @unique
+  github_refresh_token    String
+  username String         @unique
   projects Project[]
+  files    MarkdownFile[]
 }
 
 model Project {
-  url         String @unique
+  url         String         @unique
   userId      String
   testing_dir String
-  user        User   @relation(fields: [userId], references: [id])
+  user        User           @relation(fields: [userId], references: [id])
+  files       MarkdownFile[]
 
   @@index([userId])
+}
+
+model MarkdownFile {
+  id        String  @id @default(cuid())
+  content   String
+  author    User    @relation(fields: [authorId], references: [id])
+  authorId  String
+  project   Project @relation(fields: [projectId], references: [url])
+  projectId String
 }
