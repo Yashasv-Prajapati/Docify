@@ -1,0 +1,20 @@
+FROM ubuntu:22.04
+
+WORKDIR /app
+
+COPY source_directory ./source_directory
+COPY CombineFiles.java .
+COPY java2plantuml.jar .
+COPY plantuml.jar .
+
+# Install Java Development Kit (JDK)
+RUN apt-get update && apt-get install -y openjdk-11-jdk
+
+# Install Git
+RUN apt-get install -y git
+
+# Install Graphviz
+RUN apt-get install -y graphviz
+
+# Set the default command to run when the container starts
+CMD java CombineFiles.java && java -jar java2plantuml.jar combinedFile.txt && java -jar plantuml.jar output.puml

@@ -7,6 +7,7 @@ public class CombineFiles {
         String outputFile = "combinedFile.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             Files.walk(Paths.get(directoryPath))
+                    .filter(path -> path.toString().endsWith(".java"))
                     .filter(Files::isRegularFile)
                     .forEach(file -> {
                         try (BufferedReader reader = new BufferedReader(new FileReader(file.toFile()))) {
@@ -22,6 +23,6 @@ public class CombineFiles {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Files combined successfully.");
+        System.out.println("Java files combined successfully.");
     }
 }
