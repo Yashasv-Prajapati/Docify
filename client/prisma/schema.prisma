@@ -35,4 +35,7 @@ model MarkdownFile {
   authorId  String
   project   Project @relation(fields: [projectId], references: [url])
   projectId String
+
+  @@index([authorId])
+  @@index([projectId])
 }

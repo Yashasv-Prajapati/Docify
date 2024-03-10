@@ -16,7 +16,6 @@ function Signup() {
   const installationUrl =`https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`
 
 
-
   return (
     <div className='overflow-hidden bg-[#1b222f]'>
       <Navbar />
