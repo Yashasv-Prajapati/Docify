@@ -60,7 +60,7 @@ export default function Component() {
         <div className='mx-auto grid w-full max-w-6xl gap-6'>
           <div className='flex flex-col gap-2 md:flex-row md:items-center md:gap-4'>
             <Input
-              className='bg-white md:flex-1 dark:bg-gray-950'
+              className='bg-white dark:bg-gray-950 md:flex-1'
               placeholder='Search projects...'
               type='search'
             />
@@ -100,7 +100,7 @@ export default function Component() {
           <div className='grid gap-4 overflow-hidden rounded-lg border lg:gap-px lg:bg-gray-100'>
             {projects.map((project) => (
               <div
-                className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'
+                className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'
                 key={project.id}
               >
                 <div className='grid flex-1 gap-1 p-2'>
