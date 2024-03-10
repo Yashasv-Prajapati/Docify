@@ -17,4 +17,4 @@ RUN apt-get install -y git
 RUN apt-get install -y graphviz
 
 # Set the default command to run when the container starts
-CMD java CombineFiles.java && java -jar java2plantuml.jar combinedFile.txt && java -jar plantuml.jar output.puml
+CMD java CombineFiles.java source_directory && java -jar java2plantuml.jar combinedFile.txt && java -jar plantuml.jar output.puml && mkdir -p source_directory/.assets && mv output.png source_directory/.assets/
