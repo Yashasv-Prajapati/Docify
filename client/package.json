@@ -12,7 +12,7 @@
     "format:write": "prettier --write . --cache",
     "format:check": "prettier --check . --cache"
   },
-  "dependencies": {
+   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.9.1",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
