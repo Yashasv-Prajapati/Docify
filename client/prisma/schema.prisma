@@ -3,22 +3,23 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider     = "sqlite"
+  url          = "file:./dev.db"
   relationMode = "prisma"
 }
 
 model User {
-  id       String         @id @default(cuid())
-  github_access_token    String  @unique
-  github_installation_id  String @unique
-  github_refresh_token    String
-  username String         @unique
-  projects Project[]
-  files    MarkdownFile[]
+  id                     String         @id @default(cuid())
+  github_access_token    String         @unique
+  github_installation_id String         @unique
+  github_refresh_token   String
+  username               String         @unique
+  projects               Project[]
+  files                  MarkdownFile[]
 }
 
 model Project {
+  projectId   String         @id @default(cuid())
   url         String         @unique
   userId      String
   testing_dir String

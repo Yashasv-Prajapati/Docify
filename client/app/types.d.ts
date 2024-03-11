@@ -1,5 +1,5 @@
 type Project = {
-    userId: number,
-    id: number,
-    repo: string,
-}
+  userId: number;
+  id: number;
+  repo: string;
+};

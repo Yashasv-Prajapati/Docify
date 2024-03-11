@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 
 export default function Nav() {
   return (
-    <header className='flex h-16 items-center border-b bg-gray-100/40 px-4 md:px-6'>
+    <header className='flex h-16 shrink-0 items-center border-b bg-gray-100/40 px-4 md:px-6'>
       <Link className='flex items-center gap-2 text-lg font-semibold' href='#'>
         <FrameIcon className='size-6' />
         <span className='sr-only'>Docify</span>

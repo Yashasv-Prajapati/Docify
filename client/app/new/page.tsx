@@ -5,10 +5,7 @@ import axios, { AxiosResponse } from 'axios';
 import { GetTokenParams } from 'next-auth/jwt';
 
 import { db } from '@/lib/db';
-import Wrapper from '@/components/wrapper';
-import Navbar from '@/components/Navbar';
-
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -16,9 +13,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Navbar from '@/components/Navbar';
+import Wrapper from '@/components/wrapper';
 
 interface GithubRepository {
   id: string;
@@ -69,63 +68,71 @@ export default async function Page() {
   const data = await get_repositories(github_access_token);
 
   return (
-    <div className="bg-[#1b222f] overflow-hidden">
+    <div className='overflow-hidden bg-[#1b222f]'>
       <Navbar />
       <Wrapper>
-
-
         {/* <div>Import Github Repository</div> */}
-        <div className='m-5' >
-          <Card className="w-5/6 bg-[#1b222f] text-white">
+        <div className='m-5'>
+          <Card className='w-5/6 bg-[#1b222f] text-white'>
             <CardHeader>
               <CardTitle>Import Github Repository</CardTitle>
-              <CardDescription>Import your repositories to start using docify</CardDescription>
+              <CardDescription>
+                Import your repositories to start using docify
+              </CardDescription>
             </CardHeader>
             <CardContent>
-
-              <form >
-                <div className="grid w-1/2 items-center gap-4">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="email">Github Username</Label>
-                    <Input className='bg-[#1b222f]' type="email" id="email" placeholder={username} />
+              <form>
+                <div className='grid w-1/2 items-center gap-4'>
+                  <div className='space-y-1.5'>
+                    <Label htmlFor='email'>Github Username</Label>
+                    <Input
+                      className='bg-[#1b222f]'
+                      type='email'
+                      id='email'
+                      placeholder={username}
+                    />
                   </div>
                 </div>
               </form>
 
               <div>
-                { data && data.length>0
-                 ?
-                  data.map((repo: { name: string, clone_url: string, id:string }, index: number) => (
-                  <div
-                    key={id}
-                    className="m-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-                  >
-                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-                    <div className='flex flex-row items-center'>
-                      <div className="space-y-2 w-3/4">
-                        <p className="text-m font-medium leading-none">
-                          {repo.name}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {repo.clone_url}
-                        </p>
-
-
-                      </div>
-                      <div className=''>
-                        <Button variant="outline" className=' bg-[#1b222f] text-white'>Import</Button>
-                      </div>
-                    </div>
-                  </div>
-                ))
-                : null}
+                {data && data.length > 0
+                  ? data.map(
+                      (
+                        repo: { name: string; clone_url: string; id: string },
+                        index: number
+                      ) => (
+                        <div
+                          key={id}
+                          className='m-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'
+                        >
+                          <span className='flex size-2 translate-y-1 rounded-full bg-sky-500' />
+                          <div className='flex flex-row items-center'>
+                            <div className='w-3/4 space-y-2'>
+                              <p className='text-m font-medium leading-none'>
+                                {repo.name}
+                              </p>
+                              <p className='text-sm text-muted-foreground'>
+                                {repo.clone_url}
+                              </p>
+                            </div>
+                            <div className=''>
+                              <Button
+                                variant='outline'
+                                className=' bg-[#1b222f] text-white'
+                              >
+                                Import
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )
+                  : null}
               </div>
-
             </CardContent>
           </Card>
         </div>
-
-
       </Wrapper>
     </div>
   );
