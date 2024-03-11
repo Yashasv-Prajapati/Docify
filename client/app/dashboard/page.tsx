@@ -1,6 +1,10 @@
+'use client';
 import { Badge } from '@/components/ui/badge';
+
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
+// import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -48,8 +52,25 @@ const projects = [
     date: '1d ago',
   },
 ];
+const handleUmlClick = async () => {
+  console.log("UML Clicked");
+  const res = await fetch('/api/uml/generate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // body: JSON.stringify({user:'pirocomder',repoName:'test2'}),
+    body: JSON.stringify({ user: 'pirocomder', repoName: 'test2' }),
+  });
+  const data = await res.json();
+  console.log(data);
+}
 
 export default function Component() {
+
+  // const router = useRouter();
+
+
   return (
     <div key='1' className='flex h-screen flex-col'>
       <Nav />
@@ -60,7 +81,7 @@ export default function Component() {
         <div className='mx-auto grid w-full max-w-6xl gap-6'>
           <div className='flex flex-col gap-2 md:flex-row md:items-center md:gap-4'>
             <Input
-              className='bg-white md:flex-1 dark:bg-gray-950'
+              className='bg-white dark:bg-gray-950 md:flex-1'
               placeholder='Search projects...'
               type='search'
             />
@@ -100,7 +121,7 @@ export default function Component() {
           <div className='grid gap-4 overflow-hidden rounded-lg border lg:gap-px lg:bg-gray-100'>
             {projects.map((project) => (
               <div
-                className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'
+                className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'
                 key={project.id}
               >
                 <div className='grid flex-1 gap-1 p-2'>
@@ -152,7 +173,9 @@ export default function Component() {
                     <DropdownMenuItem>Generate Readme</DropdownMenuItem>
                     <DropdownMenuItem>Test Plan</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>UML Diagram</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <button onClick={handleUmlClick}>UML Diagram</button>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
