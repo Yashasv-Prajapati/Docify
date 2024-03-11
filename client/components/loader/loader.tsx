@@ -1,7 +1,12 @@
+'use client';
+
 import React, { FC, useEffect, useState } from 'react';
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
+
 import loaderAnimation from './loaderAnimation.json';
 import tickAnimation from './tickAnimation.json';
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 interface LoaderProps {}
 
@@ -12,9 +17,21 @@ interface LoaderItem {
 }
 
 const loaders: LoaderItem[] = [
-  { animationData: loaderAnimation, showTick: false, text: 'Test Task running' },
-  { animationData: loaderAnimation, showTick: false, text: 'Test Task running' },
-  { animationData: loaderAnimation, showTick: false, text: 'Test Task running' },
+  {
+    animationData: loaderAnimation,
+    showTick: false,
+    text: 'Test Task running',
+  },
+  {
+    animationData: loaderAnimation,
+    showTick: false,
+    text: 'Test Task running',
+  },
+  {
+    animationData: loaderAnimation,
+    showTick: false,
+    text: 'Test Task running',
+  },
 ];
 
 const Loader: FC<LoaderProps> = () => {
@@ -33,11 +50,36 @@ const Loader: FC<LoaderProps> = () => {
   }, [loaderIndex]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+      }}
+    >
       {loaders.map((loader, index) => (
-        <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginRight: '10px', flexGrow: 1 }}>
-            <div style={{ width: '100px', height: '100px', marginRight: '10px' }}>
+        <div
+          key={index}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '20px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              marginRight: '10px',
+              flexGrow: 1,
+            }}
+          >
+            <div
+              style={{ width: '100px', height: '100px', marginRight: '10px' }}
+            >
               {loader.showTick ? (
                 <Lottie animationData={tickAnimation} loop={false} />
               ) : (
