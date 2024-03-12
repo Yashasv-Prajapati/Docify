@@ -28,8 +28,16 @@ cd "$project_directory" || exit
 # Step 3: Generate JaCoCo report
 ./gradlew jacocoTestReport
 
-# Optional: View the generated report
-# You may want to open it in a browser
-# Uncomment the next line if you want to automatically open the report
-# xdg-open build/reports/jacoco/test/html/index.html  # For Linux
-# start "" build\reports\jacoco\test\html\index.html  # For Windows
+# Navigation to index.html
+jacoco_report_directory=$(find "$project_directory" -type d -name "jacoco")
+cd "$jacoco_report_directory" || exit
+
+# Find index.html and pass its absolute path to the Python script
+index_html_path=$(find . -type f -name "index.html")
+if [ -z "$index_html_path" ]; then
+  echo "Error: index.html not found"
+  exit 1
+fi
+
+# Run the Python script with the absolute path to index.html
+python3 test_java.py "$index_html_path" >> README.md
