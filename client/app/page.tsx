@@ -10,6 +10,7 @@ import {
   Hero,
   WhatsNew,
 } from '../components/landingPage';
+import MarkdownEditor from '@/components/markdownEditor';
 
 const Home = () => {
   return (
@@ -29,6 +30,7 @@ const Home = () => {
         </div>
         <Footer />
       </div>
+      <MarkdownEditor/>
     </div>
   );
 };

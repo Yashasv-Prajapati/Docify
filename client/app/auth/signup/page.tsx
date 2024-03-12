@@ -1,13 +1,13 @@
 import Link from 'next/link';
-
 import { buttonVariants } from '@/components/ui/button';
-
 import { Navbar } from '../../../components/index';
 
 function Signup() {
-  const appId = process.env.GITHUB_APP_ID;
-  const redirectUri = 'http://localhost:3000/api/github/callback'; // Redirect URI configured in your GitHub App settings
-  const installationUrl = `https://github.com/apps/docify-wiki/installations/new?target_id=${appId}&target_type=app`;
+  const client_id = process.env.GITHUB_CLIENT_ID;
+  const redirect_uri = process.env.GITHUB_REDIRECT_URI;
+  const scope = 'user'; // Add additional scopes as needed
+  const installationUrl =`https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`
+
 
   return (
     <div className='overflow-hidden bg-[#1b222f]'>
@@ -37,6 +37,8 @@ function Signup() {
             className={buttonVariants({
               size: 'sm',
             })}
+            target='_blank'
+            rel='noreferrer noopener'
             href={installationUrl}
           >
             Sign in with Github
