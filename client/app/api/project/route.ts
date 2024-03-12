@@ -24,6 +24,34 @@ export async function POST(req: NextRequest) {
         testing_dir: testing_dir,
       },
     });
+
+    // Construct URL to the README.md file
+    const readmeUrl = `${url}/blob/main/README.md`;
+
+    // Fetch the content of the README.md file
+    const response = await fetch(readmeUrl,{
+      headers: {
+        'Authorization': `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`, //need the access token
+      },
+    });
+    const responseData = await response.json();
+
+    // Extract the Markdown content from the JSON response
+    const readmeContent = responseData.richText;
+
+    // Create an entry for the MarkdownFile
+    await db.markdownFile.create({
+      data: {
+        content: readmeContent,
+        authorId: userId,
+        projectId: project.projectId, // Assuming project.id is the primary key of the newly created project
+        
+      },
+    });    
+
+    // Log the README content
+    // console.log('README Content:', readmeContent); 
+
     return NextResponse.json({
       project: project,
       message: 'Project created successfully',
