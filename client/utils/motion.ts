@@ -1,4 +1,4 @@
-import { Variants } from "framer-motion";
+import { Variants } from 'framer-motion';
 
 export const navVariants: {
   hidden: {
@@ -78,12 +78,14 @@ export const slideIn = (
   },
 });
 
-
 interface StaggerContainer {
   (staggerChildren: any, delayChildren: any): Variants;
 }
 
-export const staggerContainer: StaggerContainer = (staggerChildren, delayChildren) => ({
+export const staggerContainer: StaggerContainer = (
+  staggerChildren,
+  delayChildren
+) => ({
   hidden: {},
   show: {
     transition: {
@@ -93,7 +95,9 @@ export const staggerContainer: StaggerContainer = (staggerChildren, delayChildre
   },
 });
 
-export const textVariant = (delay: number): {
+export const textVariant = (
+  delay: number
+): {
   hidden: {
     y: number;
     opacity: number;
@@ -211,7 +215,7 @@ export const fadeIn = (
 });
 
 export const planetVariants = (
-  direction: 'left' | 'right',
+  direction: 'left' | 'right'
 ): {
   hidden: {
     x: string;
