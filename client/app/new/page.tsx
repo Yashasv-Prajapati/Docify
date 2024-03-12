@@ -1,4 +1,5 @@
 // Page for new Project
+'use client'
 
 import React from 'react';
 import axios, { AxiosResponse } from 'axios';
@@ -18,6 +19,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Navbar from '@/components/Navbar';
 import Wrapper from '@/components/wrapper';
+import ImportProject from '@/components/modal/ImportProject';
+import { useState,Fragment} from 'react';
 
 interface GithubRepository {
   id: string;
@@ -27,48 +30,71 @@ interface GithubRepository {
 
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 
-async function get_repositories(
-  github_access_token: string | undefined
-): Promise<Array<GithubRepository> | undefined> {
-  const user = await db.user.findUnique({
-    where: {
-      username: 'test',
-    },
-    select: {
-      github_access_token: true,
-      github_installation_id: true,
-    },
-  });
-  const installation_id = user?.github_installation_id;
-  const access_token = user?.github_access_token;
+// async function get_repositories(
+//   github_access_token: string | undefined
+// ): Promise<Array<GithubRepository> | undefined> {
+//   const user = await db.user.findUnique({
+//     where: {
+//       username: 'test',
+//     },
+//     select: {
+//       github_access_token: true,
+//       github_installation_id: true,
+//     },
+//   });
+//   const installation_id = user?.github_installation_id;
+//   const access_token = user?.github_access_token;
 
-  const requestOptions = {
-    headers: {
-      Authorization: `token ${access_token}`,
-      Accept: 'application/vnd.github.v3+json',
-      'User-Agent': 'Your-App',
-      'X-GitHub-Installation-Id': installation_id,
-    },
-  };
+//   const requestOptions = {
+//     headers: {
+//       Authorization: `token ${access_token}`,
+//       Accept: 'application/vnd.github.v3+json',
+//       'User-Agent': 'Your-App',
+//       'X-GitHub-Installation-Id': installation_id,
+//     },
+//   };
 
-  const uri = `${GITHUB_API_BASE_URL}/user/repos`;
+//   const uri = `${GITHUB_API_BASE_URL}/user/repos`;
 
-  try {
-    const response: AxiosResponse = await axios.get(uri, requestOptions);
-    return response.data;
-  } catch (err) {
-    return undefined;
+//   try {
+//     const response: AxiosResponse = await axios.get(uri, requestOptions);
+//     return response.data;
+//   } catch (err) {
+//     return undefined;
+//   }
+// }
+
+const dummyData = [
+  {
+    id: '1',
+    name: 'example-repo-1',
+    clone_url: 'https://github.com/example/example-repo-1.git'
+  },
+  {
+    id: '2',
+    name: 'example-repo-2',
+    clone_url: 'https://github.com/example/example-repo-2.git'
+  },
+  {
+    id: '3',
+    name: 'example-repo-3',
+    clone_url: 'https://github.com/example/example-repo-3.git'
   }
-}
+];
 
-export default async function Page() {
+
+export default function Page() {
   // const user = getCurrentUser();
-  const github_access_token = process.env.GITHUB_ACCESS_TOKEN;
+  // const github_access_token = process.env.GITHUB_ACCESS_TOKEN;
 
-  const data = await get_repositories(github_access_token);
+  // const data = await get_repositories(github_access_token);
+  const [showModal, setShowModal] = useState(false);
+  const data = dummyData;
+  const username = "testing";
 
   return (
     <div className='overflow-hidden bg-[#1b222f]'>
+      <Fragment>
       <Navbar />
       <Wrapper>
         {/* <div>Import Github Repository</div> */}
@@ -103,7 +129,7 @@ export default async function Page() {
                         index: number
                       ) => (
                         <div
-                          key={id}
+                          key={repo.id}
                           className='m-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'
                         >
                           <span className='flex size-2 translate-y-1 rounded-full bg-sky-500' />
@@ -120,9 +146,17 @@ export default async function Page() {
                               <Button
                                 variant='outline'
                                 className=' bg-[#1b222f] text-white'
+                                onClick={() => {
+                                  setShowModal(true);
+                                }}
                               >
-                                Import
+                                Import 
                               </Button>
+                            <ImportProject
+                             isVisible={showModal}
+                             onClose={() => {
+                               setShowModal(false);
+                             }}/>
                             </div>
                           </div>
                         </div>
@@ -134,6 +168,7 @@ export default async function Page() {
           </Card>
         </div>
       </Wrapper>
+      </Fragment>
     </div>
   );
 }
