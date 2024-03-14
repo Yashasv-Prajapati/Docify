@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
-import axios, { AxiosResponse } from 'axios';
-import * as z from 'zod';
+import axios from 'axios';
 
 import { db } from '@/lib/db';
 import { sign } from '@/lib/jwt';

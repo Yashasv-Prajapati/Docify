@@ -1,5 +1,6 @@
 import { FC } from 'react';
 
+import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
 import { searchParamsSchema } from '@/lib/validations/params';
 import Avatar from '@/app/dashboard/components/avatar';
@@ -12,10 +13,12 @@ interface PageProps {
 }
 
 const Page: FC<PageProps> = async ({ searchParams }) => {
+  const user = await getCurrentUser();
   const { search } = searchParamsSchema.parse(searchParams);
 
   const projects = await db.project.findMany({
     where: {
+      userId: user!.id,
       repository_name: {
         startsWith: search.trim(),
       },
