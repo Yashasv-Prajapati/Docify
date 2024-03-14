@@ -66,6 +66,19 @@ const handleUmlClick = async () => {
   console.log(data);
 }
 
+const handleCodeCoverage=async()=>{
+  console.log("Code Coverage Clicked");
+  const res = await fetch('/api/code_coverage/generate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username: 'pirocomder', repo: 'test2', branch: 'main', lang: 'python' }),
+  });
+  const data = await res.json();
+  console.log(data);
+}
+
 export default function Component() {
 
   // const router = useRouter();
