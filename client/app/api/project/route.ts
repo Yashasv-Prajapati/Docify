@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from 'prisma';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import * as z from 'zod';
 
 import { db } from '@/lib/db';
@@ -8,6 +8,7 @@ import { db } from '@/lib/db';
 
 const createProjectSchema = z.object({
   url: z.string(),
+  repository_name: z.string(),
   userId: z.string(),
   testing_dir: z.string(),
 });
@@ -15,22 +16,25 @@ const createProjectSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const { url, userId, testing_dir } = createProjectSchema.parse(data);
+
+    const { url, repository_name, userId, testing_dir } =
+      createProjectSchema.parse(data);
 
     const project = await db.project.create({
       data: {
         url: url,
+        repository_name: repository_name,
         userId: userId,
         testing_dir: testing_dir,
       },
     });
+
     return NextResponse.json({
       project: project,
       message: 'Project created successfully',
       success: true,
     });
   } catch (error) {
-    console.error(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json({
         message: 'Project creation failed ' + error.issues[0].message,
@@ -38,7 +42,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    if (error instanceof prisma.PrismaClientKnownRequestError) {
+    if (error instanceof PrismaClientKnownRequestError) {
       return NextResponse.json({
         message: 'Project creation failed ' + (error?.message || ''),
         success: false,
@@ -46,7 +50,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      message: 'Project creation failed ' + (error?.message || ''),
+      message: 'Project creation failed ' + (error || ''),
       success: false,
     });
   }

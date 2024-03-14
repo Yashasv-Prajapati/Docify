@@ -4,29 +4,29 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
-  relationMode = "prisma"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id       String         @id @default(cuid())
-  github_access_token     String  @unique
+  id                         String         @id @default(cuid())
+  github_access_token        String         @unique
   github_access_token_expiry DateTime
-  github_refresh_token    String
-  github_username         String  @unique
-  github_installation_id  String
-  avatar_url              String
-  projects Project[]
-  files    MarkdownFile[]
+  github_refresh_token       String
+  github_username            String         @unique
+  github_installation_id     String
+  avatar_url                 String
+  projects                   Project[]
+  files                      MarkdownFile[]
 }
 
 model Project {
-  url         String         @unique
+  projectId       String         @id @default(cuid())
+  url             String         @unique
   repository_name String
-  userId      String
-  testing_dir String
-  user        User           @relation(fields: [userId], references: [id])
-  files       MarkdownFile[]
+  userId          String
+  testing_dir     String
+  user            User           @relation(fields: [userId], references: [id])
+  files           MarkdownFile[]
 
   @@index([userId])
 }
@@ -36,7 +36,7 @@ model MarkdownFile {
   content   String
   author    User    @relation(fields: [authorId], references: [id])
   authorId  String
-  project   Project @relation(fields: [projectId], references: [url])
+  project   Project @relation(fields: [projectId], references: [projectId])
   projectId String
 
   @@index([authorId])

@@ -1,17 +1,13 @@
-// Page for new Project
-
 import { URLSearchParams } from 'url';
-import React from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { notFound } from 'next/navigation';
+import axios, { AxiosResponse } from 'axios';
 
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -20,6 +16,7 @@ import { Label } from '@/components/ui/label';
 import Navbar from '@/components/Navbar';
 import Wrapper from '@/components/wrapper';
 
+import ImportBtn from './components/import-btn';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 
@@ -67,12 +64,17 @@ async function refresh_access_token(
   }
 }
 
-async function get_repositories() {
+// returns and object
+// first att is an array of repositories
+// second att is the user id of the current user
+async function get_repositories(): Promise<
+  { state: 'success'; data: any; userId: string } | { state: 'error' } // if no user
+> {
   try {
     const curr = await getCurrentUser();
     if (!curr) {
-      console.log("NO toekn")
-      return [];
+      console.log('NO toekn');
+      return { state: 'error' };
     }
 
     let github_access_token = curr.github_access_token;
@@ -85,8 +87,8 @@ async function get_repositories() {
         curr.github_username
       )) as string;
       if (!github_access_token) {
-        console.log("NO toekn")
-        return [];
+        console.log('NO toekn');
+        return { state: 'error' };
       }
     }
 
@@ -97,33 +99,36 @@ async function get_repositories() {
         'User-Agent': 'Your-App',
         'X-GitHub-Installation-Id': curr.github_installation_id,
       },
-      params:{
-        type: 'owner'
-      }
+      params: {
+        type: 'owner',
+      },
     };
 
     const uri = `${GITHUB_API_BASE_URL}/user/repos`;
     const response: AxiosResponse = await axios.get(uri, requestOptions);
 
-    return response.data;
+    return { state: 'success', data: response.data, userId: curr.id };
   } catch (err) {
     console.log(err);
-    return [];
+    return { state: 'error' };
   }
 }
 
 export default async function Page() {
-  // const user = getCurrentUser();
   const github_access_token = process.env.GITHUB_ACCESS_TOKEN;
 
-  const data = await get_repositories();
+  const res = await get_repositories();
 
+  if (res.state === 'error') {
+    notFound();
+  }
+
+  const { data, userId } = res;
 
   return (
     <div className='overflow-hidden bg-[#1b222f]'>
       <Navbar />
       <Wrapper>
-        {/* <div>Import Github Repository</div> */}
         <div className='m-5'>
           <Card className='w-5/6 bg-[#1b222f] text-white'>
             <CardHeader>
@@ -164,17 +169,17 @@ export default async function Page() {
                               <p className='text-m font-medium leading-none'>
                                 {repo.name}
                               </p>
-                              <p className='text-muted-foreground text-sm'>
+                              <p className='text-sm text-muted-foreground'>
                                 {repo.clone_url}
                               </p>
                             </div>
                             <div className=''>
-                              <Button
-                                variant='outline'
-                                className=' bg-[#1b222f] text-white'
-                              >
-                                Import
-                              </Button>
+                              <ImportBtn
+                                url={repo.clone_url}
+                                repository_name={repo.name}
+                                userId={userId}
+                                testing_dir={'/'} // TODO: add testing dir
+                              />
                             </div>
                           </div>
                         </div>

@@ -1,13 +1,14 @@
 import Link from 'next/link';
+
 import { buttonVariants } from '@/components/ui/button';
+
 import { Navbar } from '../../../components/index';
 
 function Signup() {
   const client_id = process.env.GITHUB_CLIENT_ID;
   const redirect_uri = process.env.GITHUB_REDIRECT_URI;
   const scope = 'user'; // Add additional scopes as needed
-  const installationUrl =`https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`
-
+  const installationUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
 
   return (
     <div className='overflow-hidden bg-[#1b222f]'>
