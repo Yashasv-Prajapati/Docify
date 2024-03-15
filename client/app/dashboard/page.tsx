@@ -20,7 +20,7 @@ const Page: FC<PageProps> = async ({ searchParams }) => {
     where: {
       userId: user!.id,
       repository_name: {
-        startsWith: search.trim(),
+        contains: search.trim(),
       },
     },
   });
