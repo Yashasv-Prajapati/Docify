@@ -1,9 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
 import { ChevronDownIcon } from 'lucide-react';
-
+import { FC , useState} from 'react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -13,21 +12,33 @@ import {
 import { Input } from '@/components/ui/input';
 
 import { Button } from '../../../components/ui/button';
+type SearchParams = {
+  data: any;
+  onfilteredData: any;
+};
 
-export default function Search() {
-  const router = useRouter();
-  const pathname = usePathname();
+const  Search:FC<SearchParams>  = ({data, onfilteredData}) =>{
 
+    const [search, setSearch] = useState('' as string);
+    const handleSearch = (e: any) => {
+        setSearch(e.target.value);
+        filterData(e.target.value);
+    };
+
+    const filterData = (search: string) => {
+        const filteredData = data.filter((project: any) => {
+          return project.repository_name.toLowerCase().includes(search.toLowerCase());
+        });
+        onfilteredData(filteredData);
+      }
   return (
     <div className='flex flex-col gap-2 md:flex-row md:items-center md:gap-4'>
       <Input
         className='bg-white dark:bg-gray-950 md:flex-1'
         placeholder='Search projects...'
         type='search'
-        onChange={(e) => {
-          const search = e.target.value;
-          router.push(`${pathname}?search=${search}`);
-        }}
+        value={search}
+        onChange={handleSearch}
       />
       <div className='flex items-center gap-4'>
         <DropdownMenu>
@@ -47,3 +58,6 @@ export default function Search() {
     </div>
   );
 }
+
+
+export default Search;
