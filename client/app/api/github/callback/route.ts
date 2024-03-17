@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
-import axios, { AxiosResponse } from 'axios';
-import * as z from 'zod';
+import axios from 'axios';
 
 import { db } from '@/lib/db';
 import { sign } from '@/lib/jwt';
@@ -79,7 +78,7 @@ export async function GET(req: NextRequest) {
       path: '/',
     });
 
-    return res; 
+    return res;
   } catch (error) {
     console.log(error.message);
     return redirect('/not-found');

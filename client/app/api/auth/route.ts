@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
       }
     );
 
-    console.log("HELLO");
+    console.log('HELLO');
     const accessToken = oauth_response.data.access_token;
 
     // Fetch the user's details from github
@@ -65,10 +65,10 @@ export async function GET(req: NextRequest) {
         Accept: 'application/vnd.github.v3+json',
       },
     });
-    console.log("HELLO2");
+    console.log('HELLO2');
 
-
-    const response: AxiosResponse = await axios.get(`${GITHUB_API_BASE_URL}/app/installations`,
+    const response: AxiosResponse = await axios.get(
+      `${GITHUB_API_BASE_URL}/app/installations`,
       requestOptions
     );
     const installations = response.data;
@@ -109,7 +109,7 @@ export async function GET(req: NextRequest) {
         github_username: github_username,
       },
     });
-    
+
     user = await db.user.update({
       where: {
         github_username: github_username,
@@ -139,7 +139,7 @@ export async function GET(req: NextRequest) {
 
     return res;
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     return redirect('/not-found');
   }
 }
