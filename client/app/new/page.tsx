@@ -1,22 +1,11 @@
+// 'use client';
 import { URLSearchParams } from 'url';
 import { notFound } from 'next/navigation';
 import axios, { AxiosResponse } from 'axios';
-
+// import { useState } from 'react';
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import Navbar from '@/components/Navbar';
-import Wrapper from '@/components/wrapper';
-
-import ImportBtn from './components/import-btn';
+import SearchableProjects from './components/searchableProjects';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 
@@ -68,7 +57,7 @@ async function refresh_access_token(
 // first att is an array of repositories
 // second att is the user id of the current user
 async function get_repositories(): Promise<
-  { state: 'success'; data: any; userId: string } | { state: 'error' } // if no user
+  { state: 'success'; data: any; userId: string , username: string} | { state: 'error' } // if no user
 > {
   try {
     const curr = await getCurrentUser();
@@ -76,7 +65,6 @@ async function get_repositories(): Promise<
       console.log('NO toekn');
       return { state: 'error' };
     }
-
     let github_access_token = curr.github_access_token;
     const github_expiry_date_time = curr.github_access_token_expiry;
 
@@ -107,90 +95,26 @@ async function get_repositories(): Promise<
     const uri = `${GITHUB_API_BASE_URL}/user/repos`;
     const response: AxiosResponse = await axios.get(uri, requestOptions);
 
-    return { state: 'success', data: response.data, userId: curr.id };
+    return { state: 'success', data: response.data, userId: curr.id , username: curr.github_username};
   } catch (err) {
     console.log(err);
     return { state: 'error' };
   }
 }
 
+
 export default async function Page() {
   const github_access_token = process.env.GITHUB_ACCESS_TOKEN;
 
   const res = await get_repositories();
-
   if (res.state === 'error') {
     notFound();
   }
 
-  const { data, userId } = res;
+  
+  const { data, userId , username} = res;
 
   return (
-    <div className='overflow-hidden bg-[#1b222f]'>
-      <Navbar />
-      <Wrapper>
-        <div className='m-5'>
-          <Card className='w-5/6 bg-[#1b222f] text-white'>
-            <CardHeader>
-              <CardTitle>Import Github Repository</CardTitle>
-              <CardDescription>
-                Import your repositories to start using docify
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form>
-                <div className='grid w-1/2 items-center gap-4'>
-                  <div className='space-y-1.5'>
-                    <Label htmlFor='email'>Github Username</Label>
-                    <Input
-                      className='bg-[#1b222f]'
-                      type='email'
-                      id='email'
-                      placeholder={'username'}
-                    />
-                  </div>
-                </div>
-              </form>
-
-              <div>
-                {data && data.length > 0
-                  ? data.map(
-                      (
-                        repo: { name: string; clone_url: string; id: string },
-                        index: number
-                      ) => (
-                        <div
-                          key={repo.id}
-                          className='m-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'
-                        >
-                          <span className='flex size-2 translate-y-1 rounded-full bg-sky-500' />
-                          <div className='flex flex-row items-center'>
-                            <div className='w-3/4 space-y-2'>
-                              <p className='text-m font-medium leading-none'>
-                                {repo.name}
-                              </p>
-                              <p className='text-sm text-muted-foreground'>
-                                {repo.clone_url}
-                              </p>
-                            </div>
-                            <div className=''>
-                              <ImportBtn
-                                url={repo.clone_url}
-                                repository_name={repo.name}
-                                userId={userId}
-                                testing_dir={'/'} // TODO: add testing dir
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    )
-                  : null}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </Wrapper>
-    </div>
+      <SearchableProjects data={data} userId={userId} userName={username}/>
   );
 }
