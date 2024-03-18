@@ -1,13 +1,8 @@
 'use client';
 
-// Import required modules and components
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
 import { Table } from 'lucide-react';
-
 import Nav from '@/components/nav';
 
-// Dummy HTML code coverage table string
 const dummyCodeCoverageHTML = `
 <!DOCTYPE html>
 <html lang="en">
