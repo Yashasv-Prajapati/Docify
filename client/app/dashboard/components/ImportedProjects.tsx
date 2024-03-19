@@ -2,6 +2,7 @@
 import { FC , useState} from 'react';
 import ProjectCard from '@/app/dashboard/components/project-card';
 import Search from '@/app/dashboard/components/search';
+import Wrapper from '@/components/wrapper';
 
 
 type ImportedProjectsParams = {
@@ -13,6 +14,8 @@ const ImportedProjects: FC<ImportedProjectsParams> = ({imported_projects}) => {
         setFilteredProjects(data);
     }
     return (
+      <Wrapper>
+        
         <main className='flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
         <div className='mx-auto grid w-full max-w-6xl gap-2'>
           <h1 className='text-3xl font-semibold'>Projects</h1>
@@ -31,6 +34,7 @@ const ImportedProjects: FC<ImportedProjectsParams> = ({imported_projects}) => {
           </div>
         </div>
       </main>
+      </Wrapper>
     )
 }
 
