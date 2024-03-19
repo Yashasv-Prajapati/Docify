@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from 'axios';
 // import { useState } from 'react';
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
-import SearchableProjects from './components/searchableProjects';
+import SearchableProjects from '../../components/new/searchableProjects';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 
