@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 
+import MarkdownEditor from '@/components/markdownEditor';
+
 import { Footer, Navbar } from '../components/index';
 import {
   About,
@@ -29,6 +31,7 @@ const Home = () => {
         </div>
         <Footer />
       </div>
+      <MarkdownEditor />
     </div>
   );
 };

@@ -5,7 +5,7 @@ with open('htmlcov/index.html', 'r') as file:
     file_contents = file.read()
 
 # will change later
-API_ENDPOINT="http://localhost:3000/api/md/coverage-to-md"
+API_ENDPOINT="http://host.docker.internal:3000/api/md/coverage-to-md"
 
 myobj = {'htmlStr': file_contents}
 
