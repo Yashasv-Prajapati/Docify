@@ -11,7 +11,6 @@ import {
   import { Label } from '@/components/ui/label';
   import Navbar from '@/components/Navbar';
   import Wrapper from '@/components/wrapper';
-  
   import ImportBtn from './import-btn';
 
   type SearchableProjectsParams = {
@@ -35,10 +34,11 @@ const SearchableProjects:React.FC<SearchableProjectsParams> = ({ data , userId, 
         });
         setSearchResults(filteredProjects);
       };
-
+      
     return (
-        <div className='overflow-hidden bg-[#1b222f]'>
-        <Navbar />
+      
+        <div className='overflow-x-hidden bg-[#1b222f]'>
+        {/* <Navbar /> */}
         <Wrapper>
           <div className='m-5'>
             <Card className='w-5/6 bg-[#1b222f] text-white'>
@@ -105,6 +105,7 @@ const SearchableProjects:React.FC<SearchableProjectsParams> = ({ data , userId, 
           </div>
         </Wrapper>
       </div>
+      
     )
 };
 
