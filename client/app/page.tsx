@@ -31,7 +31,7 @@ const Home = () => {
         </div>
         <Footer />
       </div>
-      <MarkdownEditor />
+      {/* <MarkdownEditor /> */}
     </div>
   );
 };
