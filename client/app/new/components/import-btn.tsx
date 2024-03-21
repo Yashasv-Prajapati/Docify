@@ -54,12 +54,12 @@ const ImportBtn: FC<ImportBtnProps> = ({
   return (
     <Button
       size='sm'
-      className='flex gap-2'
+      className='flex gap-2 bg-green-400 hover:bg-green-600 text-black border-3'
       disabled={isLoading}
       onClick={handleOnClick}
     >
       {isLoading ? (
-        <Loader2 className='size-6 animate-spin text-zinc-500' />
+        <Loader2 className='size-6 animate-spin text-black' />
       ) : (
         'Import'
       )}
