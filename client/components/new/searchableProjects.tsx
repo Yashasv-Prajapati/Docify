@@ -53,7 +53,7 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
         <Navbar />
         <Wrapper>
           <div className='m-5'>
-            <Card className='w-5/6 bg-[#1b222f] text-white'>
+            <Card className='w-5/6 '>
               <CardHeader>
                 <CardTitle>Import Github Repository</CardTitle>
                 <CardDescription>
@@ -66,7 +66,7 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                     <div className='space-y-1.5'>
                       <Label htmlFor='email'>{userName}</Label>
                       <Input
-                        className='bg-[#1b222f]'
+                        className=''
                         type='email'
                         id='email'
                         placeholder={'Search Your Projects...'}
@@ -88,7 +88,7 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                             key={repo.id}
                             className='m-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'
                           >
-                            <span className='flex size-2 translate-y-1 rounded-full bg-sky-500' />
+                            <span className='flex size-2 translate-y-1 rounded-full bg-green-400' />
                             <div className='flex flex-row items-center'>
                               <div className='w-3/4 space-y-2'>
                                 <p className='text-m font-medium leading-none'>

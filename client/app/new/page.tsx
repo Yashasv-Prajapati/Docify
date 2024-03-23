@@ -1,12 +1,11 @@
-// 'use client';
 import { URLSearchParams } from 'url';
 import { notFound } from 'next/navigation';
 import axios, { AxiosResponse } from 'axios';
-// import { useState } from 'react';
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
 import SearchableProjects from '../../components/new/searchableProjects';
-
+import Avatar from '../dashboard/components/avatar';
+import Nav from '../dashboard/components/nav';
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 
 async function refresh_access_token(
@@ -62,7 +61,7 @@ async function get_repositories(): Promise<
   try {
     const curr = await getCurrentUser();
     if (!curr) {
-      console.log('NO toekn');
+      console.log('NO token');
       return { state: 'error' };
     }
     let github_access_token = curr.github_access_token;
@@ -113,8 +112,11 @@ export default async function Page() {
 
   
   const { data, userId , username} = res;
-
+  const AvatarComponent = <Avatar />;
   return (
-      <SearchableProjects data={data} userId={userId} userName={username}/>
+    <div key='1' className='flex h-screen flex-col'>
+        <Nav AvatarComponent={AvatarComponent} />
+       <SearchableProjects data={data} userId={userId} userName={username}/>
+      </div>
   );
 }
