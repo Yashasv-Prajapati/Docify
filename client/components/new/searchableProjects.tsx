@@ -1,44 +1,56 @@
 'use client';
-import React, {useState} from 'react';
+
+import React, { Fragment, useState } from 'react';
+
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-  } from '@/components/ui/card';
-  import { Input } from '@/components/ui/input';
-  import { Label } from '@/components/ui/label';
-  import Navbar from '@/components/Navbar';
-  import Wrapper from '@/components/wrapper';
-  import ImportBtn from './import-btn';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import ImportProject from '@/components/modal/ImportProject';
+import Navbar from '@/components/Navbar';
+import Wrapper from '@/components/wrapper';
 
-  type SearchableProjectsParams = {
-    data: any;
-    userId: string;
-    userName: string;
-    }
-const SearchableProjects:React.FC<SearchableProjectsParams> = ({ data , userId, userName}) =>{
+import ImportBtn from './import-btn';
 
-      const [searchText, setSearchText] = useState('' as string);
-      const [searchResults, setSearchResults] = useState(data as any[]);
-     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            setSearchText(e.target.value);
-            filterProjects(e.target.value);
-            // console.log(e.target.value);
-    };
-    
-    const filterProjects = (searchText: string) => {
-        const filteredProjects = data.filter((project: any) => {
-          return project.name.toLowerCase().includes(searchText.toLowerCase());
-        });
-        setSearchResults(filteredProjects);
-      };
-      
-    return (
-      
-        <div className='overflow-x-hidden '>
-        {/* <Navbar /> */}
+type SearchableProjectsParams = {
+  data: any;
+  userId: string;
+  userName: string;
+};
+const SearchableProjects: React.FC<SearchableProjectsParams> = ({
+  data,
+  userId,
+  userName,
+}) => {
+  const [searchText, setSearchText] = useState('' as string);
+  const [visibleModalId, setVisibleModalId] = useState<string | null>(null);
+  const [searchResults, setSearchResults] = useState(data as any[]);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+    filterProjects(e.target.value);
+    // console.log(e.target.value);
+  };
+
+  const filterProjects = (searchText: string) => {
+    const filteredProjects = data.filter((project: any) => {
+      return project.name.toLowerCase().includes(searchText.toLowerCase());
+    });
+    setSearchResults(filteredProjects);
+  };
+
+  const toggleModal = (modalId: string) => {
+    setVisibleModalId(modalId === visibleModalId ? null : modalId);
+  };
+
+  return (
+    <div className='overflow-hidden bg-[#1b222f]'>
+      <Fragment>
+        <Navbar />
         <Wrapper>
           <div className='m-5'>
             <Card className='w-5/6 '>
@@ -64,7 +76,7 @@ const SearchableProjects:React.FC<SearchableProjectsParams> = ({ data , userId, 
                     </div>
                   </div>
                 </form>
-  
+
                 <div>
                   {searchResults && searchResults.length > 0
                     ? searchResults.map(
@@ -86,14 +98,17 @@ const SearchableProjects:React.FC<SearchableProjectsParams> = ({ data , userId, 
                                   {repo.clone_url}
                                 </p>
                               </div>
-                              <div >
-                                <ImportBtn
-                                  url={repo.clone_url}
-                                  repository_name={repo.name}
-                                  userId={userId}
-                                  testing_dir={'/'} // TODO: add testing dir
-                                />
+                              <div className=''>
+                                <ImportBtn toggleModal={() => toggleModal(repo.id)} />
                               </div>
+                              <ImportProject
+                                url={repo.clone_url}
+                                repository_name={repo.name}
+                                userId={userId}
+                                testing_dir={'/'} // TODO: add testing dir
+                                isVisible={visibleModalId === repo.id}
+                                onClose={() => toggleModal(repo.id)}
+                              />
                             </div>
                           </div>
                         )
@@ -104,9 +119,9 @@ const SearchableProjects:React.FC<SearchableProjectsParams> = ({ data , userId, 
             </Card>
           </div>
         </Wrapper>
-      </div>
-      
-    )
+      </Fragment>
+    </div>
+  );
 };
 
 export default SearchableProjects;
