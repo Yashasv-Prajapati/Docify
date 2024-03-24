@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useRef, useState,useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-
-import { Button } from '@/components/ui/button';
 
 interface ProfileEditProps {
   isVisible: boolean;
@@ -27,8 +26,7 @@ function ImportProject({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [agree, setAgree] = useState(false);
   const [techstack, setTechstack] = useState('');
-  // console.log('teckkkkkk :', techstack);
-
+  const router = useRouter();
 
   useEffect(() => {
     if (!isVisible) {
@@ -36,7 +34,6 @@ function ImportProject({
       setTechstack('');
     }
   }, [isVisible]);
-
 
   const handleAgree = () => {
     setAgree(true);
@@ -60,6 +57,7 @@ function ImportProject({
 
       if (response.data.success) {
         toast.success('Project imported successfully');
+        router.refresh();
         // navigate to the required page
       } else {
         toast.error('Project already exists');
@@ -92,7 +90,7 @@ function ImportProject({
             <div className='relative rounded-lg bg-white shadow dark:bg-gray-700'>
               <button
                 type='button'
-                className='absolute end-2.5 top-3 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
+                className='absolute end-2.5 top-3 ms-auto inline-flex size-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
                 data-modal-hide='popup-modal'
                 onClick={() => {
                   setAgree(false);
@@ -101,7 +99,7 @@ function ImportProject({
                 }}
               >
                 <svg
-                  className='h-3 w-3'
+                  className='size-3'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -145,7 +143,7 @@ function ImportProject({
                         </div>
                       </div>
                       <svg
-                        className='ms-3 h-4 w-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
+                        className='ms-3 size-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -186,7 +184,7 @@ function ImportProject({
                         </div>
                       </div>
                       <svg
-                        className='ms-3 h-4 w-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
+                        className='ms-3 size-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -220,12 +218,12 @@ function ImportProject({
             <div className='relative rounded-lg bg-white shadow dark:bg-gray-700'>
               <button
                 type='button'
-                className='absolute end-2.5 top-3 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
+                className='absolute end-2.5 top-3 ms-auto inline-flex size-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
                 data-modal-hide='popup-modal'
                 onClick={() => onClose()}
               >
                 <svg
-                  className='h-3 w-3'
+                  className='size-3'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -243,7 +241,7 @@ function ImportProject({
               </button>
               <div className='p-4 text-center md:p-5'>
                 <svg
-                  className='mx-auto mb-4 h-12 w-12 text-gray-400 dark:text-gray-200'
+                  className='mx-auto mb-4 size-12 text-gray-400 dark:text-gray-200'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'

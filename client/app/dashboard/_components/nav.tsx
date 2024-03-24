@@ -5,14 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { logout } from '@/actions/logout';
 
-import { UserSchema } from '@/lib/validations/user';
-
 import { Button } from '../../../components/ui/button';
-import Avatar from './avatar';
-
-interface NavProps {
-  curr_user: UserSchema;
-}
 
 export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
   const [showDropdown, setShowDropdown] = useState(false);

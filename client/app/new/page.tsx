@@ -6,8 +6,8 @@ import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
 
 import SearchableProjects from '../../components/new/searchableProjects';
-import Avatar from '../dashboard/components/avatar';
-import Nav from '../dashboard/components/nav';
+import Avatar from '../dashboard/_components/avatar';
+import Nav from '../dashboard/_components/nav';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 
