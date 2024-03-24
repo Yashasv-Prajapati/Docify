@@ -48,11 +48,11 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
   };
 
   return (
-    <div className='overflow-hidden bg-[#1b222f]'>
+    <div className='bg-[#1b222f]'>
       <Fragment>
         <Navbar />
         <Wrapper>
-          <div className='m-5'>
+          <div className='m-5 min-h-screen'>
             <Card className='w-5/6 '>
               <CardHeader>
                 <CardTitle>Import Github Repository</CardTitle>
@@ -99,7 +99,9 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                                 </p>
                               </div>
                               <div className=''>
-                                <ImportBtn toggleModal={() => toggleModal(repo.id)} />
+                                <ImportBtn
+                                  toggleModal={() => toggleModal(repo.id)}
+                                />
                               </div>
                               <ImportProject
                                 url={repo.clone_url}
