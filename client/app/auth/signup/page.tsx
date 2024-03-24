@@ -38,7 +38,6 @@ function Signup() {
             className={buttonVariants({
               size: 'sm',
             })}
-            target='_blank'
             rel='noreferrer noopener'
             href={installationUrl}
           >
