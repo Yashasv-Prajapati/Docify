@@ -80,6 +80,7 @@ export async function GET(req: NextRequest) {
 
     return res;
   } catch (error) {
+    // @ts-ignore
     console.log(error.message);
     return redirect('/not-found');
   }

@@ -2,14 +2,27 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { logout } from '@/actions/logout';
+import { usePathname, useRouter } from 'next/navigation';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 import { Button } from '../../../components/ui/button';
 
 export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function logout() {
+    const response = await axios.post('/api/logout');
+
+    if (response.status === 200) {
+      toast.success('Logged out successfully');
+      router.push('/auth/signup');
+    } else {
+      toast.error('Error logging out');
+    }
+  }
 
   return (
     <header className='flex h-16 shrink-0 items-center border-b bg-gray-100/40 px-4 sm:justify-between md:px-6'>
@@ -76,7 +89,7 @@ export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
             </Link>
             {/* show this only when user is Logged in ******** */}
             <span
-              onClick={() => logout()}
+              onClick={logout}
               className='block cursor-pointer px-4 py-2 text-gray-800 hover:bg-gray-100'
             >
               Logout
