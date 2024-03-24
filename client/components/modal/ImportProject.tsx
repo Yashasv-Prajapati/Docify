@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useRef, useState,useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -27,8 +28,8 @@ function ImportProject({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [agree, setAgree] = useState(false);
   const [techstack, setTechstack] = useState('');
+  const router = useRouter();
   // console.log('teckkkkkk :', techstack);
-
 
   useEffect(() => {
     if (!isVisible) {
@@ -36,7 +37,6 @@ function ImportProject({
       setTechstack('');
     }
   }, [isVisible]);
-
 
   const handleAgree = () => {
     setAgree(true);
@@ -47,6 +47,7 @@ function ImportProject({
   const handleContinue = async () => {
     // CALL THE API HERE BASED ON THE TECKSTACK {java,python}
     setIsLoading(true);
+
     try {
       const response = await axios.post('/api/project', {
         url,
@@ -57,12 +58,19 @@ function ImportProject({
 
       // console.log("repository_nameeeeeeee:",repository_name);
       // console.log("language:",techstack);
+      const truncatedRepoName =
+        repository_name.length > 20
+          ? repository_name.substring(0, 20) + '...'
+          : repository_name;
 
       if (response.data.success) {
-        toast.success('Project imported successfully');
-        // navigate to the required page
+        toast.success(`Project '${truncatedRepoName}' imported successfully`);
+        console.log('repository_name', repository_name);
+        router.push('/dashboard');
+        // Refresh the page
+        window.location.reload();
       } else {
-        toast.error('Project already exists');
+        toast.error(`Project '${truncatedRepoName}' already exists`);
       }
     } catch (error) {
       if (error instanceof AxiosError) {

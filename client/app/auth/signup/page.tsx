@@ -1,8 +1,12 @@
+"use client"
+
 import Link from 'next/link';
+import Lottie from 'lottie-react';
 
 import { buttonVariants } from '@/components/ui/button';
 
 import { Navbar } from '../../../components/index';
+import BlueanimationData from '../../../public/Animation - 1711299754830.json';
 
 function Signup() {
   const client_id = process.env.GITHUB_CLIENT_ID;
@@ -11,18 +15,28 @@ function Signup() {
   const installationUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
 
   return (
-    <div className='overflow-hidden bg-[#1b222f]'>
+    <div className='overflow-hidden bg-[#d1d4db] h-screen'>
       <Navbar />
-      <div className='flex justify-between'>
+      <div className='flex justify-between h-screen m-auto'>
         <div className='flex w-1/2 flex-col justify-center border-2 border-transparent p-6'>
-          <h1 className='mb-4 text-2xl font-extrabold leading-none tracking-tight text-white md:text-3xl lg:text-4xl'>
+          <h1 className='mb-4 text-2xl font-extrabold leading-none tracking-tight bg-gradient-to-r from-sky-400 to-[#0508be] bg-clip-text text-transparent md:text-3xl lg:text-4xl'>
             Let&apos;s build something new.
           </h1>
-          <div className='mb-16 text-lg font-normal text-gray-500 dark:text-gray-400 lg:text-xl xl:px-48 '>
+          <div className='text-left mb-16 text-lg font-normal text-gray-500 dark:text-gray-400 lg:text-xl  '>
             To get the insights, import an existing Git Repository.
           </div>
-          <svg
-            className='me-2 size-4'
+          
+          <Link
+            className={buttonVariants({
+              size: 'sm',
+              variant: 'secondary'
+            })}
+            target='_blank'
+            rel='noreferrer noopener'
+            href={installationUrl}
+          >
+            <svg
+            className='me-2 size-4 mr-4'
             aria-hidden='true'
             xmlns='http://www.w3.org/2000/svg'
             fill='currentColor'
@@ -34,42 +48,14 @@ function Signup() {
               clipRule='evenodd'
             />
           </svg>
-          <Link
-            className={buttonVariants({
-              size: 'sm',
-            })}
-            target='_blank'
-            rel='noreferrer noopener'
-            href={installationUrl}
-          >
             Sign in with Github
           </Link>
         </div>
-        <div>
-          <img
-            src='/cover.png'
-            // width={20}
-            // height={40}
-            alt='hero_cover'
-            className='relative z-10 h-[350px] w-full rounded-tl-[140px] object-cover sm:h-[500px]'
+        <div className='m-auto border-l-2 w-1/2'>
+          <Lottie
+            animationData={BlueanimationData}
+            className='mx-auto  size-[300px] object-contain  xl:size-[500px]'
           />
-          <a href='#explore'>
-            <div className=' relative z-10 mt-[-50px] flex w-full  justify-end sm:mt-[-70px] '>
-              <span className='pr-11 '>
-                <span className='relative z-10 mt-[-50px] flex w-min  justify-end rounded-full  bg-gradient-to-r from-[#250b47] to-[#2a0670] sm:mt-[-70px]'>
-                  {/* <img
-              src="/stamp.png"
-              alt="stamp"
-              className="sm:w-[155px] w-[100px] sm:h-[155px] h-[100px] object-contain"
-            /> */}
-                  {/* <Lottie
-                    animationData={animationData}
-                    className='size-[100px] object-contain sm:size-[155px]'
-                  /> */}
-                </span>
-              </span>
-            </div>
-          </a>
         </div>
       </div>
     </div>
