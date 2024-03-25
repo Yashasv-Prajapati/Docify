@@ -1,7 +1,11 @@
 #!/bin/bash
 
+#if not already installed
+pip install pipreqs
+pip install pip-tools
+
 # Define the directory path
-path_to_directory="/path/to/directory" #Use the next line while integration, currently given dummy path
+path_to_directory="/Users/aryamangupta/Desktop/GitHub/test" #Use the next line while integration, currently given dummy path
 # path_to_directory="$1"
 
 # Step 1: Generate requirements.txt using pipreqs
@@ -20,8 +24,12 @@ pip freeze > all_dependencies.txt
 #Merge the outputs to form the final requirements.txt
 cat "$path_to_directory/requirements.txt" all_dependencies.txt | sort | uniq > merged_requirements.txt
 
+# Removes redundancies 
+pip-compile --output-file requirements.txt merged_requirements.txt
+grep -v '^[ ]*#' requirements.txt > tmpfile && mv tmpfile requirements.txt
+
 #Delete requirements.txt, all_dependencies.txt
-rm "$path_to_directory/requirements.txt" all_dependencies.txt
+rm "$path_to_directory/requirements.txt" all_dependencies.txt merged_requirements.txt
 
 #Deactivate and delete the temporary virtual environment
 deactivate
