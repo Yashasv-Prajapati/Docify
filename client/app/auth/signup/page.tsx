@@ -14,7 +14,7 @@ function Signup() {
     <div className='overflow-hidden bg-[#1b222f]'>
       <Navbar />
       <div className='flex justify-between'>
-        <div className='flex w-1/2 flex-col justify-center border-2 border-transparent p-6'>
+        <div className='flex min-h-screen w-1/2 flex-col place-content-center border-2 border-transparent p-6'>
           <h1 className='mb-4 text-2xl font-extrabold leading-none tracking-tight text-white md:text-3xl lg:text-4xl'>
             Let&apos;s build something new.
           </h1>
@@ -38,14 +38,13 @@ function Signup() {
             className={buttonVariants({
               size: 'sm',
             })}
-            target='_blank'
             rel='noreferrer noopener'
             href={installationUrl}
           >
             Sign in with Github
           </Link>
         </div>
-        <div>
+        <div className='flex items-center'>
           <img
             src='/cover.png'
             // width={20}

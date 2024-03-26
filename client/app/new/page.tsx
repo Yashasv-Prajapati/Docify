@@ -1,11 +1,14 @@
 import { URLSearchParams } from 'url';
 import { notFound } from 'next/navigation';
 import axios, { AxiosResponse } from 'axios';
+
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
+
 import SearchableProjects from '../../components/new/searchableProjects';
-import Avatar from '../dashboard/components/avatar';
-import Nav from '../dashboard/components/nav';
+import Avatar from '../dashboard/_components/avatar';
+import Nav from '../dashboard/_components/nav';
+
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 
 async function refresh_access_token(
@@ -56,7 +59,8 @@ async function refresh_access_token(
 // first att is an array of repositories
 // second att is the user id of the current user
 async function get_repositories(): Promise<
-  { state: 'success'; data: any; userId: string , username: string} | { state: 'error' } // if no user
+  | { state: 'success'; data: any; userId: string; username: string }
+  | { state: 'error' } // if no user
 > {
   try {
     const curr = await getCurrentUser();
@@ -94,13 +98,17 @@ async function get_repositories(): Promise<
     const uri = `${GITHUB_API_BASE_URL}/user/repos`;
     const response: AxiosResponse = await axios.get(uri, requestOptions);
 
-    return { state: 'success', data: response.data, userId: curr.id , username: curr.github_username};
+    return {
+      state: 'success',
+      data: response.data,
+      userId: curr.id,
+      username: curr.github_username,
+    };
   } catch (err) {
     console.log(err);
     return { state: 'error' };
   }
 }
-
 
 export default async function Page() {
   const github_access_token = process.env.GITHUB_ACCESS_TOKEN;
@@ -110,13 +118,12 @@ export default async function Page() {
     notFound();
   }
 
-  
-  const { data, userId , username} = res;
+  const { data, userId, username } = res;
   const AvatarComponent = <Avatar />;
   return (
     <div key='1' className='flex h-screen flex-col'>
-        <Nav AvatarComponent={AvatarComponent} />
-       <SearchableProjects data={data} userId={userId} userName={username}/>
-      </div>
+      <Nav AvatarComponent={AvatarComponent} />
+      <SearchableProjects data={data} userId={userId} userName={username} />
+    </div>
   );
 }

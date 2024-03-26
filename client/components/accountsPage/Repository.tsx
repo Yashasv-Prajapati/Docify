@@ -19,22 +19,22 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repository }) => {
       </div>
       <div className='flex items-center justify-between'>
         <span className='flex items-center gap-2'>
-        <svg
-          className=' h-4 w-4 text-gray-400'
-          aria-hidden='true'
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-        >
-          <path
-            stroke='currentColor'
-            stroke-linecap='round'
-            strokeLinejoin='round'
-            strokeWidth='2'
-            d='M11 6.5h2M11 18h2m-7-5v-2m12 2v-2M5 8h2c.6 0 1-.4 1-1V5c0-.6-.4-1-1-1H5a1 1 0 0 0-1 1v2c0 .6.4 1 1 1Zm0 12h2c.6 0 1-.4 1-1v-2c0-.6-.4-1-1-1H5a1 1 0 0 0-1 1v2c0 .6.4 1 1 1Zm12 0h2c.6 0 1-.4 1-1v-2c0-.6-.4-1-1-1h-2a1 1 0 0 0-1 1v2c0 .6.4 1 1 1Zm0-12h2c.6 0 1-.4 1-1V5c0-.6-.4-1-1-1h-2a1 1 0 0 0-1 1v2c0 .6.4 1 1 1Z'
-          />
-        </svg>
-        <span className=' text-xs text-gray-400'>{repository.language}</span>
+          <svg
+            className=' h-4 w-4 text-gray-400'
+            aria-hidden='true'
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+          >
+            <path
+              stroke='currentColor'
+              stroke-linecap='round'
+              strokeLinejoin='round'
+              strokeWidth='2'
+              d='M11 6.5h2M11 18h2m-7-5v-2m12 2v-2M5 8h2c.6 0 1-.4 1-1V5c0-.6-.4-1-1-1H5a1 1 0 0 0-1 1v2c0 .6.4 1 1 1Zm0 12h2c.6 0 1-.4 1-1v-2c0-.6-.4-1-1-1H5a1 1 0 0 0-1 1v2c0 .6.4 1 1 1Zm12 0h2c.6 0 1-.4 1-1v-2c0-.6-.4-1-1-1h-2a1 1 0 0 0-1 1v2c0 .6.4 1 1 1Zm0-12h2c.6 0 1-.4 1-1V5c0-.6-.4-1-1-1h-2a1 1 0 0 0-1 1v2c0 .6.4 1 1 1Z'
+            />
+          </svg>
+          <span className=' text-xs text-gray-400'>{repository.language}</span>
         </span>
         <span className='flex items-center '>
           <svg
