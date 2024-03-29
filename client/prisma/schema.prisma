@@ -25,6 +25,7 @@ model Project {
   repository_name String
   userId          String
   testing_dir     String
+  project_type    String
   user            User           @relation(fields: [userId], references: [id])
   files           MarkdownFile[]
 

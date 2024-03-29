@@ -94,7 +94,7 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                                 <p className='text-m font-medium leading-none'>
                                   {repo.name}
                                 </p>
-                                <p className='text-sm text-muted-foreground'>
+                                <p className='text-muted-foreground text-sm'>
                                   {repo.clone_url}
                                 </p>
                               </div>
