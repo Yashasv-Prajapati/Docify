@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { createProjectSchema } from '@/lib/validations/project';
 
 interface ProfileEditProps {
   isVisible: boolean;
@@ -39,26 +40,25 @@ function ImportProject({
     setAgree(true);
     // Perform any additional actions needed when user agrees
   };
-  // console.log("repository_nameeeeeeee:",repository_name);
 
   const handleContinue = async () => {
     // CALL THE API HERE BASED ON THE TECKSTACK {java,python}
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/project', {
+      const body = createProjectSchema.parse( {
         url,
         repository_name,
         userId,
         testing_dir,
+        project_type: techstack
       });
-
-      // console.log("repository_nameeeeeeee:",repository_name);
-      // console.log("language:",techstack);
+      const response = await axios.post('/api/project',body, {withCredentials: true});
 
       if (response.data.success) {
         toast.success('Project imported successfully');
-        router.refresh();
+        // router.refresh();
         // navigate to the required page
+        router.push('/dashboard');
       } else {
         toast.error('Project already exists');
       }

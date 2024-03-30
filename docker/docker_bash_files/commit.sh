@@ -35,4 +35,4 @@ git add .
 git commit -m "Docify changes to repository, changes made in ./assets folder"
 
 # Push to github
-git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}.git
+git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}.git docify

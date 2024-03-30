@@ -1,23 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import * as z from 'zod';
-
 import { db } from '@/lib/db';
+import { createProjectSchema } from '@/lib/validations/project';
 
-// pages/api/projects.js
-
-const createProjectSchema = z.object({
-  url: z.string(),
-  repository_name: z.string(),
-  userId: z.string(),
-  testing_dir: z.string(),
-});
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
 
-    const { url, repository_name, userId, testing_dir } =
+    const { url, repository_name, userId, testing_dir, project_type } =
       createProjectSchema.parse(data);
 
     const project = await db.project.create({
@@ -26,7 +18,8 @@ export async function POST(req: NextRequest) {
         repository_name: repository_name,
         userId: userId,
         testing_dir: testing_dir,
-      },
+        project_type:project_type
+      }
     });
 
     return NextResponse.json({
