@@ -3,3 +3,5 @@ node_modules
 package.json
 bun.lockb
 public
+components/loader/loaderAnimation.json
+components/loader/tickAnimation.json

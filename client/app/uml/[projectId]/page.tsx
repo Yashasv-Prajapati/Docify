@@ -6,9 +6,10 @@ import { Package2Icon } from 'lucide-react';
 import { db } from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import Nav from '@/components/nav';
+import Avatar from '@/app/dashboard/_components/avatar';
+import Nav from '@/app/dashboard/_components/nav';
 
-import DownloadBtn from '../components/download-btn';
+import DownloadBtn from '../_components/download-btn';
 
 interface PageProps {
   params: { projectId: string };
@@ -28,7 +29,7 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
 
   return (
     <div className='flex h-screen flex-col'>
-      <Nav />
+      <Nav AvatarComponent={<Avatar />} />
       <main className='flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10'>
         <div className='mx-auto grid w-full max-w-6xl gap-2'>
           <h1 className='text-3xl font-semibold'>Projects</h1>
