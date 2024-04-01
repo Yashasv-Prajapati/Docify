@@ -6,12 +6,12 @@ import { Navbar } from '../../components/index';
 
 const AccountsPage: React.FC = () => {
   return (
-    <div className=' overflow-hidden bg-[#1b222f] h-screen'>
+    <div className=' h-screen overflow-hidden bg-[#1b222f]'>
       <Navbar />
       {/* <div className="gradient-03 z-0" /> */}
       <div className='mx-auto flex '>
         <Sidebar />
-        <div className='flex flex-col  w-4/5'>
+        <div className='flex w-4/5  flex-col'>
           <Tabs />
 
           {/* The rest of the profile page content will go here */}

@@ -25,7 +25,7 @@ const Tabs: React.FC = () => {
         <li className='me-2'>
           <a
             href='#'
-            className='active group inline-flex items-center justify-center rounded-t-lg border-b-2 border-[#7184f0] p-4 text-transparent bg-clip-text bg-gradient-to-r to-[#8e29f3] from-sky-400 '
+            className='active group inline-flex items-center justify-center rounded-t-lg border-b-2 border-[#7184f0] bg-gradient-to-r from-sky-400 to-[#8e29f3] bg-clip-text p-4 text-transparent '
             aria-current='page'
           >
             <svg

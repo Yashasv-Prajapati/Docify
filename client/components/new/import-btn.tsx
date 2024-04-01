@@ -11,9 +11,7 @@ interface ImportBtnProps {
   toggleModal: () => void; // Add toggleModal prop
 }
 
-const ImportBtn: FC<ImportBtnProps> = ({
-  toggleModal,
-}) => {
+const ImportBtn: FC<ImportBtnProps> = ({ toggleModal }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
@@ -21,7 +19,9 @@ const ImportBtn: FC<ImportBtnProps> = ({
       size='sm'
       className='flex gap-2'
       disabled={isLoading}
-      onClick={()=> {toggleModal()}}
+      onClick={() => {
+        toggleModal();
+      }}
     >
       {isLoading ? (
         <Loader2 className='size-6 animate-spin text-zinc-500' />

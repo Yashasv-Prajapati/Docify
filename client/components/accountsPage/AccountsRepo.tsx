@@ -1,8 +1,9 @@
 // pages/index.tsx or pages/your-page.tsx
 
 import React from 'react';
-import GridRepositories from './GridRepositories';
+
 import { Repository } from '../../types/index';
+import GridRepositories from './GridRepositories';
 
 const repositories: Repository[] = [
   // Replace these with your actual repository data
@@ -17,7 +18,7 @@ const repositories: Repository[] = [
 
 const ProfilePage: React.FC = () => {
   return (
-    <div className="container mx-auto p-4 ">
+    <div className='container mx-auto p-4 '>
       <GridRepositories repositories={repositories} />
       {/* Other components */}
     </div>

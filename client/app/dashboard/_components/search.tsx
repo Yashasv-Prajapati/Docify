@@ -1,8 +1,9 @@
 'use client';
 
+import { FC, useState } from 'react';
 import Link from 'next/link';
 import { ChevronDownIcon } from 'lucide-react';
-import { FC , useState} from 'react';
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,25 +13,27 @@ import {
 import { Input } from '@/components/ui/input';
 
 import { Button } from '../../../components/ui/button';
+
 type SearchParams = {
   data: any;
   onfilteredData: any;
 };
 
-const  Search:FC<SearchParams>  = ({data, onfilteredData}) =>{
+const Search: FC<SearchParams> = ({ data, onfilteredData }) => {
+  const [search, setSearch] = useState('' as string);
+  const handleSearch = (e: any) => {
+    setSearch(e.target.value);
+    filterData(e.target.value);
+  };
 
-    const [search, setSearch] = useState('' as string);
-    const handleSearch = (e: any) => {
-        setSearch(e.target.value);
-        filterData(e.target.value);
-    };
-
-    const filterData = (search: string) => {
-        const filteredData = data.filter((project: any) => {
-          return project.repository_name.toLowerCase().includes(search.toLowerCase());
-        });
-        onfilteredData(filteredData);
-      }
+  const filterData = (search: string) => {
+    const filteredData = data.filter((project: any) => {
+      return project.repository_name
+        .toLowerCase()
+        .includes(search.toLowerCase());
+    });
+    onfilteredData(filteredData);
+  };
   return (
     <div className='flex flex-col gap-2 md:flex-row md:items-center md:gap-4'>
       <Input
@@ -57,7 +60,6 @@ const  Search:FC<SearchParams>  = ({data, onfilteredData}) =>{
       </div>
     </div>
   );
-}
-
+};
 
 export default Search;
