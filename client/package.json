@@ -10,7 +10,8 @@
     "postinstall": "prisma generate",
     "prepare": "cd .. && husky client/.husky",
     "format:write": "prettier --write . --cache",
-    "format:check": "prettier --check . --cache"
+    "format:check": "prettier --check . --cache",
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -53,6 +54,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/dockerode": "^3.3.23",
+    "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.11.17",
     "@types/react": "^18",
