@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+
 import { createProjectSchema } from '@/lib/validations/project';
 
 interface ProfileEditProps {
@@ -28,6 +29,7 @@ function ImportProject({
   const [agree, setAgree] = useState(false);
   const [techstack, setTechstack] = useState('');
   const router = useRouter();
+  // console.log('teckkkkkk :', techstack);
 
   useEffect(() => {
     if (!isVisible) {
@@ -44,23 +46,34 @@ function ImportProject({
   const handleContinue = async () => {
     // CALL THE API HERE BASED ON THE TECKSTACK {java,python}
     setIsLoading(true);
+
     try {
-      const body = createProjectSchema.parse( {
+      const body = createProjectSchema.parse({
         url,
         repository_name,
         userId,
         testing_dir,
-        project_type: techstack
+        project_type: techstack,
       });
-      const response = await axios.post('/api/project',body, {withCredentials: true});
+      const response = await axios.post('/api/project', body, {
+        withCredentials: true,
+      });
+
+      const truncatedRepoName =
+        repository_name.length > 20
+          ? repository_name.substring(0, 20) + '...'
+          : repository_name;
 
       if (response.data.success) {
-        toast.success('Project imported successfully');
+        toast.success(`Project '${truncatedRepoName}' imported successfully`);
+        console.log('repository_name', repository_name);
         // router.refresh();
         // navigate to the required page
-        router.push('/dashboard');
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000); // Adjust delay as needed
       } else {
-        toast.error('Project already exists');
+        toast.error(`Project '${truncatedRepoName}' already exists`);
       }
     } catch (error) {
       if (error instanceof AxiosError) {
