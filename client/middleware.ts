@@ -45,6 +45,9 @@ export function middleware(request: NextRequest) {
 
   return null;
 }
+// export function middleware(request: NextRequest) {//just forwards, no changes
+//   return null;
+// }
 
 export const config = {
   matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
