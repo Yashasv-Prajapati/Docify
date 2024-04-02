@@ -69,8 +69,9 @@ function ImportProject({
         console.log('repository_name', repository_name);
         // router.refresh();
         // navigate to the required page
-        router.push('/dashboard');
-        window.location.reload();
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000); // Adjust delay as needed
       } else {
         toast.error(`Project '${truncatedRepoName}' already exists`);
       }
