@@ -21,31 +21,46 @@ export async function POST(req: NextRequest) {
     console.log('Request to generate code coverage');
     const docker = new Dockerode();
     const data = await req.json();
+    const {token,username,repo}=data;
+    // 
     // console.log(data);
     console.log(parentDir);
     const containerImg =
       data.lang == 'python'
         ? 'express-test-net:latest'
-        : 'express-test-net:latest';
+        : 'dockify_java:latest';
+    const binds=
+    data.lang=='python'?[
+      parentDir + `/python/code_coverage:/app`,
+      parentDir+'/docker/docker_bash_files:/bash_files'
+    ]:
+    [
+      parentDir + `/java/code_coverage:/app`,
+      parentDir+'/docker/docker_bash_files:/bash_files'
+    ]
+    ;
     const containerOptions = {
       Image: containerImg,
       Tty: true,
       HostConfig: {
         AutoRemove: true,
-        Binds: [parentDir + `/python_code_coverage:/app`],
+        Binds:binds
+        // Binds: [parentDir + `/python/code_coverage:/app`,parentDir+'/docker/docker_bash_files:/bash_files'],
       },
-      env: [
-        `REPO=${data.repo}`,
-        `BRANCH=${data.branch}`,
-        `USER=${data.username}`,
-        `LANG=${data.lang}`,
-      ],
+      // env: [
+      //   `REPO=${data.repo}`,
+      //   `BRANCH=${data.branch}`,
+      //   `USER=${data.username}`,
+      //   `LANG=${data.lang}`,
+      // ],
       // CMD :["sh", "-c", "chmod +x python_code_coverage.sh && chmod +x download_repo.sh && ./download_repo.sh  && ./python_code_coverage.sh && tail -f /dev/null"],
-      CMD: [
-        'sh',
-        '-c',
-        'echo Hello && echo $USER && echo $REPO && ./download_repo.sh && ./python_code_coverage.sh && ls  && tail -f /dev/null',
-      ],
+      // CMD: [
+      //   'sh',
+      //   '-c',
+      //   'echo Hello && echo $USER && echo $REPO && ./download_repo.sh && ./python_code_coverage.sh && ls  && tail -f /dev/null',
+      // ],
+      // CMD:["tail","-f","/dev/null"]
+      CMD:["sh","-c",`./download.sh ${token} ${username} ${repo} && ./coverage.sh ${repo} && ./commit.sh ${username} ${repo} ${token}`]
       // CMD:["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"],
     };
     docker.createContainer(containerOptions, (err, container) => {
