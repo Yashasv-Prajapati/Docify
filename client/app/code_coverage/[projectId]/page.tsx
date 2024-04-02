@@ -1,6 +1,7 @@
 'use client';
 
 import { Table } from 'lucide-react';
+
 import Nav from '@/components/nav';
 
 const dummyCodeCoverageHTML = `

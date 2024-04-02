@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -25,6 +25,7 @@ model Project {
   repository_name String
   userId          String
   testing_dir     String
+  project_type    String
   user            User           @relation(fields: [userId], references: [id])
   files           MarkdownFile[]
 

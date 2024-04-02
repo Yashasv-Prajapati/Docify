@@ -75,12 +75,16 @@ export async function GET(req: NextRequest) {
     // console.log(installations);
 
     let installed = false;
+    let github_installation_id = '';
+    // console.log("Installations", installations);
     if (installations.length > 0) {
       for (let i = 0; i < installations.length; i++) {
         const user_name = installations[i].account.login;
         // const installation_id = installations[i].id;
+
         if (user_name === userResponse.data.login) {
           installed = true;
+          github_installation_id = installations[i].id;
           break;
         }
       }
@@ -106,20 +110,33 @@ export async function GET(req: NextRequest) {
     // check if user exists in the database
     let user = await db.user.findUnique({
       where: {
-        github_username: github_username,
-      },
+        github_username: github_username
+      }
     });
 
-    user = await db.user.update({
-      where: {
-        github_username: github_username,
-      },
-      data: {
-        github_access_token: accessToken,
-        github_refresh_token: github_refresh_token,
-        github_access_token_expiry: expiry_date_time,
-      },
-    });
+    if(!user){ // user doesn't not exist, then create
+      user = await db.user.create({
+        data: {
+          github_username: github_username,
+          github_access_token: accessToken,
+          github_refresh_token: github_refresh_token,
+          github_access_token_expiry: expiry_date_time,
+          avatar_url: github_user_avatar_url,
+          github_installation_id:github_installation_id.toString()
+        }
+      });
+    }else{ // update
+      user = await db.user.update({
+        where: {
+          github_username: github_username
+        },
+        data: {
+          github_access_token: accessToken,
+          github_refresh_token: github_refresh_token,
+          github_access_token_expiry: expiry_date_time
+        }
+      });
+    }
 
     const res = NextResponse.redirect(
       `${process.env.NEXT_SERVER_URL}/dashboard`
@@ -139,6 +156,7 @@ export async function GET(req: NextRequest) {
 
     return res;
   } catch (error) {
+    // @ts-ignore
     console.log(error.message);
     return redirect('/not-found');
   }

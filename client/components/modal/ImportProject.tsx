@@ -6,7 +6,7 @@ import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
+import { createProjectSchema } from '@/lib/validations/project';
 
 interface ProfileEditProps {
   isVisible: boolean;
@@ -42,22 +42,23 @@ function ImportProject({
     setAgree(true);
     // Perform any additional actions needed when user agrees
   };
-  // console.log("repository_nameeeeeeee:",repository_name);
 
   const handleContinue = async () => {
     // CALL THE API HERE BASED ON THE TECKSTACK {java,python}
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/api/project', {
+      const body = createProjectSchema.parse({
         url,
         repository_name,
         userId,
         testing_dir,
+        project_type: techstack,
+      });
+      const response = await axios.post('/api/project', body, {
+        withCredentials: true,
       });
 
-      // console.log("repository_nameeeeeeee:",repository_name);
-      // console.log("language:",techstack);
       const truncatedRepoName =
         repository_name.length > 20
           ? repository_name.substring(0, 20) + '...'
@@ -66,8 +67,9 @@ function ImportProject({
       if (response.data.success) {
         toast.success(`Project '${truncatedRepoName}' imported successfully`);
         console.log('repository_name', repository_name);
+        // router.refresh();
+        // navigate to the required page
         router.push('/dashboard');
-        // Refresh the page
         window.location.reload();
       } else {
         toast.error(`Project '${truncatedRepoName}' already exists`);
@@ -100,7 +102,7 @@ function ImportProject({
             <div className='relative rounded-lg bg-white shadow dark:bg-gray-700'>
               <button
                 type='button'
-                className='absolute end-2.5 top-3 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
+                className='absolute end-2.5 top-3 ms-auto inline-flex size-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
                 data-modal-hide='popup-modal'
                 onClick={() => {
                   setAgree(false);
@@ -109,7 +111,7 @@ function ImportProject({
                 }}
               >
                 <svg
-                  className='h-3 w-3'
+                  className='size-3'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -153,7 +155,7 @@ function ImportProject({
                         </div>
                       </div>
                       <svg
-                        className='ms-3 h-4 w-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
+                        className='ms-3 size-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -194,7 +196,7 @@ function ImportProject({
                         </div>
                       </div>
                       <svg
-                        className='ms-3 h-4 w-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
+                        className='ms-3 size-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -228,12 +230,12 @@ function ImportProject({
             <div className='relative rounded-lg bg-white shadow dark:bg-gray-700'>
               <button
                 type='button'
-                className='absolute end-2.5 top-3 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
+                className='absolute end-2.5 top-3 ms-auto inline-flex size-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white'
                 data-modal-hide='popup-modal'
                 onClick={() => onClose()}
               >
                 <svg
-                  className='h-3 w-3'
+                  className='size-3'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -251,7 +253,7 @@ function ImportProject({
               </button>
               <div className='p-4 text-center md:p-5'>
                 <svg
-                  className='mx-auto mb-4 h-12 w-12 text-gray-400 dark:text-gray-200'
+                  className='mx-auto mb-4 size-12 text-gray-400 dark:text-gray-200'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'

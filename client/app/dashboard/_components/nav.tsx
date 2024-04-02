@@ -2,35 +2,37 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-
-import { UserSchema } from '@/lib/validations/user';
+import { usePathname, useRouter } from 'next/navigation';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 import { Button } from '../../../components/ui/button';
-import styles from '../../../styles';
-// import Avatar from './avatar';
-
-interface NavProps {
-  curr_user: UserSchema;
-}
 
 export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function logout() {
+    const response = await axios.post('/api/logout');
+
+    if (response.status === 200) {
+      toast.success('Logged out successfully');
+      router.push('/auth/signup');
+    } else {
+      toast.error('Error logging out');
+    }
+  }
 
   return (
-    <header className='flex h-16 shrink-0 items-center  bg-gray-100/40 px-4 sm:justify-between md:px-6 border-b-2'>
+    <header className='flex h-16 shrink-0 items-center border-b bg-gray-100/40 px-4 sm:justify-between md:px-6'>
       <Link
         href='/'
         className='flex w-full items-center justify-center gap-2 text-lg font-semibold sm:w-auto sm:justify-normal'
       >
-        <img
-          src='/logo-no-background.png'
-          alt='search'
-          className='h-10 cursor-pointer  object-contain xl:h-12' // Add cursor-pointer to show the cursor as pointer
-        />
+        <span>Docify</span>
       </Link>
-      <nav className='mr-8 hidden w-full flex-row items-center justify-center gap-6 px-24 text-sm font-medium  sm:flex lg:gap-14'>
+      <nav className='hidden w-full flex-row items-center justify-start gap-6 px-24 text-sm font-medium  sm:flex lg:gap-14'>
         <NavLink href='/' currentPath={pathname}>
           Home
         </NavLink>
@@ -86,11 +88,12 @@ export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
               </span>
             </Link>
             {/* show this only when user is Logged in ******** */}
-            <Link href='/logout' passHref>
-              <span className='block cursor-pointer px-4 py-2 text-gray-800 hover:bg-gray-100'>
-                Log out
-              </span>
-            </Link>
+            <span
+              onClick={logout}
+              className='block cursor-pointer px-4 py-2 text-gray-800 hover:bg-gray-100'
+            >
+              Logout
+            </span>
           </div>
         )}
       </div>
