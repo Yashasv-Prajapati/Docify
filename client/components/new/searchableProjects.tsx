@@ -48,7 +48,6 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
   };
 
   return (
-<<<<<<< HEAD
     <Wrapper className='mx-auto'>
       <div className='m-5 mx-auto '>
         <Card className='mx-auto w-5/6 border-2 border-[#6785f2] '>
@@ -112,72 +111,6 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                             <p className='text-sm text-muted-foreground'>
                               {repo.clone_url}
                             </p>
-=======
-    <div className='bg-[#1b222f]'>
-      <Fragment>
-        <Navbar />
-        <Wrapper>
-          <div className='m-5 min-h-screen'>
-            <Card className='w-5/6 '>
-              <CardHeader>
-                <CardTitle>Import Github Repository</CardTitle>
-                <CardDescription>
-                  Import your repositories to start using docify
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form>
-                  <div className='grid w-1/2 items-center gap-4'>
-                    <div className='space-y-1.5'>
-                      <Label htmlFor='email'>{userName}</Label>
-                      <Input
-                        className=''
-                        type='email'
-                        id='email'
-                        placeholder={'Search Your Projects...'}
-                        value={searchText}
-                        onChange={handleSearchChange}
-                      />
-                    </div>
-                  </div>
-                </form>
-
-                <div>
-                  {searchResults && searchResults.length > 0
-                    ? searchResults.map(
-                        (
-                          repo: { name: string; clone_url: string; id: string },
-                          index: number
-                        ) => (
-                          <div
-                            key={repo.id}
-                            className='m-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0'
-                          >
-                            <span className='flex size-2 translate-y-1 rounded-full bg-green-400' />
-                            <div className='flex flex-row items-center'>
-                              <div className='w-3/4 space-y-2'>
-                                <p className='text-m font-medium leading-none'>
-                                  {repo.name}
-                                </p>
-                                <p className='text-muted-foreground text-sm'>
-                                  {repo.clone_url}
-                                </p>
-                              </div>
-                              <div className=''>
-                                <ImportBtn
-                                  toggleModal={() => toggleModal(repo.id)}
-                                />
-                              </div>
-                              <ImportProject
-                                url={repo.clone_url}
-                                repository_name={repo.name}
-                                userId={userId}
-                                testing_dir={'/'} // TODO: add testing dir
-                                isVisible={visibleModalId === repo.id}
-                                onClose={() => toggleModal(repo.id)}
-                              />
-                            </div>
->>>>>>> upstream/main
                           </div>
                           <div className=''>
                             <ImportBtn
