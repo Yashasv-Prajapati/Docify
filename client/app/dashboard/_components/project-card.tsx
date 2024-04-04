@@ -1,12 +1,9 @@
 'use client';
 
 import { FC } from 'react';
-import Link from 'next/link';
-import { Project } from '@prisma/client';
 import { GitBranchIcon, GitCommitIcon, MoreHorizontalIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,9 +20,9 @@ const handleUmlClick = async () => {
     headers: {
       'Content-Type': 'application/json',
     },
-    // body: JSON.stringify({user:'pirocomder',repoName:'test2'}),
     body: JSON.stringify({ user: 'pirocomder', repoName: 'test2' }),
   });
+
   const data = await res.json();
   console.log(data);
 };

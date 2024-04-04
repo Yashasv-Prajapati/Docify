@@ -40,14 +40,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(
       new URL(`/auth/signup?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
-    return NextResponse.redirect(new URL('/auth/signup', nextUrl));
   }
 
   return null;
 }
-// export function middleware(request: NextRequest) {//just forwards, no changes
-//   return null;
-// }
 
 export const config = {
   matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],

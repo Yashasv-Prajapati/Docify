@@ -9,13 +9,15 @@ path_to_directory="$1"
 new_folder_path=".test_docify"  # Change this to your desired new folder path
 
 # Step 1: Create a new folder
+cd "../repo/$path_to_directory"
 mkdir "$new_folder_path"
 
 # Step 2: Copy only Python files from the directory to the new folder
-find "$path_to_directory" -name "*.py" -exec cp {} "$new_folder_path" \;
+find . -name "*.py" -exec cp {} "$new_folder_path" \;
 
 # Step 3: Generate requirements.txt using pipreqs
 pipreqs "$new_folder_path"
+cat "$new_folder_path/requirements.txt"
 
 # Step 4: Create and activate a temporary virtual environment
 python3 -m venv temp_env
@@ -31,13 +33,12 @@ cat "$new_folder_path/requirements.txt" all_dependencies.txt | sort | uniq > mer
 
 # Remove redundancies
 pip-compile --output-file requirements.txt merged_requirements.txt
-grep -v '^[ ]*#' requirements.txt > tmpfile && mv tmpfile requirements.txt
+grep -v '^[ ]*#' requirements.txt > tmpfile && mkdir -p .docify-assets && mv tmpfile .docify-assets/requirements.txt
 
 # Delete requirements.txt, all_dependencies.txt
-rm "$new_folder_path/requirements.txt" all_dependencies.txt merged_requirements.txt
+rm "$new_folder_path/requirements.txt" all_dependencies.txt merged_requirements.txt requirements.txt
 
 # Deactivate and delete the temporary virtual environment
 deactivate
 rm -rf temp_env
 rm -rf .test_docify
-

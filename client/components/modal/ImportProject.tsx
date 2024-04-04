@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
@@ -66,12 +66,8 @@ function ImportProject({
 
       if (response.data.success) {
         toast.success(`Project '${truncatedRepoName}' imported successfully`);
-        console.log('repository_name', repository_name);
-        // router.refresh();
-        // navigate to the required page
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1000); // Adjust delay as needed
+        router.push('/dashboard');
+        router.refresh();
       } else {
         toast.error(`Project '${truncatedRepoName}' already exists`);
       }
