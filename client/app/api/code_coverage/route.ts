@@ -22,12 +22,11 @@ export async function POST(req: NextRequest) {
     const docker = new Dockerode();
     const data = await req.json();
     const {token,username,repo}=data;
-    // 
-    // console.log(data);
+
     console.log(parentDir);
     const containerImg =
       data.lang == 'python'
-        ? 'express-test-net:latest'
+        ? 'test:latest'
         : 'dockify_java:latest';
     const binds=
     data.lang=='python'?[
@@ -59,8 +58,8 @@ export async function POST(req: NextRequest) {
       //   '-c',
       //   'echo Hello && echo $USER && echo $REPO && ./download_repo.sh && ./python_code_coverage.sh && ls  && tail -f /dev/null',
       // ],
-      // CMD:["tail","-f","/dev/null"]
-      CMD:["sh","-c",`./download.sh ${token} ${username} ${repo} && ./coverage.sh ${repo} && ./commit.sh ${username} ${repo} ${token}`]
+      CMD:["tail","-f","/dev/null"]
+      // CMD:["sh","-c",`./download.sh ${token} ${username} ${repo} && ./coverage.sh ${repo} && ./commit.sh ${username} ${repo} ${token}`]
       // CMD:["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"],
     };
     docker.createContainer(containerOptions, (err, container) => {
@@ -82,7 +81,7 @@ export async function POST(req: NextRequest) {
         // return NextResponse.json({ message: 'Successfully started the container' },{status:200});
       });
     });
-    return redirect('/dashboard');
+    // return redirect('/dashboard');
     // return redirect('/new')
     // return NextResponse.redirect('https://localhost:3000/dashboard');
     return NextResponse.json(
@@ -92,6 +91,10 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     return NextResponse.json({
       message: `Error occured while generating code coverage : ${err}`,
-    });
+    }, {status:500});
   }
 }
+
+// export async function GET(){
+//   return NextResponse.json({message:'GET request to code coverage'}, {status:200});
+// }
