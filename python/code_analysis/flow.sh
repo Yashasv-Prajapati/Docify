@@ -1,5 +1,14 @@
+
+    #!/bin/bash
+
+# Get the arguments
+filename=$1
+function_name=$2
+
+# Create the Python file
+cat << EOF > flow.py
 import sys
-import main
+import $filename
 
 def trace_calls(frame, event, arg):
     if event == 'call':
@@ -15,9 +24,10 @@ def trace_calls(frame, event, arg):
 
 def docify_flow():
     #  = sys.argv[1]
-    main.main()
+    $filename.$function_name()
 
 sys.settrace(trace_calls)
 
 if(__name__ == "__main__"):
     docify_flow()
+EOF
