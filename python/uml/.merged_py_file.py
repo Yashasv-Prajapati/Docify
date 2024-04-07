@@ -67,13 +67,3 @@ if __name__ == "__main__":
     main()
 
 
-# Content from: ./test.py
-
-
-
-def add(a, b):
-    return a + b
-
-add(1, 2)
-
-
