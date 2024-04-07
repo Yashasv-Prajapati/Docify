@@ -31,12 +31,14 @@ pip freeze > all_dependencies.txt
 # Merge the outputs to form the final requirements.txt
 cat "$new_folder_path/requirements.txt" all_dependencies.txt | sort | uniq > merged_requirements.txt
 
+mkdir .docify-assets
+
 # Remove redundancies
 pip-compile --output-file requirements.txt merged_requirements.txt
-grep -v '^[ ]*#' requirements.txt > tmpfile && mkdir -p .docify-assets && mv tmpfile .docify-assets/requirements.txt
+grep -v '^[ ]*#' requirements.txt > .docify-assets/requirements.txt
 
 # Delete requirements.txt, all_dependencies.txt
-rm "$new_folder_path/requirements.txt" all_dependencies.txt merged_requirements.txt requirements.txt
+rm "$new_folder_path/requirements.txt" all_dependencies.txt requirements.txt merged_requirements.txt
 
 # Deactivate and delete the temporary virtual environment
 deactivate

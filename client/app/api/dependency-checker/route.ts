@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     console.log(github_access_token, github_username, project_type, repositoryName);
     const containerImage =
       project_type === 'python'
-        ? 'dependency-checker-python:latest'
+        ? 'express-test-net:latest'
         : 'dependency-checker-java:latest';
     const binds =
       project_type === 'python'
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         ? [
             'sh',
             '-c',
-            `./download.sh ${github_access_token} ${github_username} ${repositoryName} && ./dependency-checker.sh ${repositoryName} && ./commit.sh ${github_username} ${repositoryName} ${github_access_token}`,
+            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID}`,
           ]
         : [];
 
