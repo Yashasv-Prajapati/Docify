@@ -3,6 +3,7 @@ cd repo
 GITHUB_USERNAME=$1
 GITHUB_REPOSITORY=$2
 GITHUB_TOKEN=$3
+GITHUB_APP_ID=$4
 GITHUB_BRANCH_NAME="docify"
 cd $GITHUB_REPOSITORY
 ls
@@ -30,11 +31,11 @@ git checkout docify
 # Add all files
 git add .
 
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
+git config --global user.name "docify[bot]"
+git config --global user.email $GITHUB_APP_ID+docify[bot]@users.noreply.github.com
 
 # Commit with message
 git commit -m "Docify changes to repository, changes made in ./assets folder"
 
 # Push to github
-git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}.git docify
+git push -f https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}.git docify
