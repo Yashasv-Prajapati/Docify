@@ -15,12 +15,18 @@ export async function POST(request: NextRequest) {
     const { htmlStr } = CoverageToMdSchema.parse(data);
     const markdown = coverageToMd(htmlStr);
 
-    return new NextResponse(markdown);
+    return NextResponse.json({ markdown: markdown }, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
+      return NextResponse.json(
+        { message: JSON.stringify(error.issues) },
+        { status: 422 }
+      );
     }
 
-    return new NextResponse('Internal Server Error', { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
