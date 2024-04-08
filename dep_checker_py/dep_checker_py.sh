@@ -1,43 +1,45 @@
 #!/bin/bash
 
-#if not already installed
-pip install pipreqs
-pip install pip-tools
+# Check if a directory path is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <path_to_python_project_directory>"
+    exit 1
+fi
 
-# Define the directory path
-path_to_directory="$1"
-new_folder_path=".test_docify"  # Change this to your desired new folder path
+path_to_directory="$1" # Path to the Python project directory
+temp_dir=$(mktemp -d -t dependency-checker-XXXXXX) # Create a temporary directory
 
-# Step 1: Create a new folder
-mkdir "$new_folder_path"
+echo "Temporary directory created at: $temp_dir"
 
-# Step 2: Copy only Python files from the directory to the new folder
-find "$path_to_directory" -name "*.py" -exec cp {} "$new_folder_path" \;
+# Step 1: Create and activate a temporary virtual environment within the temporary directory
+python3 -m venv "$temp_dir/env"
+source "$temp_dir/env/bin/activate"
 
-# Step 3: Generate requirements.txt using pipreqs
-pipreqs "$new_folder_path"
+# Step 2: Install pipreqs and pipdeptree in the temporary environment
+pip install pipreqs pipdeptree
 
-# Step 4: Create and activate a temporary virtual environment
-python3 -m venv temp_env
-source temp_env/bin/activate && pip install -r "$new_folder_path/requirements.txt"
+# Step 3: Use pipreqs to generate a requirements.txt file for direct imports from the project
+pipreqs "$path_to_directory" --force --savepath "$temp_dir/requirements_direct.txt"
+echo "Direct requirements identified and saved."
 
-# Install the modules and libraries listed by pipreqs into the temporary environment
+# Step 4: Install the directly imported packages into the temporary environment
+pip install -r "$temp_dir/requirements_direct.txt"
+echo "Direct requirements installed."
 
-# Get a list of all installed packages and their dependencies using pip freeze
-pip freeze > all_dependencies.txt
+# Step 5: Use pipdeptree to analyze and list the dependencies of installed packages
+pipdeptree --warn silence --freeze --output-file "$temp_dir/requirements_full.txt"
+echo "Full dependency list generated."
 
-# Merge the outputs to form the final requirements.txt
-cat "$new_folder_path/requirements.txt" all_dependencies.txt | sort | uniq > merged_requirements.txt
+# Step 6: Optional - Clean the requirements list if needed
+# This step is placeholder for any additional processing you might want to perform
+# For example, removing specific lines, filtering out unnecessary packages, etc.
 
-# Remove redundancies
-pip-compile --output-file requirements.txt merged_requirements.txt
-grep -v '^[ ]*#' requirements.txt > tmpfile && mv tmpfile requirements.txt
+# Step 7: Copy the final list of requirements back to the project directory or a specific location
+cp "$temp_dir/requirements_full.txt" "./final_requirements.txt"
+echo "Final requirements list copied to the current directory."
 
-# Delete requirements.txt, all_dependencies.txt
-rm "$new_folder_path/requirements.txt" all_dependencies.txt merged_requirements.txt
-
-# Deactivate and delete the temporary virtual environment
+# Cleanup
 deactivate
-rm -rf temp_env
-rm -rf .test_docify
+rm -rf "$temp_dir"
+echo "Cleanup complete."
 
