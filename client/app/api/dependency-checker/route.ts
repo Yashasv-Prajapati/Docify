@@ -26,8 +26,14 @@ export async function POST(request: NextRequest) {
   const { github_access_token, github_username } = currentUser;
 
   try {
-    const { project_type, repositoryName } = DependencyCheckerSchema.parse(data);
-    console.log(github_access_token, github_username, project_type, repositoryName);
+    const { project_type, repositoryName } =
+      DependencyCheckerSchema.parse(data);
+    console.log(
+      github_access_token,
+      github_username,
+      project_type,
+      repositoryName
+    );
     const containerImage =
       project_type === 'python'
         ? 'express-test-net:latest'

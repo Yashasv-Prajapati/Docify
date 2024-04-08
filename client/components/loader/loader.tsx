@@ -19,9 +19,21 @@ interface LoaderItem {
 }
 
 const loaders: LoaderItem[] = [
-  { animationData: loaderAnimation, showTick: false, text: 'Container starting' },
-  { animationData: loaderAnimation, showTick: false, text: 'Container executing' },
-  { animationData: loaderAnimation, showTick: false, text: 'Execution completing' }, // Added a fourth loader
+  {
+    animationData: loaderAnimation,
+    showTick: false,
+    text: 'Container starting',
+  },
+  {
+    animationData: loaderAnimation,
+    showTick: false,
+    text: 'Container executing',
+  },
+  {
+    animationData: loaderAnimation,
+    showTick: false,
+    text: 'Execution completing',
+  }, // Added a fourth loader
 ];
 
 const Loader: FC<LoaderProps> = ({ progressValues }) => {
@@ -40,11 +52,36 @@ const Loader: FC<LoaderProps> = ({ progressValues }) => {
   }, [loaderIndex, progressValues]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+      }}
+    >
       {loaders.map((loader, index) => (
-        <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginRight: '10px', flexGrow: 1 }}>
-            <div style={{ width: '100px', height: '100px', marginRight: '10px' }}>
+        <div
+          key={index}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '20px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              marginRight: '10px',
+              flexGrow: 1,
+            }}
+          >
+            <div
+              style={{ width: '100px', height: '100px', marginRight: '10px' }}
+            >
               {loader.showTick ? (
                 <Lottie animationData={tickAnimation} loop={false} />
               ) : (

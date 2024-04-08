@@ -11,7 +11,7 @@ import { slideIn, staggerContainer, textVariant } from '../../utils/motion';
 
 function CodePlanet() {
   return (
-    <div >
+    <div>
       <motion.div
         variants={staggerContainer(0.5, 0)}
         initial='hidden'

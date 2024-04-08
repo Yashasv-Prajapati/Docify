@@ -102,10 +102,10 @@
   filter: blur(150px);
 }
 
-.dropdown-menu{
-  position : absolute;
-  top : 100%;
-  right : 20px;
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 20px;
   /* background-color : #7a8494; */
   padding: 10px 20px;
   width: 200px;

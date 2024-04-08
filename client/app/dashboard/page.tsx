@@ -8,13 +8,13 @@ import ImportedProjects from './_components/ImportedProjects';
 const Page = async () => {
   const user = await getCurrentUser();
 
-  const projects = await db.$transaction(async(db)=>{
+  const projects = await db.$transaction(async (db) => {
     return await db.project.findMany({
       where: {
         userId: user!.id,
       },
     });
-  })
+  });
 
   const AvatarComponent = <Avatar />;
 

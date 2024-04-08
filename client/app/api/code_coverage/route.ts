@@ -5,43 +5,33 @@ import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
 
-const parentDir = path.resolve(
-  __dirname,
-  '..',
-  '..',
-  '..',
-  '..',
-  '..',
-  '..',
-); //now we are pointing to the repository root
+const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..'); //now we are pointing to the repository root
 
 export async function POST(req: NextRequest) {
   try {
     console.log('Request to generate code coverage');
     const docker = new Dockerode();
     const data = await req.json();
-    const {token,username,repo}=data;
+    const { token, username, repo } = data;
     console.log(parentDir);
     const containerImg =
+      data.lang == 'python' ? 'express-test-net:latest' : 'dockify_java:latest';
+    const binds =
       data.lang == 'python'
-        ? 'express-test-net:latest'
-        : 'dockify_java:latest';
-    const binds=
-    data.lang=='python'?[
-      parentDir + `/python/code_coverage:/app`,
-      parentDir+'/docker/docker_bash_files:/bash_files'
-    ]:
-    [
-      parentDir + `/java/code_coverage:/app`,
-      parentDir+'/docker/docker_bash_files:/bash_files'
-    ]
-    ;
+        ? [
+            parentDir + `/python/code_coverage:/app`,
+            parentDir + '/docker/docker_bash_files:/bash_files',
+          ]
+        : [
+            parentDir + `/java/code_coverage:/app`,
+            parentDir + '/docker/docker_bash_files:/bash_files',
+          ];
     const containerOptions = {
       Image: containerImg,
       Tty: true,
       HostConfig: {
         AutoRemove: true,
-        Binds:binds
+        Binds: binds,
         // Binds: [parentDir + `/python/code_coverage:/app`,parentDir+'/docker/docker_bash_files:/bash_files'],
       },
       // env: [
@@ -56,7 +46,11 @@ export async function POST(req: NextRequest) {
       //   '-c',
       //   'echo Hello && echo $USER && echo $REPO && ./download_repo.sh && ./python_code_coverage.sh && ls  && tail -f /dev/null',
       // ],
-      CMD:["sh","-c",`tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < coverage.sh > cov.sh && chmod +x d.sh && chmod +x c.sh && chmod +x cov.sh &&./d.sh ${token} ${username} ${repo} && ./cov.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`] // "&& tail -f /dev/null" for not closing and removing the container (can be used for debugging)
+      CMD: [
+        'sh',
+        '-c',
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < coverage.sh > cov.sh && chmod +x d.sh && chmod +x c.sh && chmod +x cov.sh &&./d.sh ${token} ${username} ${repo} && ./cov.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
+      ], // "&& tail -f /dev/null" for not closing and removing the container (can be used for debugging)
       // CMD:["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"],
     };
     docker.createContainer(containerOptions, (err, container) => {
