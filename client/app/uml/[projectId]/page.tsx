@@ -1,8 +1,9 @@
 import { FC } from 'react';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import axios from 'axios';
 import { Package2Icon } from 'lucide-react';
 
+import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,18 +11,39 @@ import Avatar from '@/app/dashboard/_components/avatar';
 import Nav from '@/app/dashboard/_components/nav';
 
 import DownloadBtn from '../_components/download-btn';
+import UML from '../_components/UML';
 
 interface PageProps {
   params: { projectId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
+const fetchUML = async (user: any, project: any): Promise<string> => {
+  try {
+    const username = user?.github_username;
+    const repoName = project?.repository_name;
+    const accessToken = user?.github_access_token;
+    //****Need to bypass middleware in order to send the request */
+    const response = await axios.get(
+      `http://localhost:3000/api/uml/fetchUML?username=${username}&repoName=${repoName}&accessToken=${accessToken}`
+      // {
+      //   responseType: 'blob', // Ensure the response is treated as a blob
+      // }
+      // {withCredentials: true}
+    );
+    return response?.data?.data?.download_url;
+  } catch (error) {
+    console.error('Error Showing UML:', error);
+    return '';
+  }
+};
 const Page: FC<PageProps> = async ({ params, searchParams }) => {
   const project = await db.project.findUnique({
     where: { projectId: params.projectId },
   });
-
-  const imageUrl = 'https://generated.vusercontent.net/placeholder.svg';
+  const user = await getCurrentUser();
+  // const imageUrl = 'https://generated.vusercontent.net/placeholder.svg';
+  const img_url = await fetchUML(user, project);
 
   if (!project) {
     notFound();
@@ -52,22 +74,12 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
             <div className='flex justify-center'>
               <div className='grid w-full max-w-6xl gap-4'>
                 <div className='relative aspect-video overflow-hidden rounded-lg'>
-                  <Image
-                    alt='Image'
-                    className='object-cover'
-                    height='1080'
-                    src={imageUrl}
-                    style={{
-                      aspectRatio: '1920/1080',
-                      objectFit: 'cover',
-                    }}
-                    width='1920'
-                  />
+                  <UML imageUrl={img_url as string} />
                 </div>
                 <Card>
                   <CardContent className='p-4'>
                     <div className='grid gap-4'>
-                      <DownloadBtn imageUrl={imageUrl} />
+                      <DownloadBtn imageUrl={img_url as string} />
                     </div>
                   </CardContent>
                 </Card>

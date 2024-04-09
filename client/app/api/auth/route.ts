@@ -110,11 +110,12 @@ export async function GET(req: NextRequest) {
     // check if user exists in the database
     let user = await db.user.findUnique({
       where: {
-        github_username: github_username
-      }
+        github_username: github_username,
+      },
     });
 
-    if(!user){ // user doesn't not exist, then create
+    if (!user) {
+      // user doesn't not exist, then create
       user = await db.user.create({
         data: {
           github_username: github_username,
@@ -122,19 +123,20 @@ export async function GET(req: NextRequest) {
           github_refresh_token: github_refresh_token,
           github_access_token_expiry: expiry_date_time,
           avatar_url: github_user_avatar_url,
-          github_installation_id:github_installation_id.toString()
-        }
+          github_installation_id: github_installation_id.toString(),
+        },
       });
-    }else{ // update
+    } else {
+      // update
       user = await db.user.update({
         where: {
-          github_username: github_username
+          github_username: github_username,
         },
         data: {
           github_access_token: accessToken,
           github_refresh_token: github_refresh_token,
-          github_access_token_expiry: expiry_date_time
-        }
+          github_access_token_expiry: expiry_date_time,
+        },
       });
     }
 

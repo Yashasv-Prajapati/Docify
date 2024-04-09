@@ -14,7 +14,7 @@ export async function startDummyContainer() {
 
   // Create the container
   const container = await docker.createContainer(containerOptions);
-  
+
   // Start the container
   await container.start();
 
