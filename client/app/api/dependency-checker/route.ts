@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return new NextResponse('Unauthorized', { status: 401 });
+    return NextResponse.json({message:'Unauthorized'}, { status: 401 });
   }
 
   const { github_access_token, github_username } = currentUser;
@@ -81,7 +81,8 @@ export async function POST(request: NextRequest) {
 
     console.log('Container started successfully');
 
-    return new NextResponse('Success!', { status: 200 });
+    // return new NextResponse('Success!', { status: 200 });
+    return NextResponse.json({message:"Success!"}, {status: 200});
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new NextResponse(JSON.stringify(error.issues), { status: 422 });

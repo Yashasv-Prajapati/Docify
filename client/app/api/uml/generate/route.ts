@@ -7,7 +7,9 @@ import { NextApiRequest } from 'next';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
 import { ResolvableTo } from 'tailwindcss/types/config';
-
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
+import { db } from '@/lib/db';
 const parentDir = path.resolve(
   __dirname,
   '..',
@@ -39,14 +41,17 @@ export async function POST(req: NextRequest) {
     );
     // res.status(405).json({message:`Cannot ${req.method} this route `});
   }
+  console.log(parentDir)
   const docker = new Dockerode();
   console.log('Dockerode created');
   const data = await req.json();
   console.log(data);
-  const envVars = {
-    VAR1: 'value1',
-    VAR2: 'value2',
-  };
+  const {accessToken: token, userName: username,repoName: repo,projectType: type,projectId:projectId}=data;
+  // const project=await db.project.findFirst({
+  //   where:{
+  //     projectId:projectId
+  //   }
+  // });
   //   const containerOptions = {
   //     Image: 'express-test-net:latest',
   //     Tty: true,
@@ -60,18 +65,25 @@ export async function POST(req: NextRequest) {
   //     // Cmd:['echo','Hello' ,'&&','tail','-f','/dev/null']
   //     CMD :["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"]
   //     };
-  const { projectId, type } = data;
+  // const { projectId, type } = data;
   let containerOptions;
+  const binds=type=='python'?
+  [
+    parentDir + `/python/uml:/app`,
+  ]:
+  [
+    parentDir + `/java/uml:/app`,
+  ]
   if (type == 'python') {
     containerOptions = {
       Image: 'express-test-net:latest',
       Tty: true,
-      Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
+      // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
         AutoRemove: true,
         Binds: [
-          parentDir + `/uml_py:/app`,
-          parentDir + `/uml_py/data:/app/send`,
+          parentDir + `/python/uml:/app`,
+          // parentDir + `/python/data:/app/send`,
         ],
       },
       // Cmd:[shellscript('pirocomder','test2')]
@@ -80,20 +92,21 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
-        'echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && ls',
+        // `tail -f /dev/null`,
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
       ],
       //this is a dummy command, will be replaced by the bash script
     };
   } else if (type == 'java') {
     containerOptions = {
-      Image: 'express-test-net:latest',
+      Image: 'dockify_java:latest',
       Tty: true,
-      Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
+      // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
         AutoRemove: true,
         Binds: [
-          parentDir + `/uml_java:/app`,
-          parentDir + `/uml_java/data:/app/send`,
+          parentDir + `/java/uml:/app`,
+          parentDir + `/java/uml:/app/send`,
         ],
       },
       // Cmd:[shellscript('pirocomder','test2')]
@@ -102,7 +115,7 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
-        'echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && ls',
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} && tail -f/dev/null`,
       ],
       //this is a dummy command, will be replaced by the bash script
     };
@@ -134,10 +147,10 @@ export async function POST(req: NextRequest) {
           );
         }
         console.log('Container finished its job!');
-        return NextResponse.redirect(`/uml/${projectId}/page.tsx`);
+        return NextResponse.redirect(`/uml/${projectId}`);
       });
     });
   });
-  //   res.status(200).json({ message: 'Container started successfully!' });
-  // return NextResponse.json({ message: `Container started successfully!` }, { status: 200 });
+  // return res.status(200).json({ message: 'Container started successfully!' });
+  return NextResponse.json({ message: `Container started successfully!` }, { status: 200 });
 }

@@ -1,6 +1,5 @@
 // 'use server'
 import path from 'path';
-import { env } from 'process';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
@@ -9,11 +8,11 @@ const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..'); /
 
 export async function POST(req: NextRequest) {
   try {
-    console.log('Request to generate code coverage');
+    // console.log('Request to generate code coverage');
     const docker = new Dockerode();
     const data = await req.json();
     const { token, username, repo } = data;
-    console.log(parentDir);
+
     const containerImg =
       data.lang == 'python' ? 'express-test-net:latest' : 'dockify_java:latest';
     const binds =
@@ -53,23 +52,40 @@ export async function POST(req: NextRequest) {
       ], // "&& tail -f /dev/null" for not closing and removing the container (can be used for debugging)
       // CMD:["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"],
     };
-    docker.createContainer(containerOptions, (err, container) => {
-      if (err) {
-        console.error('Failed to create container:', err);
-        return NextResponse.json(
-          { message: 'Failed to create container' },
-          { status: 500 }
-        );
-      }
-      container?.start((err) => {
+
+    // docker.createContainer(containerOptions, (err, container) => {
+    //   if (err) {
+    //     console.error('Failed to create container:', err);
+    //     return NextResponse.json(
+    //       { message: 'Failed to create container' },
+    //       { status: 500 }
+    //     );
+    //   }
+    //   container?.start((err) => {
+    //     if (err) {
+    //       console.error('Failed to start container:', err);
+    //       return NextResponse.json(
+    //         { message: 'Failed to start container' },
+    //         { status: 500 }
+    //       );
+    //     }
+    //     // return NextResponse.json({ message: 'Successfully started the container' },{status:200});
+    //   });
+    // })
+
+    await new Promise<void>((resolve, reject) => {
+      docker.createContainer(containerOptions, (err, container) => {
         if (err) {
-          console.error('Failed to start container:', err);
-          return NextResponse.json(
-            { message: 'Failed to start container' },
-            { status: 500 }
-          );
+          console.error('Failed to create container:', err);
+          reject(new Error('Failed to create container'));
         }
-        // return NextResponse.json({ message: 'Successfully started the container' },{status:200});
+        container?.start((err) => {
+          if (err) {
+            console.error('Failed to start container:', err);
+            reject(new Error('Failed to start container'));
+          }
+          resolve();
+        });
       });
     });
     // return redirect('/dashboard');
@@ -81,7 +97,8 @@ export async function POST(req: NextRequest) {
     );
   } catch (err) {
     return NextResponse.json({
-      message: `Error occured while generating code coverage : ${err}`,
-    });
+      message: `Error occured while generating code coverage : ${err?.message as string}`,
+    }, {status:500});
+
   }
 }
