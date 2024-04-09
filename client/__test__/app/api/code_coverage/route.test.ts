@@ -4,7 +4,7 @@
 import Dockerode, { Container } from 'dockerode';
 import { testApiHandler } from 'next-test-api-route-handler';
 
-import * as appHandler from './route';
+import * as appHandler from '../../../../app/api/code_coverage/route';
 
 describe('POST /api/code_coverage', () => {
   // everything goooooood
