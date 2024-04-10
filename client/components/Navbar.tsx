@@ -8,6 +8,8 @@ import Image from 'next/image';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  // const router = useRouter(); // Initialize useRouter
+
   return (
     <motion.nav
       variants={navVariants}

@@ -16,16 +16,16 @@ import {
 const Home = () => {
   return (
     <div>
-      <div className='overflow-hidden bg-[#1b222f]'>
-        <Navbar />
-        <Hero />
+      <div className='overflow-hidden bg-[#d1d4db]'>
+        <Navbar data-testid="navbar"/>
+        <Hero data-testid="hero"/>
         <div className='relative'>
-          <About />
+          <About data-testid="about"/>
           <div className='gradient-03 z-0' />
           <Explore />
         </div>
         <div className='relative'>
-          <GetStarted />
+          <GetStarted data-testid="get-started"/>
           <div className='gradient-04 z-0' />
           <WhatsNew />
         </div>

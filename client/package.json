@@ -31,7 +31,11 @@
     "framer": "^2.4.1",
     "highlight.js": "^11.9.0",
     "isomorphic-dompurify": "^2.3.0",
+<<<<<<< Updated upstream
     "jose": "^5.2.3",
+=======
+    "jest-canvas-mock": "^2.5.2",
+>>>>>>> Stashed changes
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.323.0",
