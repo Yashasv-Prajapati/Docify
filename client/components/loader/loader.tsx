@@ -8,7 +8,9 @@ import tickAnimation from './tickAnimation.json';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
-interface LoaderProps {}
+interface LoaderProps {
+  progressValues: number[]; // Array of progress values
+}
 
 interface LoaderItem {
   animationData: any;
@@ -20,34 +22,34 @@ const loaders: LoaderItem[] = [
   {
     animationData: loaderAnimation,
     showTick: false,
-    text: 'Test Task running',
+    text: 'Container starting',
   },
   {
     animationData: loaderAnimation,
     showTick: false,
-    text: 'Test Task running',
+    text: 'Container executing',
   },
   {
     animationData: loaderAnimation,
     showTick: false,
-    text: 'Test Task running',
-  },
+    text: 'Execution completing',
+  }, // Added a fourth loader
 ];
 
-const Loader: FC<LoaderProps> = () => {
+const Loader: FC<LoaderProps> = ({ progressValues }) => {
   const [loaderIndex, setLoaderIndex] = useState<number>(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (loaderIndex < loaders.length) {
         loaders[loaderIndex].showTick = true;
-        loaders[loaderIndex].text = 'Successful';
+        loaders[loaderIndex].text = `${progressValues[loaderIndex]}% completed`;
         setLoaderIndex(loaderIndex + 1);
       }
-    }, 2500);
+    }, 1000);
 
     return () => clearTimeout(timer);
-  }, [loaderIndex]);
+  }, [loaderIndex, progressValues]);
 
   return (
     <div
