@@ -1,21 +1,21 @@
-import AccountsRepo from '@/components/accountsPage/AccountsRepo';
+import Authentication from '@/components/accountsPage/Authentication';
 import Tabs from '@/components/accountsPage/Tabs';
+import Avatar from '@/app/dashboard/_components/avatar';
+import Nav from '@/app/dashboard/_components/nav';
 
 import Sidebar from '../../components/accountsPage/Sidebar';
 import { Navbar } from '../../components/index';
 
 const AccountsPage: React.FC = () => {
+  const AvatarComponent = <Avatar />;
   return (
-    <div className=' h-screen overflow-hidden bg-[#1b222f]'>
-      <Navbar />
-      {/* <div className="gradient-03 z-0" /> */}
-      <div className='mx-auto flex '>
+    <div className=' h-screen overflow-hidden bg-[#d1d4db]'>
+      <Nav AvatarComponent={AvatarComponent} />
+      <div className='mx-auto flex  '>
         <Sidebar />
         <div className='flex w-4/5  flex-col'>
-          <Tabs />
-
-          {/* The rest of the profile page content will go here */}
-          <AccountsRepo />
+          {/* <Tabs /> */}
+          <Authentication />
         </div>
       </div>
     </div>

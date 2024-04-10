@@ -7,6 +7,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 import { Button } from '../../../components/ui/button';
+import Image from 'next/image';
 
 export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -25,14 +26,20 @@ export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
   }
 
   return (
-    <header className='flex h-16 shrink-0 items-center border-b bg-gray-100/40 px-4 sm:justify-between md:px-6'>
-      <Link
+    <header className='flex h-16 shrink-0 items-center  bg-gray-100/40 px-4 sm:justify-between md:px-6 border-b-2'>
+     <Link
         href='/'
         className='flex w-full items-center justify-center gap-2 text-lg font-semibold sm:w-auto sm:justify-normal'
       >
-        <span>Docify</span>
+        <Image
+          src='/logo-no-background.png'
+          alt='search'
+          width={150}
+          height={150}
+          className=' cursor-pointer  object-contain ' // Add cursor-pointer to show the cursor as pointer
+        />
       </Link>
-      <nav className='hidden w-full flex-row items-center justify-start gap-6 px-24 text-sm font-medium  sm:flex lg:gap-14'>
+      <nav className='mr-8 hidden w-full flex-row items-center justify-center gap-6 px-24 text-sm font-medium  sm:flex lg:gap-14'>
         <NavLink href='/' currentPath={pathname}>
           Home
         </NavLink>
