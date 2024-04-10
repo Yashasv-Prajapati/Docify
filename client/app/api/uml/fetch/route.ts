@@ -24,8 +24,11 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
     );
     return NextResponse.json({ message: fileData }, { status: 200 });
   } catch (err) {
-    return NextResponse.json({
-      message: `Error occured while fetching the uml image : ${err}`,
-    });
+    return NextResponse.json(
+      {
+        message: `Error occured while fetching the uml image : ${err}`,
+      },
+      { status: 500 }
+    );
   }
 }
