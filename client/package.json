@@ -13,7 +13,7 @@
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
     "postinstall": "prisma generate",
-    "prepare": "husky",
+    "prepare": "cd .. && husky client/.husky",
     "test": "jest",
     "test:watch": "jest --watchAll"
   },
