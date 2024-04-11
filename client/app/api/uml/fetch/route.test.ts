@@ -6,61 +6,45 @@ import { testApiHandler } from 'next-test-api-route-handler';
 
 import * as appHandler from './route';
 
-// Mocking the 'markdown-table' module
-jest.mock('markdown-table', () => {
+// Mocking the 'fs' module
+jest.mock('fs', () => {
   let myMock = jest
     .fn()
-    .mockImplementationOnce(() => 'mocked markdown table')
+    .mockImplementationOnce(() => 'mocked file data')
     .mockImplementationOnce(() => {
       throw new Error('mocked error');
     });
   return {
-    markdownTable: myMock,
+    readFileSync: myMock,
   };
 });
 
-describe('POST /api/md/coverage-to-md', () => {
-  it('POST returns 200', async () => {
+describe('POST /api/uml-image', () => {
+  it('POST returns 200 and file data when valid request', async () => {
     await testApiHandler({
       appHandler,
       async test({ fetch }) {
         const res = await fetch({
           method: 'POST',
           body: JSON.stringify({
-            htmlStr: '<html><body><h1>Code Coverage</h1></body></html>',
+            username: 'testUser',
+            reponame: 'testRepo',
           }),
         });
         expect(res.status).toBe(200);
         const body = await res.json();
-        expect(body).toBeDefined();
+        expect(body.message).toBe('mocked file data');
       },
     });
   });
 
-  it('POST returns 422', async () => {
+  it('POST returns error message when invalid request', async () => {
     await testApiHandler({
       appHandler,
       async test({ fetch }) {
         const res = await fetch({
           method: 'POST',
           body: JSON.stringify({}),
-        });
-        expect(res.status).toBe(422);
-        const body = await res.json();
-        expect(body).toBeDefined();
-      },
-    });
-  });
-  
-  it('POST returns 500', async () => {
-    await testApiHandler({
-      appHandler,
-      async test({ fetch }) {
-        const res = await fetch({
-          method: 'POST',
-          body: JSON.stringify({
-            htmlStr: '<html><body><h1>Code Coverage</h1></body></html>',
-          }),
         });
         expect(res.status).toBe(500);
         const body = await res.json();
