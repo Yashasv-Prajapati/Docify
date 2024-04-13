@@ -15,12 +15,16 @@ import { Separator } from '@/components/ui/separator';
 
 const handleUmlClick = async () => {
   console.log('UML Clicked');
-  const res = await fetch('/api/uml/generate', {
+  const res = await fetch('/api/generate-readme', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ user: 'pirocomder', repoName: 'test2' }),
+    body: JSON.stringify({
+      project_description: 'hello owo',
+      project_type: 'python',
+      repositoryName: 'olipy',
+    }),
   });
 
   const data = await res.json();
