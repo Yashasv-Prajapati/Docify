@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       )
       .catch(async () => {
         await axios.post(
-          `${process.env.NEXT_SERVER_URL}/api/dependency-checker`,
+          `${process.env.NEXT_APP_URL}/api/dependency-checker`,
           { project_type, repositoryName },
           {
             headers: {
@@ -61,13 +61,19 @@ export async function POST(request: NextRequest) {
       'base64'
     ).toString('utf-8');
 
-    const prompt = `Generate a project description using the following project details:
-                    - Project Name: ${repositoryName}
-                    - Project Description: ${project_description}
-                    - Project Type: ${project_type}
-                    - Project Dependencies: ${project_dependencies}`;
+    const prompt = `Generate a project description for the README.md file based on the provided details:
+
+Project Name: ${repositoryName}
+Project Description: ${project_description}
+Project Type: ${project_type}
+Project Dependencies: ${project_dependencies}
+
+Consider the provided dependencies to infer the project's functionality and purpose. The project aims to [briefly describe project goals or objectives], leveraging the ${project_dependencies.split('\n').length} dependencies listed. It is built using ${project_type} and focuses on [describe core features or functionalities]. 
+
+The README should offer an overview of the project's purpose, its features, installation instructions, usage guidelines, and additional information beneficial for users or contributors. Maintain a clear and concise tone, emphasizing key aspects and benefits while addressing potential users' needs and concerns.`;
+
     const readme = await axios.get(
-      `http://127.0.0.1:8000/chat?prompt=${prompt}`
+      `${process.env.LLM_API_URL}/chat?prompt=${prompt}`
     );
 
     return NextResponse.json({ readme: readme.data }, { status: 200 });

@@ -13,9 +13,11 @@ cookie_path_dir = "./cookies/"
 
 app = FastAPI()
 
+NEXT_APP_URL = os.getenv("NEXT_APP_URL")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[NEXT_APP_URL],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -45,7 +47,6 @@ def chat(prompt: str):
         chatbot = create_chatbot()
 
         query_result = chatbot.chat(prompt)
-        print("prompt", prompt)
         print("query_result", query_result)
         return query_result.text
     except Exception as e:

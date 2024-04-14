@@ -56,17 +56,11 @@ export async function POST(request: NextRequest) {
       CMD: commands,
     };
 
-    // Create container
     const container = await dockerode.createContainer(containerOptions);
-
-    // Start container
     await container.start();
-
     console.log('Container started successfully');
 
-    // Wait for container to stop
     await container.wait();
-
     console.log('Container stopped');
 
     return NextResponse.json({ message: 'Success!' }, { status: 200 });
