@@ -29,11 +29,11 @@ git config --global user.email $GITHUB_APP_ID+docify[bot]@users.noreply.github.c
 # Change to docify branch
 git checkout docify
 
-# Add coverage report to README
-git add README.md
+# Add all files
+git add .
 
 # Commit with message
 git commit -m "Docify changes to repository, changes made in ./assets folder"
 
 # Push to github
-git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}.git docify
+git push --force https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}.git docify

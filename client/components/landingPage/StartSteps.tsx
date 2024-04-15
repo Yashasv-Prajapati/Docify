@@ -12,7 +12,7 @@ const StartSteps: React.FC<StartStepsProps> = ({ number, text }) => (
     >
       <p className='text-[20px] font-bold text-white'>{number}</p>
     </div>
-    <p className='ml-[30px] flex-1 text-[20px] font-medium leading-[32.4px] bg-gradient-to-r from-sky-400 to-[#181bda] bg-clip-text text-transparent'>
+    <p className='ml-[30px] flex-1 bg-gradient-to-r from-sky-400 to-[#181bda] bg-clip-text text-[20px] font-medium leading-[32.4px] text-transparent'>
       {text}
     </p>
   </div>

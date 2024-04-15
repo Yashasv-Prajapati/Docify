@@ -13,31 +13,44 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 
-const handleUmlClick = async () => {
-  console.log('UML Clicked');
-  const res = await fetch('/api/uml/generate', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ user: 'pirocomder', repoName: 'test2' }),
-  });
-
-  const data = await res.json();
-  console.log(data);
-};
-
 interface ProjectCardProps {
   url: string;
   repository_name: string;
   testing_dir: string;
+  project_id:string;
+  project_type:string;
+  access_token:string;
+  username:string;
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
   url,
   repository_name,
   testing_dir,
+  project_id,
+  project_type,
+  access_token,
+  username
 }) => {
+
+  const handleUmlClick = async () => {
+    console.log('UML Clicked');
+
+    const res = await fetch('/api/uml/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ accessToken:access_token, userName:username, repoName:repository_name, projectType:project_type, projectId:project_id }),
+    });
+
+    const data = await res.json();
+    console.log(data);
+  };
+
+
+
+
   return (
     <div className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'>
       <div className='grid flex-1 gap-1 p-2'>

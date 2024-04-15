@@ -8,6 +8,7 @@ import { UserSchema } from '@/lib/validations/user';
 
 import { Button } from '../../../components/ui/button';
 import styles from '../../../styles';
+
 // import Avatar from './avatar';
 
 interface NavProps {
@@ -19,7 +20,7 @@ export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
   const pathname = usePathname();
 
   return (
-    <header className='flex h-16 shrink-0 items-center  bg-gray-100/40 px-4 sm:justify-between md:px-6 border-b-2'>
+    <header className='flex h-16 shrink-0 items-center  border-b-2 bg-gray-100/40 px-4 sm:justify-between md:px-6'>
       <Link
         href='/'
         className='flex w-full items-center justify-center gap-2 text-lg font-semibold sm:w-auto sm:justify-normal'

@@ -3,9 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Dropdown } from 'react-day-picker';
+
 import '../styles/globals.css';
+
 import { useState } from 'react';
 import Image from 'next/image';
+
 import styles from '../styles';
 import { navVariants } from '../utils/motion';
 

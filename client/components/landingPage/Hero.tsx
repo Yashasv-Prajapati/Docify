@@ -40,22 +40,22 @@ const Hero = () => {
                     className='mb-2  me-2 mr-10 rounded-2xl bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-base font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 '
                   >
                     <span className='flex flex-row'>
-                    <svg
-                      className ='h-6 w-6 text-white mr-1'
-                      aria-hidden='true'
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='24'
-                      height='24'
-                      fill='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        fill-rule='evenodd'
-                        d='M8.6 5.2A1 1 0 0 0 7 6v12a1 1 0 0 0 1.6.8l8-6a1 1 0 0 0 0-1.6l-8-6Z'
-                        clip-rule='evenodd'
-                      />
-                    </svg>
-                    Get Started
+                      <svg
+                        className='mr-1 h-6 w-6 text-white'
+                        aria-hidden='true'
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='24'
+                        height='24'
+                        fill='currentColor'
+                        viewBox='0 0 24 24'
+                      >
+                        <path
+                          fill-rule='evenodd'
+                          d='M8.6 5.2A1 1 0 0 0 7 6v12a1 1 0 0 0 1.6.8l8-6a1 1 0 0 0 0-1.6l-8-6Z'
+                          clip-rule='evenodd'
+                        />
+                      </svg>
+                      Get Started
                     </span>
                   </button>
                 </div>
