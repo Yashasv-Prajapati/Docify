@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const { token, username, repo } = data;
 
     const containerImg =
-      data.lang == 'python' ? 'express-test-net:latest' : 'dockify_java:latest';
+      data.lang == 'python' ? 'python:latest' : 'dockify_java:latest';
     const binds =
       data.lang == 'python'
         ? [

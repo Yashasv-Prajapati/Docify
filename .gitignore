@@ -11,3 +11,7 @@ package-lock*.json
 
 dev.db*
 
+u.sh
+d.sh
+c.sh
+

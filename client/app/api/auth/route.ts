@@ -53,8 +53,6 @@ export async function GET(req: NextRequest) {
         },
       }
     );
-
-    console.log('HELLO');
     const accessToken = oauth_response.data.access_token;
 
     // Fetch the user's details from github
