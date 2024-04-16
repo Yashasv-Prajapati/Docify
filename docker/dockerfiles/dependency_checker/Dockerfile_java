@@ -1,0 +1,12 @@
+FROM openjdk:latest
+RUN apt-get update && \
+    apt-get install -y \
+    curl \
+    wget \
+    iputils-ping \
+    dnsutils \
+    git \
+    && \
+    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY . .
