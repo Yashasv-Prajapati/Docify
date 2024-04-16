@@ -1,6 +1,5 @@
 // 'use server'
 import path from 'path';
-import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
 
@@ -96,9 +95,12 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (err) {
-    return NextResponse.json({
-      message: `Error occured while generating code coverage : ${err?.message as string}`,
-    }, {status:500});
-
+    if (err instanceof Error)
+      return NextResponse.json(
+        {
+          message: `Error occured while generating code coverage : ${err.message}`,
+        },
+        { status: 500 }
+      );
   }
 }
