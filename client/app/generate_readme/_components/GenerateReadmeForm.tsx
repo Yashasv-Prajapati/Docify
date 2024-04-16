@@ -26,7 +26,9 @@ import {
   } from '@/components/ui/card';
 // Define the formSchema for form data validation
 const formSchema = z.object({
+  projectType: z.string().min(1),
   description: z.string().min(1),
+  repositoryName: z.string().min(1),
 });
 
 interface FormData {
@@ -36,15 +38,19 @@ interface FormData {
 }
 
 interface Project {
-  project_type: string;
+  projectId: string;
+  url: string;
   repository_name: string;
-}
+  userId: string;
+  testing_dir: string;
+  project_type: string;
+}  
 
 interface Props {
   project: Project;
 }
 
-export default function GenerateReadmeForm({ project = {project_type: "python", repository_name: "The-arcade-game"}}: Props) {
+export default function GenerateReadmeForm({ project}: Props) {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,6 +65,8 @@ export default function GenerateReadmeForm({ project = {project_type: "python", 
     try {
       console.log("Generating Readme...");
       // Send request to API handler to generate readme
+      console.log(values);
+      //TODO: need to integrate with the backend, need to pass projectId along with values to backend
       const response = await fetch('/api/generate-readme', {
         method: 'POST',
         headers: {
@@ -97,7 +105,7 @@ export default function GenerateReadmeForm({ project = {project_type: "python", 
                   <FormItem>
                     <FormLabel>Project Type</FormLabel>
                     <FormControl>
-                      <Input value={project.project_type} disabled className="border border-gray-300" />
+                      <Input value={project.project_type.toUpperCase()} disabled className="border border-gray-300" />
                     </FormControl>
                   </FormItem>
                 )}

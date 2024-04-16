@@ -33,9 +33,11 @@ const ImportedProjects: FC<ImportedProjectsParams> = ({
             {filteredProjects.map((project) => (
               <ProjectCard
                 key={project.projectId}
+                projectId={project.projectId}
                 url={project.url}
                 repository_name={project.repository_name}
                 testing_dir={project.testing_dir}
+                project_type={project.project_type}
               />
             ))}
           </div>

@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import { GitBranchIcon, GitCommitIcon, MoreHorizontalIcon } from 'lucide-react';
-
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -27,17 +27,23 @@ const handleUmlClick = async () => {
   console.log(data);
 };
 
+
 interface ProjectCardProps {
   url: string;
   repository_name: string;
   testing_dir: string;
+  project_type: string;
+  projectId: string;
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
+  projectId,
   url,
   repository_name,
   testing_dir,
+  project_type,
 }) => {
+  const router = useRouter();
   return (
     <div className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'>
       <div className='grid flex-1 gap-1 p-2'>
@@ -84,7 +90,9 @@ const ProjectCard: FC<ProjectCardProps> = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuItem>Generate Readme</DropdownMenuItem>
+          <DropdownMenuItem>
+          <button onClick={()=>{router.push(`/generate_readme/${projectId}`)}}>Generate Readme</button>
+          </DropdownMenuItem>
           <DropdownMenuItem>Test Plan</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
