@@ -10,6 +10,7 @@ import { ResolvableTo } from 'tailwindcss/types/config';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { db } from '@/lib/db';
+import { redirect } from 'next/navigation';
 const parentDir = path.resolve(
   __dirname,
   '..',
@@ -52,6 +53,12 @@ export async function POST(req: NextRequest) {
   //     projectId:projectId
   //   }
   // });
+  const {accessToken: token, userName: username,repoName: repo,projectType: type,projectId:projectId}=data;
+  // const project=await db.project.findFirst({
+  //   where:{
+  //     projectId:projectId
+  //   }
+  // });
   //   const containerOptions = {
   //     Image: 'express-test-net:latest',
   //     Tty: true,
@@ -76,7 +83,7 @@ export async function POST(req: NextRequest) {
   ]
   if (type == 'python') {
     containerOptions = {
-      Image: 'express-test-net:latest',
+      Image: 'python:latest',
       Tty: true,
       // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
@@ -92,6 +99,8 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
+        // `tail -f /dev/null`,
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
         // `tail -f /dev/null`,
         `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
       ],
@@ -115,6 +124,7 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} && tail -f/dev/null`,
         `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} && tail -f/dev/null`,
       ],
       //this is a dummy command, will be replaced by the bash script
@@ -147,7 +157,7 @@ export async function POST(req: NextRequest) {
           );
         }
         console.log('Container finished its job!');
-        return NextResponse.redirect(`/uml/${projectId}`);
+        return redirect(`/uml/${projectId}`);
       });
     });
   });

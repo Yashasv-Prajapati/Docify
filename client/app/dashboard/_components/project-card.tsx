@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 
+
 const handleUmlClick = async () => {
   console.log('UML Clicked');
   const res = await fetch('/api/uml/generate', {
@@ -27,13 +28,13 @@ const handleUmlClick = async () => {
   console.log(data);
 };
 
-
 interface ProjectCardProps {
   url: string;
   repository_name: string;
   testing_dir: string;
   project_type: string;
   projectId: string;
+
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
@@ -44,6 +45,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
   project_type,
 }) => {
   const router = useRouter();
+
   return (
     <div className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'>
       <div className='grid flex-1 gap-1 p-2'>
