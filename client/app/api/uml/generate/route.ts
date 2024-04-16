@@ -1,16 +1,8 @@
-'use server';
-
-// const Dockerode=require('dockerode');
-//const path = require('path');
 import path from 'path';
-import { NextApiRequest } from 'next';
+import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
-import { ResolvableTo } from 'tailwindcss/types/config';
-import { Prisma } from '@prisma/client';
-import { z } from 'zod';
-import { db } from '@/lib/db';
-import { redirect } from 'next/navigation';
+
 const parentDir = path.resolve(
   __dirname,
   '..',
@@ -42,45 +34,24 @@ export async function POST(req: NextRequest) {
     );
     // res.status(405).json({message:`Cannot ${req.method} this route `});
   }
-  console.log(parentDir)
+  console.log(parentDir);
   const docker = new Dockerode();
   console.log('Dockerode created');
   const data = await req.json();
   console.log(data);
-  const {accessToken: token, userName: username,repoName: repo,projectType: type,projectId:projectId}=data;
-  // const project=await db.project.findFirst({
-  //   where:{
-  //     projectId:projectId
-  //   }
-  // });
-  const {accessToken: token, userName: username,repoName: repo,projectType: type,projectId:projectId}=data;
-  // const project=await db.project.findFirst({
-  //   where:{
-  //     projectId:projectId
-  //   }
-  // });
-  //   const containerOptions = {
-  //     Image: 'express-test-net:latest',
-  //     Tty: true,
-  //     Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
-  //     HostConfig: {
-  //         AutoRemove: true,
-  //         Binds: [parentDir + `/uml_py:/app`,parentDir + `/uml_py/data:/app/send`],
-  //     },
-  //     // Cmd:[shellscript('pirocomder','test2')]
-  //     // Cmd:['python','test.py'],
-  //     // Cmd:['echo','Hello' ,'&&','tail','-f','/dev/null']
-  //     CMD :["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"]
-  //     };
-  // const { projectId, type } = data;
+  const {
+    accessToken: token,
+    userName: username,
+    repoName: repo,
+    projectType: type,
+    projectId: projectId,
+  } = data;
+
   let containerOptions;
-  const binds=type=='python'?
-  [
-    parentDir + `/python/uml:/app`,
-  ]:
-  [
-    parentDir + `/java/uml:/app`,
-  ]
+  const binds =
+    type == 'python'
+      ? [parentDir + `/python/uml:/app`]
+      : [parentDir + `/java/uml:/app`];
   if (type == 'python') {
     containerOptions = {
       Image: 'python:latest',
@@ -162,5 +133,8 @@ export async function POST(req: NextRequest) {
     });
   });
   // return res.status(200).json({ message: 'Container started successfully!' });
-  return NextResponse.json({ message: `Container started successfully!` }, { status: 200 });
+  return NextResponse.json(
+    { message: `Container started successfully!` },
+    { status: 200 }
+  );
 }

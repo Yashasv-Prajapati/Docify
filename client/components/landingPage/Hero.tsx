@@ -22,7 +22,7 @@ const Hero = () => {
           viewport={{ once: false, amount: 0.25 }}
           className={`${styles.innerWidth} mx-auto flex flex-col`}
         >
-          <div className='relative z-10 flex flex-col items-center items-center justify-center p-9'>
+          <div className='relative z-10 flex flex-col items-center justify-center p-9'>
             <motion.h1 variants={textVariant(1.1)}>
               {/* Lets Us handle  */}
               <div className='text-2xl font-bold text-white md:text-3xl lg:text-4xl xl:mt-5 xl:text-5xl'>
@@ -41,7 +41,7 @@ const Hero = () => {
                   >
                     <span className='flex flex-row'>
                       <svg
-                        className='mr-1 h-6 w-6 text-white'
+                        className='mr-1 size-6 text-white'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         width='24'

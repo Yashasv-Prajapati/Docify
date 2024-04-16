@@ -34,11 +34,11 @@ const InsightCard: React.FC<InsightCardProps> = ({
         </p>
       </div>
 
-      <div className='hidden size-[100px] items-center justify-center rounded-full border-[1px] border-white bg-transparent lg:flex'>
+      <div className='hidden size-[100px] items-center justify-center rounded-full border-DEFAULT border-white bg-transparent lg:flex'>
         <img
           src='/arrow.svg'
           alt='arrow'
-          className='size-[40%] object-contain'
+          className='size-2/5 object-contain'
         />
       </div>
     </div>
