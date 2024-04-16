@@ -79,6 +79,7 @@
     "jest-environment-node": "^29.7.0",
     "jose": "^5.2.3",
     "lint-staged": "^15.2.2",
+    "nock": "^13.5.4",
     "node-loader": "^2.0.0",
     "node-mocks-http": "^1.14.1",
     "postcss": "^8",
