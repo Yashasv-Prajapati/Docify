@@ -51,7 +51,7 @@ describe('POST /api/md/coverage-to-md', () => {
       },
     });
   });
-  
+
   it('POST returns 500', async () => {
     await testApiHandler({
       appHandler,

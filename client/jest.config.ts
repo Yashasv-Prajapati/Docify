@@ -16,7 +16,8 @@ const config: Config = {
     //react: "next/dist/compiled/react/cjs/react.development.js",
     '^@/(.*)$': '<rootDir>/$1',
   },
-  setupFilesAfterEnv: ['./jest.setup.ts'],
+  setupFilesAfterEnv: ["./jest.setup.ts"],
+  preset: "ts-jest",
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
