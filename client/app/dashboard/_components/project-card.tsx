@@ -17,10 +17,10 @@ interface ProjectCardProps {
   url: string;
   repository_name: string;
   testing_dir: string;
-  project_id:string;
-  project_type:string;
-  access_token:string;
-  username:string;
+  project_id: string;
+  project_type: string;
+  access_token: string;
+  username: string;
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
@@ -30,9 +30,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
   project_id,
   project_type,
   access_token,
-  username
+  username,
 }) => {
-
   const handleUmlClick = async () => {
     console.log('UML Clicked');
 
@@ -41,18 +40,21 @@ const ProjectCard: FC<ProjectCardProps> = ({
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ accessToken:access_token, userName:username, repoName:repository_name, projectType:project_type, projectId:project_id }),
+      body: JSON.stringify({
+        accessToken: access_token,
+        userName: username,
+        repoName: repository_name,
+        projectType: project_type,
+        projectId: project_id,
+      }),
     });
 
     const data = await res.json();
     console.log(data);
   };
 
-
-
-
   return (
-    <div className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'>
+    <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
       <div className='grid flex-1 gap-1 p-2'>
         <div className='font-medium'>{repository_name}</div>
       </div>

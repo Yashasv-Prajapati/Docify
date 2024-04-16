@@ -15,11 +15,12 @@ type ImportedProjectsParams = {
     github_refresh_token: string;
     github_username: string;
     github_installation_id: string;
-    avatar_url: string;};
+    avatar_url: string;
+  };
 };
 const ImportedProjects: FC<ImportedProjectsParams> = ({
   imported_projects,
-  user
+  user,
 }) => {
   const [filteredProjects, setFilteredProjects] = useState(
     imported_projects as any[]

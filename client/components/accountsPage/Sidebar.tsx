@@ -11,7 +11,7 @@ const Sidebar: React.FC = () => {
             alt='Profile'
             width={100}
             height={100}
-            className='mb-3 h-56 w-56  rounded-full shadow-lg'
+            className='mb-3 size-56 rounded-full  shadow-lg'
           />
           <h5 className='mb-1 bg-gradient-to-r from-sky-400 to-[#8e29f3] bg-clip-text text-xl font-medium text-transparent'>
             Anushtha Prakash
