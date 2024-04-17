@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { GitBranchIcon, GitCommitIcon,Github, MoreHorizontalIcon } from 'lucide-react';
+import {MoreHorizontalIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -35,7 +35,6 @@ const ProjectCard: FC<ProjectCardProps> = ({
   username,
 }) => {
   const router = useRouter();
-  // console.log(project_id);
   const handleUmlClick = async () => {
     console.log('UML Clicked');
 
@@ -88,11 +87,19 @@ const ProjectCard: FC<ProjectCardProps> = ({
         </div>
       </div>
       <Separator className='my-2 lg:hidden' />
-      {/* <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2 text-gray-500 dark:text-gray-400'>
-          date
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className='flex items-center gap-2'>
+          
+         Testing Directory
         </div>
-      </div> */}
+        <div className='flex items-center gap-2'>
+        <span
+            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+          />
+          {testing_dir}
+        </div>
+      </div>
+      <Separator className='my-2 lg:hidden' />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
