@@ -1,6 +1,7 @@
 'use client';
 
 import { FC } from 'react';
+import { useRouter } from 'next/navigation';
 import { GitBranchIcon, GitCommitIcon, MoreHorizontalIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -32,6 +33,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
   access_token,
   username,
 }) => {
+  const router = useRouter();
+  // console.log(project_id);
   const handleUmlClick = async () => {
     console.log('UML Clicked');
 
@@ -99,7 +102,15 @@ const ProjectCard: FC<ProjectCardProps> = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuItem>Generate Readme</DropdownMenuItem>
+          <DropdownMenuItem>
+            <button
+              onClick={() => {
+                router.push(`/generate_readme/${project_id}`);
+              }}
+            >
+              Generate Readme
+            </button>
+          </DropdownMenuItem>
           <DropdownMenuItem>Test Plan</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
