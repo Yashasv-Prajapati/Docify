@@ -35,11 +35,7 @@ const InsightCard: React.FC<InsightCardProps> = ({
       </div>
 
       <div className='hidden size-[100px] items-center justify-center rounded-full border-DEFAULT border-white bg-transparent lg:flex'>
-        <img
-          src='/arrow.svg'
-          alt='arrow'
-          className='size-2/5 object-contain'
-        />
+        <img src='/arrow.svg' alt='arrow' className='size-2/5 object-contain' />
       </div>
     </div>
   </motion.div>

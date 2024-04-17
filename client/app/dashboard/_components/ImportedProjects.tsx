@@ -44,7 +44,7 @@ const ImportedProjects: FC<ImportedProjectsParams> = ({
               <ProjectCard
                 key={project.projectId}
                 url={project.url}
-                project_id={project.project_id}
+                project_id={project.projectId}
                 project_type={project.project_type}
                 access_token={user.github_access_token}
                 username={user.github_username}
