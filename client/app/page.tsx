@@ -39,11 +39,13 @@
 import Image from 'next/image';
 
 import Navbar from '@/components/LandingPageNew/navbar/page'
+import FirstSection from '@/components/LandingPageNew/first-section/page';
 
 const Home = () => {
   return (
     <div>
       <Navbar />
+      <FirstSection/>
     </div>
   );
 };
