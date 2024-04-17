@@ -1,4 +1,5 @@
 import Dockerode from 'dockerode';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const docker = new Dockerode();
 
@@ -21,11 +22,17 @@ export async function startDummyContainer() {
   // Wait for the container to finish its job
   await container.wait();
 }
-// Start the dummy container and send progress updates
-startDummyContainer()
-  .then(() => {
-    console.log('Dummy container finished its job.');
-  })
-  .catch((error) => {
+// Export default API route handler
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    // Start the dummy container
+    const result = await startDummyContainer();
+
+    // Respond with success message
+    res.status(200).json({ message: result });
+  } catch (error) {
+    // Handle errors
     console.error('Error starting dummy container:', error);
-  });
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
