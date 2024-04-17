@@ -13,14 +13,14 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repository }) => {
         <h5 className='bg-gradient-to-r from-sky-400 to-[#8e29f3] bg-clip-text text-lg font-bold text-transparent'>
           {repository.name}
         </h5>
-        <span className='rounded-xl border-2 border-gray-600 pl-2 pr-2 text-sm text-gray-500'>
+        <span className='rounded-xl border-2 border-gray-600 px-2 text-sm text-gray-500'>
           {repository.isPublic ? 'Public' : 'Private'}
         </span>
       </div>
       <div className='flex items-center justify-between'>
         <span className='flex items-center gap-2'>
           <svg
-            className=' h-4 w-4 text-gray-400'
+            className=' size-4 text-gray-400'
             aria-hidden='true'
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -38,7 +38,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repository }) => {
         </span>
         <span className='flex items-center '>
           <svg
-            className='h-4 w-4 text-yellow-300 '
+            className='size-4 text-yellow-300 '
             aria-hidden='true'
             xmlns='http://www.w3.org/2000/svg'
             fill='currentColor'

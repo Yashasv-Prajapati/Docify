@@ -37,7 +37,7 @@ const Search: FC<SearchParams> = ({ data, onfilteredData }) => {
   return (
     <div className='flex flex-col gap-2 md:flex-row md:items-center md:gap-4'>
       <Input
-        className='bg-white dark:bg-gray-950 md:flex-1'
+        className='bg-white md:flex-1 dark:bg-gray-950'
         placeholder='Search projects...'
         type='search'
         value={search}

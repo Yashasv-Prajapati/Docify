@@ -19,7 +19,7 @@ function Signup() {
           <h1 className='mb-4 bg-gradient-to-r from-sky-400 to-[#0508be] bg-clip-text text-2xl font-extrabold leading-none tracking-tight text-transparent md:text-3xl lg:text-4xl'>
             Let&apos;s build something new.
           </h1>
-          <div className='mb-16 text-left text-lg font-normal text-gray-500 dark:text-gray-400 lg:text-xl  '>
+          <div className='mb-16 text-left text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400  '>
             To get the insights, import an existing Git Repository.
           </div>
 
