@@ -19,6 +19,16 @@ const config: Config = {
   setupFilesAfterEnv: ["./jest.setup.ts"],
   preset: "ts-jest",
 };
-
+// module.exports = createJestConfig(config);
+// module.exports = { 
+// // //   // other configuration...
+//   setupFiles: ['<rootDir>/jest.setup.ts'],
+// };
+// module.exports = {
+  // clearMocks: true,
+  // preset: 'ts-jest',
+  // testEnvironment: 'node',
+  // setupFilesAfterEnv: ['<rootDir>/singleton.ts'],
+// }
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 export default createJestConfig(config);
