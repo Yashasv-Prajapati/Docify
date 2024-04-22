@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-const GITHUB_APP_PRIVATE_KEY = '-----BEGIN RSA PRIVATE KEY-----test_private-----END RSA PRIVATE KEY-----' as string;
+const GITHUB_APP_PRIVATE_KEY = '-----BEGIN RSA PRIVATE KEY-----test_private-----END RSA PRIVATE KEY-----';
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 const crypto = require('crypto');
 
@@ -84,90 +84,6 @@ function generateJwtToken() {
 }
 
 
-
-// describe('GET function', () => {
-//   beforeEach(() => {
-//     jest.resetAllMocks();
-//   });
-
-//   it('should handle successful request', async () => {
-//     const req = {
-//       nextUrl: {
-//         searchParams: {
-//           get: jest.fn().mockReturnValue('code'),
-//         },
-//       },
-//     } as unknown as NextRequest;
-//     (axios.post as jest.Mock).mockImplementation((url, data, config) => {
-//       if (url === 'https://github.com/login/oauth/access_token') {
-//         return Promise.resolve({
-//           data: {
-//                   access_token: 'test_access_token',
-//                   refresh_token: 'test_refresh_token',
-//                   expires_in: 3600,
-//           },
-//           body: {
-//             client_id: process.env.GITHUB_CLIENT_ID,
-//             client_secret: process.env.GITHUB_CLIENT_SECRET,
-//             code: req.nextUrl.searchParams.get('code'),
-//           }
-//         });
-//       }
-//       // Handle other URLs or return a default value
-//     });
-
-//     (axios.get as jest.Mock)
-//       .mockResolvedValueOnce({
-//         data: {
-//           login: 'test_user',
-//           avatar_url: 'test_avatar_url',
-//         },
-//         headers: {
-//           Authorization: 'token test_access_token',
-//           Accept: 'application/vnd.github.v3+json',
-//         }
-//       })
-//       .mockResolvedValueOnce({
-//         data: [
-//           {
-//             account: {
-//               login: 'test_user',
-//             },
-//             id: 'test_installation_id',
-//           },
-//         ],
-//         headers: {
-//           Authorization: `Bearer ${generateJwtToken()}`,
-//           Accept: 'application/vnd.github.v3+json',
-//           'User-Agent': 'Your-App',
-//         },
-//       });
-//       mockUserFindUnique.mockResolvedValue({
-//         github_username: 'test_user',
-//         github_access_token: 'test_access_token',
-//         github_refresh_token: 'test_refresh_token',
-//       });
-
-//       mockUserCreate.mockResolvedValue({ 
-
-//         github_username: 'test_user',
-//       github_access_token: 'test_access_token',
-//       github_refresh_token: 'test_refresh_token',
-//       github_access_token_expiry: new Date(),
-//       avatar_url: 'test_avatar_url',
-//       github_installation_id: 'test_installation_id',
-//       });
-
-//     (sign as jest.Mock).mockResolvedValue('test_jwt');
-
-
-
-//   });
-
-//   // // Add more test cases as needed
-// });
-
-
 it('should redirect to installation URL if app not installed', async () => {
   const req = {
     nextUrl: {
@@ -224,60 +140,3 @@ it('should redirect to installation URL if app not installed', async () => {
   expect(installed).toBe(false);
 });
 
-// it("should go to instllation if user didn't install", async () => {
-//   const req = {
-//     nextUrl: {
-//       searchParams: {
-//         get: jest.fn().mockReturnValue('code'),
-//       },
-//     },
-//   } as unknown as NextRequest;
-
-//   (axios.post as jest.Mock).mockImplementation((url, data, config) => {
-//     if (url === 'https://github.com/login/oauth/access_token') {
-//       return Promise.resolve({
-//         data: {
-//           access_token: 'test_access_token',
-//           refresh_token: 'test_refresh_token',
-//           expires_in: 3600,
-//         },
-//       });
-//     }
-//   });
-
-//   (axios.get as jest.Mock)
-//     .mockResolvedValueOnce({
-//       data: {
-//         login: 'test_user',
-//         avatar_url: 'test_avatar_url',
-//       },
-//     })
-//     .mockResolvedValueOnce({
-//       data: [
-//         {
-//           account: {
-//             login: 'test_user',
-//           },
-//           id: 'test_installation_id',
-//         },
-//       ],
-//     });
-
-//   mockUserFindUnique.mockResolvedValue(null);
-//   mockUserCreate.mockResolvedValue({
-//     github_username: 'test_user',
-//     github_access_token: 'test_access_token',
-//     github_refresh_token: 'test_refresh_token',
-//     github_access_token_expiry: new Date(),
-//     avatar_url: 'test_avatar_url',
-//     github_installation_id: 'test_installation_id',
-//   });
-
-//   (sign as jest.Mock).mockResolvedValue('test_jwt');
-
-//   const response = await GET(req);
-
-//   // expect(response.status).toBe(302);
-//   expect(response.headers.get('Location')).toBe(`https://github.com/apps/docify-wiki/installations/new?target_id=${GITHUB_APP_ID}&target_type=app`);
-//   // expect(mockUserCreate).toHaveBeenCalled();
-// });
