@@ -44,19 +44,9 @@ const Search: FC<SearchParams> = ({ data, onfilteredData }) => {
         onChange={handleSearch}
       />
       <div className='flex items-center gap-4'>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className='bg-white dark:bg-gray-950' variant='outline'>
+            <Button className='bg-white dark:bg-gray-950' variant='outline' onClick={() => {window.location.href = '/new'}}>
               Add New...
-              <ChevronDownIcon className='ml-2 size-4' />
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuCheckboxItem checked>
-              <Link href='/new'>Project</Link>
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </div>
   );
