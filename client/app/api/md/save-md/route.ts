@@ -20,10 +20,10 @@ export async function POST(request: NextRequest) {
       data: { content, authorId, projectId },
     });
 
-    return NextResponse.json({"MD": md}, {status: 200});
+    return NextResponse.json({ MD: md }, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({"message":error.issues}, { status: 422 });
+      return NextResponse.json({ message: error.issues }, { status: 422 });
     }
 
     return new NextResponse('Internal Server Error', { status: 500 });

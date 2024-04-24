@@ -52,5 +52,5 @@ def chat(prompt: str):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error calling stored procedure create_user: {e}",
+            detail=f"Error creating chatbot: {e}",
         )

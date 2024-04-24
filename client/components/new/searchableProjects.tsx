@@ -72,7 +72,7 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                   clipRule='evenodd'
                 />
               </svg>
-              <code className='bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold '>
+              <code className='relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold '>
                 {userName}
               </code>
             </div>
@@ -108,7 +108,7 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                             <p className='text-m font-medium leading-none'>
                               {repo.name}
                             </p>
-                            <p className='text-muted-foreground text-sm'>
+                            <p className='text-sm text-muted-foreground'>
                               {repo.clone_url}
                             </p>
                           </div>
