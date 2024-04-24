@@ -86,7 +86,7 @@ public class LibraryAnalyzer {
         }
 
         String directoryPath = args[0];
-        String requirementsFilePath = "requirements.txt";
+        String requirementsFilePath = ".docify-assets/requirements.txt";
 
         File directory = new File(directoryPath);
         if (!directory.exists() || !directory.isDirectory()) {
