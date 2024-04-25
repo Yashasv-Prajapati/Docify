@@ -1,14 +1,15 @@
-#!/bin/bash
-
-# Get CMD variables
+cd ..
+cd repo
 GITHUB_USERNAME=$1
 GITHUB_REPOSITORY=$2
 GITHUB_TOKEN=$3
-GITHUB_BRANCH_NAME="docify"
+GITHUB_APP_ID=$4
+GITHUB_BRANCH_NAME=$5
 
-# Main script
+cd $GITHUB_REPOSITORY
+ls
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 <github_username> <repository_name> <access_token>"
+    echo "Usage: $0 <github_username> <repository_name> <access_token> <github_app_id> <branch_name>"
     exit 1
 fi
 
@@ -24,7 +25,8 @@ else
     echo "Creating branch '$GITHUB_BRANCH_NAME' and checking out..."
     git checkout -b "$GITHUB_BRANCH_NAME"
 fi
-
+git config --global user.name "docify[bot]"
+git config --global user.email $GITHUB_APP_ID+docify[bot]@users.noreply.github.com
 # Change to docify branch
 git checkout docify
 
@@ -35,4 +37,4 @@ git add .
 git commit -m "Docify changes to repository, changes made in ./assets folder"
 
 # Push to github
-git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}.git docify
+git push --force https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}.git docify
