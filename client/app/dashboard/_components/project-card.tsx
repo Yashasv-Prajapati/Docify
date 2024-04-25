@@ -1,10 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {MoreHorizontalIcon } from 'lucide-react';
-
+import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -35,6 +36,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
   username,
 }) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleUmlClick = async () => {
     console.log('UML Clicked');
 
@@ -56,7 +58,36 @@ const ProjectCard: FC<ProjectCardProps> = ({
     console.log(data);
   };
 
+  const handleDependencyClick = async () => {
+    console.log('Dependency Checker Clicked');
+    setIsLoading(true);
+    const res = await fetch('/api/dependency-checker', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        // accessToken: access_token,
+        // userName: username,
+        repositoryName: repository_name,
+        project_type: project_type,
+        // projectId: project_id,
+      }),
+    });
+
+    const data = await res.json();
+    console.log(data);
+    setIsLoading(false);
+    router.push(`/dependency_checker/${project_id}`);
+  };
+
   return (
+    <>
+    {isLoading ? (
+      <div className='flex flex-row justify-center'>
+        <Loader2 className='size-6 h-20 animate-spin items-center text-zinc-500' />
+      </div>
+    ) : (
     <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
       <div className='grid flex-1 gap-1 p-2'>
         <div className='font-medium'>{repository_name}</div>
@@ -126,9 +157,13 @@ const ProjectCard: FC<ProjectCardProps> = ({
           <DropdownMenuItem>
             <button onClick={handleUmlClick}>UML Diagram</button>
           </DropdownMenuItem>
+          <DropdownMenuItem>
+            <button onClick={handleDependencyClick}>Dependency Checker</button>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </div>)}
+    </>
   );
 };
 
