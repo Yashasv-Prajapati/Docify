@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
   if (type == 'python') {
     containerOptions = {
-      Image: 'python:latest',
+      Image: 'docify_python:latest',
       Tty: true,
       // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
     };
   } else if (type == 'java') {
     containerOptions = {
-      Image: 'docify-java:latest',
+      Image: 'docify_java:latest',
       Tty: true,
       // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
