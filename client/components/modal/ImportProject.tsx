@@ -152,7 +152,7 @@ function ImportProject({
                         </div>
                       </div>
                       <svg
-                        className='ms-3 size-4 text-gray-500 rtl:rotate-180 dark:text-gray-400'
+                        className='ms-3 size-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -193,7 +193,7 @@ function ImportProject({
                         </div>
                       </div>
                       <svg
-                        className='ms-3 size-4 text-gray-500 rtl:rotate-180 dark:text-gray-400'
+                        className='ms-3 size-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
