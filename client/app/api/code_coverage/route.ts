@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
             parentDir + '/docker/docker_bash_files:/bash_files',
           ];
 
-    const uid_for_branch_name = nanoid();
+    const uid_for_branch_name = "docify-" + nanoid();
     const containerOptions = {
       Image: containerImg,
       Tty: true,

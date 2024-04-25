@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         ? 'python-dep-checker:latest'
         : 'dependency-checker-java:latest';
 
-    const uid_for_branch_name = nanoid();
+    const uid_for_branch_name = "docify-" +nanoid();
 
     const binds =
       project_type === 'python'

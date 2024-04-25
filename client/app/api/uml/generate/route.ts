@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       ? [parentDir + `/python/uml:/app`]
       : [parentDir + `/java/uml:/app`];
 
-  const uid_for_branch_name = nanoid();
+  const uid_for_branch_name = "docify-" +nanoid();
 
   if (type == 'python') {
     containerOptions = {
