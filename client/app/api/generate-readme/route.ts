@@ -23,8 +23,12 @@ export async function POST(request: NextRequest) {
   const { github_access_token, github_username } = currentUser;
 
   try {
-    const { project_goals, core_functionalities, project_type, repositoryName } =
-      GenerateReadmeSchema.parse(data);
+    const {
+      project_goals,
+      core_functionalities,
+      project_type,
+      repositoryName,
+    } = GenerateReadmeSchema.parse(data);
 
     await axios
       .head(
