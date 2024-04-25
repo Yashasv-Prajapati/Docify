@@ -13,7 +13,6 @@ import { GenerateReadmeSchema } from '@/lib/validations/generate-readme';
 // }
 export async function POST(request: NextRequest) {
   const data = await request.json();
-  // console.log("data: ", data);
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {

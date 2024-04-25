@@ -2,6 +2,7 @@
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
+import {nanoid} from 'nanoid';
 
 const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..'); //now we are pointing to the repository root
 
@@ -24,6 +25,8 @@ export async function POST(req: NextRequest) {
             parentDir + `/java/code_coverage:/app`,
             parentDir + '/docker/docker_bash_files:/bash_files',
           ];
+
+    const uid_for_branch_name = "docify-" + nanoid();
     const containerOptions = {
       Image: containerImg,
       Tty: true,
@@ -47,7 +50,7 @@ export async function POST(req: NextRequest) {
       CMD: [
         'sh',
         '-c',
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < coverage.sh > cov.sh && chmod +x d.sh && chmod +x c.sh && chmod +x cov.sh &&./d.sh ${token} ${username} ${repo} && ./cov.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < coverage.sh > cov.sh && chmod +x d.sh && chmod +x c.sh && chmod +x cov.sh &&./d.sh ${token} ${username} ${repo} && ./cov.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} ${uid_for_branch_name}`
       ], // "&& tail -f /dev/null" for not closing and removing the container (can be used for debugging)
       // CMD:["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"],
     };
