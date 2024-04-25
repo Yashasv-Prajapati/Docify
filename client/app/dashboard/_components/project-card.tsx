@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { MoreHorizontalIcon } from 'lucide-react';
+import {MoreHorizontalIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -76,32 +76,47 @@ const ProjectCard: FC<ProjectCardProps> = ({
   };
 
   return (
-    <div className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'>
+    <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
       <div className='grid flex-1 gap-1 p-2'>
         <div className='font-medium'>{repository_name}</div>
       </div>
       <Separator className='my-2 lg:hidden' />
       <div className='grid flex-1 gap-1 p-2'>
         <div className=' my-2 flex items-start gap-2'>
-          <LogoGithub />
-          <Link href={url} className='hover:underline'>
-            Github
-          </Link>
+        <svg width="24" height="24" viewBox="0 0 24 24" 
+        fill="none" stroke="currentColor" strokeWidth="2" 
+        strokeLinecap="round" strokeLinejoin="round" 
+        className="lucide lucide-github">
+          <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+          <path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+            <Link href={url} className='hover:underline'>Github</Link>
         </div>
       </div>
       <Separator className='my-2 lg:hidden' />
       <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2 font-semibold'>
+        <div className='flex items-center gap-2'>
+          
           Project type
         </div>
-        <div className='flex items-center gap-2'>{project_type}</div>
+        <div className='flex items-center gap-2'>
+        <span
+            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+          />
+          {project_type}
+        </div>
       </div>
       <Separator className='my-2 lg:hidden' />
       <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2 font-semibold'>
-          Testing Directory
+        <div className='flex items-center gap-2'>
+          
+         Testing Directory
         </div>
-        <div className='flex items-center gap-2'>{testing_dir}</div>
+        <div className='flex items-center gap-2'>
+        <span
+            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+          />
+          {testing_dir}
+        </div>
       </div>
       <Separator className='my-2 lg:hidden' />
       <DropdownMenu>
@@ -135,33 +150,5 @@ const ProjectCard: FC<ProjectCardProps> = ({
     </div>
   );
 };
-
-function LogoGithub(props: React.SVGAttributes<SVGElement>) {
-  return (
-    <svg
-      {...props}
-      data-testid='geist-icon'
-      height={16}
-      strokeLinejoin='round'
-      viewBox='0 0 16 16'
-      width={16}
-      style={{ color: 'currentcolor' }}
-    >
-      <g clipPath='url(#clip0_872_3147)'>
-        <path
-          fillRule='evenodd'
-          clipRule='evenodd'
-          d='M8 0C3.58 0 0 3.57879 0 7.99729C0 11.5361 2.29 14.5251 5.47 15.5847C5.87 15.6547 6.02 15.4148 6.02 15.2049C6.02 15.0149 6.01 14.3851 6.01 13.7154C4 14.0852 3.48 13.2255 3.32 12.7757C3.23 12.5458 2.84 11.836 2.5 11.6461C2.22 11.4961 1.82 11.1262 2.49 11.1162C3.12 11.1062 3.57 11.696 3.72 11.936C4.44 13.1455 5.59 12.8057 6.05 12.5957C6.12 12.0759 6.33 11.726 6.56 11.5261C4.78 11.3262 2.92 10.6364 2.92 7.57743C2.92 6.70773 3.23 5.98797 3.74 5.42816C3.66 5.22823 3.38 4.40851 3.82 3.30888C3.82 3.30888 4.49 3.09895 6.02 4.1286C6.66 3.94866 7.34 3.85869 8.02 3.85869C8.7 3.85869 9.38 3.94866 10.02 4.1286C11.55 3.08895 12.22 3.30888 12.22 3.30888C12.66 4.40851 12.38 5.22823 12.3 5.42816C12.81 5.98797 13.12 6.69773 13.12 7.57743C13.12 10.6464 11.25 11.3262 9.47 11.5261C9.76 11.776 10.01 12.2558 10.01 13.0056C10.01 14.0752 10 14.9349 10 15.2049C10 15.4148 10.15 15.6647 10.55 15.5847C12.1381 15.0488 13.5182 14.0284 14.4958 12.6673C15.4735 11.3062 15.9996 9.67293 16 7.99729C16 3.57879 12.42 0 8 0Z'
-          fill='currentColor'
-        />
-      </g>
-      <defs>
-        <clipPath id='clip0_872_3147'>
-          <rect width={16} height={16} fill='white' />
-        </clipPath>
-      </defs>
-    </svg>
-  );
-}
 
 export default ProjectCard;
