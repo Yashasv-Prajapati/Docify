@@ -35,6 +35,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
   username,
 }) => {
   const router = useRouter();
+
   const handleUmlClick = async () => {
     console.log('UML Clicked');
 
@@ -49,6 +50,24 @@ const ProjectCard: FC<ProjectCardProps> = ({
         repoName: repository_name,
         projectType: project_type,
         projectId: project_id,
+      }),
+    });
+
+    const data = await res.json();
+    console.log(data);
+  };
+
+  const handleTestPlanClick = async () => {
+    console.log('Test Plan Clicked');
+
+    const res = await fetch('/api/test_plan/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        project_id: project_id,
+        project_description: `This is a ${project_type} project.`,
       }),
     });
 
@@ -106,7 +125,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
               Generate Readme
             </button>
           </DropdownMenuItem>
-          <DropdownMenuItem>Test Plan</DropdownMenuItem>
+          <DropdownMenuItem><button onClick={handleTestPlanClick}>Test Plan</button></DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <button onClick={handleUmlClick}>UML Diagram</button>
