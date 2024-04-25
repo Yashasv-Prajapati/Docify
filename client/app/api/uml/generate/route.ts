@@ -55,7 +55,6 @@ export async function POST(req: NextRequest) {
       ? [parentDir + `/python/uml:/app`]
       : [parentDir + `/java/uml:/app`];
 
-  const uid_for_branch_name = "docify-" +nanoid();
 
   if (type == 'python') {
     containerOptions = {
@@ -75,7 +74,9 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} ${uid_for_branch_name}`,
+        // `tail -f /dev/null`
+        // `tr -d "\\r" < download.sh > d.sh && ./d.sh ${token} ${username} ${repo}&& tail -f /dev/null`,
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} `,
       ],
       //this is a dummy command, will be replaced by the bash script
     };
@@ -97,7 +98,7 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} ${uid_for_branch_name}`,
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
       ],
       //this is a dummy command, will be replaced by the bash script
     };
