@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
     };
   } else if (type == 'java') {
     containerOptions = {
-      Image: 'dockify_java:latest',
+      Image: 'docify_java:latest',
       Tty: true,
       // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
