@@ -4,11 +4,12 @@ GITHUB_USERNAME=$1
 GITHUB_REPOSITORY=$2
 GITHUB_TOKEN=$3
 GITHUB_APP_ID=$4
-GITHUB_BRANCH_NAME="docify"
+GITHUB_BRANCH_NAME=$5
+
 cd $GITHUB_REPOSITORY
 ls
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 <github_username> <repository_name> <access_token>"
+    echo "Usage: $0 <github_username> <repository_name> <access_token> <github_app_id> <branch_name>"
     exit 1
 fi
 
