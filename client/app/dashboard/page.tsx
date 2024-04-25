@@ -1,10 +1,8 @@
 import { redirect } from 'next/navigation';
-
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
 import Avatar from '@/app/dashboard/_components/avatar';
 import Nav from '@/app/dashboard/_components/nav';
-
 import ImportedProjects from './_components/ImportedProjects';
 
 const Page = async () => {

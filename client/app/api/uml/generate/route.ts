@@ -2,6 +2,7 @@ import path from 'path';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
+import { nanoid } from 'nanoid';
 
 const parentDir = path.resolve(
   __dirname,
@@ -45,16 +46,19 @@ export async function POST(req: NextRequest) {
     repoName: repo,
     projectType: type,
     projectId: projectId,
+    folderPath: folderPath,
   } = data;
-
+  const path = folderPath == '/' ? repo : repo + folderPath;
   let containerOptions;
   const binds =
     type == 'python'
       ? [parentDir + `/python/uml:/app`]
       : [parentDir + `/java/uml:/app`];
+
+
   if (type == 'python') {
     containerOptions = {
-      Image: 'python:latest',
+      Image: 'docify_python:latest',
       Tty: true,
       // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
@@ -70,16 +74,15 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
-        // `tail -f /dev/null`,
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
-        // `tail -f /dev/null`,
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
+        // `tail -f /dev/null`
+        // `tr -d "\\r" < download.sh > d.sh && ./d.sh ${token} ${username} ${repo}&& tail -f /dev/null`,
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} `,
       ],
       //this is a dummy command, will be replaced by the bash script
     };
   } else if (type == 'java') {
     containerOptions = {
-      Image: 'dockify_java:latest',
+      Image: 'docify_java:latest',
       Tty: true,
       // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
@@ -95,8 +98,7 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} && tail -f/dev/null`,
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} && tail -f/dev/null`,
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
       ],
       //this is a dummy command, will be replaced by the bash script
     };
@@ -128,7 +130,7 @@ export async function POST(req: NextRequest) {
           );
         }
         console.log('Container finished its job!');
-        return redirect(`/uml/${projectId}`);
+        return NextResponse.redirect(`${process.env.NEXT_APP_URL}/uml/${projectId}`);
       });
     });
   });

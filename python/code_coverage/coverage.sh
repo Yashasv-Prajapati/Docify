@@ -15,3 +15,5 @@ coverage report
 coverage html
 
 python3 test_python.py  >> README.md
+
+rm test_python.py

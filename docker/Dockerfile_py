@@ -3,12 +3,12 @@ FROM frolvlad/alpine-python3
 # Install necessary tools for networking
 RUN apk update && \
     apk add --no-cache \
-        curl \
-        wget \
-        iputils \
-        bind-tools \
-        git \
-        && \
+    curl \
+    wget \
+    iputils \
+    bind-tools \
+    git \
+    && \
     rm -rf /var/cache/apk/*\
     && pip install requests\
     && pip install coverage\
@@ -33,7 +33,7 @@ WORKDIR /app
 
 # Copy the current directory contents into the container at /usr/src/app
 
-COPY ./code ./
+# COPY ./code ./
 #COPY ./received ./send
 #COPY ./received ./send
 #can't mount to a existing file in the container
