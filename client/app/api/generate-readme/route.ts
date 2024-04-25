@@ -39,7 +39,25 @@ export async function POST(request: NextRequest) {
           },
         }
       )
+      .then(async () => {
+        const response = await axios.get(
+          `https://api.github.com/repos/${github_username}/${repositoryName}/commits?sha=docify&?path=.docify-assets/requirements.txt`,
+          {
+            headers: {
+              Authorization: `token ${github_access_token}`,
+            },
+          }
+        );
+
+        if (
+          response.data[0].commit.author.date <
+          new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
+        ) {
+          throw new Error('File is stale');
+        }
+      })
       .catch(async () => {
+        console.log('ok now your here');
         await axios.post(
           `${process.env.NEXT_APP_URL}/api/dependency-checker`,
           { project_type, repositoryName },
