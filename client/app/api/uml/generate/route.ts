@@ -46,8 +46,9 @@ export async function POST(req: NextRequest) {
     repoName: repo,
     projectType: type,
     projectId: projectId,
+    folderPath: folderPath,
   } = data;
-
+  const path = folderPath == '/' ? repo : repo + folderPath;
   let containerOptions;
   const binds =
     type == 'python'
@@ -74,7 +75,6 @@ export async function POST(req: NextRequest) {
       Cmd: [
         'sh',
         '-c',
-        // `tail -f /dev/null`,
         `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} ${uid_for_branch_name}`,
       ],
       //this is a dummy command, will be replaced by the bash script
