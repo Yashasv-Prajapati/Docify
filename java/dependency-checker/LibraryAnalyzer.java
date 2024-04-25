@@ -80,13 +80,13 @@ public class LibraryAnalyzer {
     }
 
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.out.println("Usage: java LibraryAnalyzer <DirectoryPath> <RequirementsFilePath>");
+        if (args.length != 1) {
+            System.out.println("Usage: java LibraryAnalyzer <DirectoryPath>");
             return;
         }
 
         String directoryPath = args[0];
-        String requirementsFilePath = args[1];
+        String requirementsFilePath = ".docify-assets/requirements.txt";
 
         File directory = new File(directoryPath);
         if (!directory.exists() || !directory.isDirectory()) {

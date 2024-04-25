@@ -44,7 +44,11 @@ export async function POST(request: NextRequest) {
             '-c',
             `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID}`,
           ]
-        : [];
+        : [
+            'sh',
+            '-c',
+            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID}`,
+          ];
 
     const containerOptions = {
       Image: containerImage,

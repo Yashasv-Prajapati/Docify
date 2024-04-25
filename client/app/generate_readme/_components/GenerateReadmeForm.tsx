@@ -30,13 +30,15 @@ import Wrapper from '@/components/wrapper';
 // Define the formSchema for form data validation
 const formSchema = z.object({
   projectType: z.string().min(1),
-  description: z.string().min(1),
   repositoryName: z.string().min(1),
+  core_functionalities: z.string().min(1),
+  project_goals: z.string().min(1),
 });
 interface FormData {
   projectType: string;
   repositoryName: string;
-  description: string;
+  core_functionalities:string;
+  project_goals:string;
 }
 
 interface Project {
@@ -58,18 +60,19 @@ export default function GenerateReadmeForm({ project }: Props) {
     defaultValues: {
       projectType: project.project_type,
       repositoryName: project.repository_name,
-      description: '',
+      core_functionalities: '',
+      project_goals: '',
     },
   });
 
   // Function to handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log(values);
     try {
       console.log('Generating Readme...');
 
       const body = GenerateReadmeSchema.parse({
-        project_description: values.description,
+        core_functionalities: values.core_functionalities,
+        project_goals: values.project_goals,
         project_type: values.projectType,
         repositoryName: values.repositoryName,
       });
@@ -135,13 +138,29 @@ export default function GenerateReadmeForm({ project }: Props) {
                 />
                 <FormField
                   control={form.control}
-                  name='description'
+                  name='project_goals'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project Description</FormLabel>
+                      <FormLabel>Brief Description of the project goals and objectives</FormLabel>
                       <FormControl>
                         <textarea
-                          placeholder='Enter project description'
+                          placeholder='Build a software that...'
+                          {...field}
+                          className='h-32 w-full resize-none border border-gray-300 p-2'
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='core_functionalities'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Brief description of the core features and functionalities of the project</FormLabel>
+                      <FormControl>
+                        <textarea
+                          placeholder='Easing the process of...'
                           {...field}
                           className='h-32 w-full resize-none border border-gray-300 p-2'
                         />

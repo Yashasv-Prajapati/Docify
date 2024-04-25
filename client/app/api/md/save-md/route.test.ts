@@ -22,7 +22,7 @@ describe('POST /api/md/save-md', () => {
             content: 'content',
             authorId: 'clutn863b0000f4rhb9pzrdkc',
             projectId: 'clutn9clr0006f4rhd6o27p3y',
-        }),
+          }),
         });
         expect(res.status).toBe(200);
         const body = await res.json();
