@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
   if (type == 'python') {
     containerOptions = {
-      Image: 'python:latest',
+      Image: 'docify_python:latest',
       Tty: true,
       // Env: Object.entries(envVars).map(([key, value]) => `${key}=${value}`),
       HostConfig: {
@@ -129,7 +129,7 @@ export async function POST(req: NextRequest) {
           );
         }
         console.log('Container finished its job!');
-        return redirect(`/uml/${projectId}`);
+        return NextResponse.redirect(`${process.env.NEXT_APP_URL}/uml/${projectId}`);
       });
     });
   });

@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
 
     const containerImage =
       project_type === 'python'
-        ? 'python-dep-checker:latest'
-        : 'dependency-checker-java:latest';
+        ? 'docify_python:latest'
+        : 'docify_java:latest';
 
     const uid_for_branch_name = "docify-" +nanoid();
 
