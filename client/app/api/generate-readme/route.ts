@@ -21,6 +21,9 @@ export async function POST(request: NextRequest) {
 
   const { github_access_token, github_username } = currentUser;
 
+  // To check whether we need to call /api/dependency-checker
+  let flag = false;
+
   try {
     const {
       project_goals,
@@ -48,25 +51,34 @@ export async function POST(request: NextRequest) {
           }
         );
 
-        if (
-          response.data[0].commit.author.date <
-          new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
-        ) {
-          throw new Error('File is stale');
+        const lastModified = new Date(response.data[0].commit.author.date);
+        const oneDayAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+
+        if (lastModified < oneDayAgo) {
+          console.log('requirements.txt file is stale');
+
+          // If requirements.txt file is stale, call /api/dependency-checker
+          flag = true;
         }
       })
       .catch(async () => {
-        console.log('ok now your here');
-        await axios.post(
-          `${process.env.NEXT_APP_URL}/api/dependency-checker`,
-          { project_type, repositoryName },
-          {
-            headers: {
-              Cookie: request.headers.get('Cookie'),
-            },
-          }
-        );
+        console.log('requirements.txt file does not exist');
+
+        // If head request fails, requirements.txt file does not exist and we need to call /api/dependency-checker
+        flag = true;
       });
+
+    if (flag) {
+      await axios.post(
+        `${process.env.NEXT_APP_URL}/api/dependency-checker`,
+        { project_type, repositoryName },
+        {
+          headers: {
+            Cookie: request.headers.get('Cookie'),
+          },
+        }
+      );
+    }
 
     const response = await axios.get(
       `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=docify`,

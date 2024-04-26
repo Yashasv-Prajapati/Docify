@@ -171,7 +171,7 @@ const Preview: FC<PreviewProps> = ({ markdown }) => {
       </div>
       <div className='h-[400px] overflow-y-auto'>
         <div
-          className='prose size-full break-words bg-gray-100 p-6 prose-pre:bg-[#1a1b26]'
+          className='prose prose-pre:bg-[#1a1b26] size-full break-words bg-gray-100 p-6'
           dangerouslySetInnerHTML={{
             __html: parsedMarkdown,
           }}
