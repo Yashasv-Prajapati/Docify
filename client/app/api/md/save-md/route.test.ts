@@ -4,8 +4,9 @@
 
 import { testApiHandler } from 'next-test-api-route-handler';
 
-import * as appHandler from './route';
 import { db } from '@/lib/db';
+
+import * as appHandler from './route';
 
 // Mocking the 'markdown-table' module
 jest.mock('markdown-table', () => ({
@@ -14,12 +15,11 @@ jest.mock('markdown-table', () => ({
 
 describe('POST /api/md/save-md', () => {
   it('POST returns 200', async () => {
-
-    const data={
-      id:'test id',
-      content:'Hello harshit!! Here is your markdown file',
-      authorId:'test author id',
-      projectId:'test project id',
+    const data = {
+      id: 'test id',
+      content: 'Hello harshit!! Here is your markdown file',
+      authorId: 'test author id',
+      projectId: 'test project id',
     };
     jest.spyOn(db.markdownFile, 'create').mockResolvedValue(data);
 

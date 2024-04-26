@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {MoreHorizontalIcon } from 'lucide-react';
-import { Loader2 } from 'lucide-react';
+import { set } from 'date-fns';
+import { Loader2, MoreHorizontalIcon } from 'lucide-react';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -37,28 +38,38 @@ const ProjectCard: FC<ProjectCardProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const handleUmlClick = async () => {
     console.log('UML Clicked');
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/uml/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken: access_token,
+          userName: username,
+          repoName: repository_name,
+          projectType: project_type,
+          projectId: project_id,
+        }),
+      });
 
-    const res = await fetch('/api/uml/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        accessToken: access_token,
-        userName: username,
-        repoName: repository_name,
-        projectType: project_type,
-        projectId: project_id,
-      }),
-    });
-
-    const data = await res.json();
-    console.log(data);
+      const data = await res.json();
+      // console.log('Data:', data);
+      if (res.status === 200) {
+        toast.success('UML diagram generated successfully');
+        router.push(`/uml/${project_id}`);
+      }
+    } catch (error) {
+      console.error('Error Showing UML:', error);
+      toast.error('Failed to generate UML diagram');
+    } finally {
+      setIsLoading(false);
+    }
   };
-  
+
   const handleTestPlanClick = async () => {
     console.log('Test Plan Clicked');
 
@@ -99,86 +110,86 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
     setIsLoading(false);
     router.push(`/dependency_checker/${project_id}`);
-
   };
 
   return (
     <>
-    {isLoading ? (
-      <div className='flex flex-row justify-center'>
-        <Loader2 className='size-6 h-20 animate-spin items-center text-zinc-500' />
-      </div>
-    ) : (
-    <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
-      <div className='grid flex-1 gap-1 p-2'>
-        <div className='font-medium'>{repository_name}</div>
-      </div>
-      <Separator className='my-2 lg:hidden' />
-      <div className='grid flex-1 gap-1 p-2'>
-        <div className=' my-2 flex items-start gap-2'>
-        <LogoGithub />
-            <Link href={url} className='hover:underline'>Github</Link>
+      {isLoading ? (
+        <div className='flex flex-row justify-center'>
+          <Loader2 className='size-6 h-20 animate-spin items-center text-zinc-500' />
         </div>
-      </div>
-      <Separator className='my-2 lg:hidden' />
-      <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2'>
-          
-          Project type
+      ) : (
+        <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
+          <div className='grid flex-1 gap-1 p-2'>
+            <div className='font-medium'>{repository_name}</div>
+          </div>
+          <Separator className='my-2 lg:hidden' />
+          <div className='grid flex-1 gap-1 p-2'>
+            <div className=' my-2 flex items-start gap-2'>
+              <LogoGithub />
+              <Link href={url} className='hover:underline'>
+                Github
+              </Link>
+            </div>
+          </div>
+          <Separator className='my-2 lg:hidden' />
+          <div className='grid flex-1 gap-1 p-2'>
+            <div className='flex items-center gap-2'>Project type</div>
+            <div className='flex items-center gap-2'>
+              <span
+                className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+              />
+              {project_type}
+            </div>
+          </div>
+          <Separator className='my-2 lg:hidden' />
+          <div className='grid flex-1 gap-1 p-2'>
+            <div className='flex items-center gap-2'>Testing Directory</div>
+            <div className='flex items-center gap-2'>
+              <span
+                className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+              />
+              {testing_dir}
+            </div>
+          </div>
+          <Separator className='my-2 lg:hidden' />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className='absolute right-4 top-4'
+                size='icon'
+                variant='ghost'
+              >
+                <MoreHorizontalIcon className='size-4' />
+                <span className='sr-only'>Toggle menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end'>
+              <DropdownMenuItem>
+                <button
+                  onClick={() => {
+                    router.push(`/generate_readme/${project_id}`);
+                  }}
+                >
+                  Generate Readme
+                </button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button onClick={handleTestPlanClick}>Test Plan</button>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <button onClick={handleUmlClick}>UML Diagram</button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button onClick={handleDependencyClick}>
+                  Dependency Checker
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <div className='flex items-center gap-2'>
-        <span
-            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
-          />
-          {project_type}
-        </div>
-      </div>
-      <Separator className='my-2 lg:hidden' />
-      <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2'>
-          
-         Testing Directory
-        </div>
-        <div className='flex items-center gap-2'>
-        <span
-            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
-          />
-          {testing_dir}
-        </div>
-      </div>
-      <Separator className='my-2 lg:hidden' />
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            className='absolute right-4 top-4'
-            size='icon'
-            variant='ghost'
-          >
-            <MoreHorizontalIcon className='size-4' />
-            <span className='sr-only'>Toggle menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuItem>
-            <button
-              onClick={() => {
-                router.push(`/generate_readme/${project_id}`);
-              }}
-            >
-              Generate Readme
-            </button>
-          </DropdownMenuItem>
-          <DropdownMenuItem><button onClick={handleTestPlanClick}>Test Plan</button></DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <button onClick={handleUmlClick}>UML Diagram</button>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <button onClick={handleDependencyClick}>Dependency Checker</button>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>)}
+      )}
     </>
   );
 };

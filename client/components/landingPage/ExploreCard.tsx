@@ -24,7 +24,7 @@ const ExploreCard: React.FC<ExploreCardProps> = ({
     variants={fadeIn('right', 'spring', index * 0.5, 0.75) as Variants} // Type assertion since fadeIn may not match Variants exactly
     className={`relative ${
       active === id ? 'flex-[10] lg:flex-[3.5]' : 'flex-[2] lg:flex-[0.5]'
-    } ease-out-flex duration-[0.7s] flex h-[700px] min-w-[170px] cursor-pointer items-center justify-center transition-[flex]`}
+    } ease-out-flex flex h-[700px] min-w-[170px] cursor-pointer items-center justify-center transition-[flex] duration-[0.7s]`}
     onClick={() => handleClick(id)}
   >
     <img

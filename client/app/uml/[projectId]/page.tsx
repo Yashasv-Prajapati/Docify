@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import axios from 'axios';
 import { Package2Icon } from 'lucide-react';
@@ -19,19 +20,31 @@ interface PageProps {
 }
 
 const fetchUML = async (user: any, project: any): Promise<string> => {
+  const cookieStore = cookies();
+  const arr = cookieStore
+    .getAll()
+    .map((cookie) => `${cookie.name}=${cookie.value}`);
   try {
     const username = user?.github_username;
     const repoName = project?.repository_name;
     const accessToken = user?.github_access_token;
-    //****Need to bypass middleware in order to send the request */
-    const response = await axios.get(
-      `http://localhost:3000/api/uml/fetchUML?username=${username}&repoName=${repoName}&accessToken=${accessToken}`
-      // {
-      //   responseType: 'blob', // Ensure the response is treated as a blob
-      // }
-      // {withCredentials: true}
+
+    //sending cookie explicitly, otherwise won't work**
+    const res = await fetch(
+      `http://localhost:3000/api/uml/fetchUML?username=${username}&repoName=${repoName}&accessToken=${accessToken}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `token ${accessToken}`,
+          Cookie: arr.join('; '),
+        },
+      }
     );
-    return response?.data?.data?.download_url;
+
+    const data = await res.json();
+    // console.log('Data:', data);
+    return data.data.download_url;
   } catch (error) {
     console.error('Error Showing UML:', error);
     return '';
@@ -58,7 +71,7 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
         </div>
         <div className='flex flex-col'>
           <div className='mx-auto grid w-full max-w-6xl gap-6'>
-            <header className='flex h-14 items-center gap-4 border-b px-4 dark:border-gray-800 lg:h-[60px]'>
+            <header className='flex h-14 items-center gap-4 border-b px-4 lg:h-[60px] dark:border-gray-800'>
               <Button
                 className='size-8 rounded-full'
                 size='icon'

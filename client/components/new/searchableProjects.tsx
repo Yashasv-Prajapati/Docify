@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Fragment, useState } from 'react';
+import Link from 'next/link';
 
 import {
   Card,
@@ -16,7 +17,6 @@ import Navbar from '@/components/Navbar';
 import Wrapper from '@/components/wrapper';
 
 import ImportBtn from './import-btn';
-import Link from 'next/link';
 
 type SearchableProjectsParams = {
   data: any;
@@ -73,7 +73,7 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                   clipRule='evenodd'
                 />
               </svg>
-              <code className='relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold '>
+              <code className='bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold '>
                 {userName}
               </code>
             </div>
@@ -109,7 +109,10 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                             <p className='text-m font-medium leading-none'>
                               {repo.name}
                             </p>
-                            <Link className='text-sm text-muted-foreground hover:underline' href={repo.clone_url}>
+                            <Link
+                              className='text-muted-foreground text-sm hover:underline'
+                              href={repo.clone_url}
+                            >
                               {repo.clone_url}
                             </Link>
                           </div>
