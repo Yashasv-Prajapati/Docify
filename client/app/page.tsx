@@ -17,19 +17,35 @@ const Home = () => {
   return (
     <div>
       <div className='overflow-hidden bg-[#d1d4db]'>
-        <Navbar data-testid="navbar"/>
-        <Hero data-testid="hero"/>
+        <div data-testid='navbar'>
+          <Navbar />
+        </div>
+        <div data-testid="hero">
+          <Hero />
+        </div>
+        {/* <Navbar/> */}
+        {/* <Hero/> */}
         <div className='relative'>
-          <About data-testid="about"/>
+          <div data-testid="about">
+            <About />
+          </div>
           <div className='gradient-03 z-0' />
-          <Explore />
+          <div data-testid="explore">
+            <Explore />
+          </div>
         </div>
         <div className='relative'>
-          <GetStarted data-testid="get-started"/>
+          <div data-testid="get-started">
+            <GetStarted />
+          </div>
           <div className='gradient-04 z-0' />
-          <WhatsNew />
+          <div data-testid="whats-new">
+            <WhatsNew />
+          </div>
         </div>
-        <Footer />
+        <div data-testid="footer">
+          <Footer />
+        </div>
       </div>
       {/* <MarkdownEditor /> */}
     </div>

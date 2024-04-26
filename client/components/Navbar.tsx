@@ -36,8 +36,9 @@ function Navbar() {
             src='/cover.png'
             alt='Bordered avatar'
             onClick={() => setOpen(!open)}
+            data-testid='navbar-toggle'
           />
-          <div className={`dropdown-menu ${open ? 'active' : 'inactive'} `}>
+          <div className={`dropdown-menu ${open ? 'active' : 'inactive'} `} data-testid="navbar-dropdown">
             <h3 className='bg-gradient-to-r from-sky-400 to-[#8e29f3] bg-clip-text font-medium text-transparent'>
               DOCIFY EASTER
               <br />

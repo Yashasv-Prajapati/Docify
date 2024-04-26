@@ -1,31 +1,55 @@
-import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent} from '@testing-library/react';
+import 'intersection-observer';
 import '@testing-library/jest-dom'; // Import jest-dom for custom matchers
 import Home from '../page';
+import Router from 'next/router';
+import { JSX, ClassAttributes, ImgHTMLAttributes } from 'react';
 
-// Mocking components used in page.tsx
-jest.mock('../components/index', () => ({
-  Navbar: jest.fn(() => <div data-testid="navbar">Mocked Navbar</div>),
-  Footer: jest.fn(() => <div data-testid="footer">Mocked Footer</div>),
+// Mock useRouter:
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      prefetch: () => null
+    };
+  }
+}));
+// Mock next/image
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: JSX.IntrinsicAttributes & ClassAttributes<HTMLImageElement> & ImgHTMLAttributes<HTMLImageElement>) => (
+    <img {...props} />
+  ),
 }));
 
-jest.mock('../components/landingPage', () => ({
-  Hero: jest.fn(() => <div data-testid="hero">Mocked Hero</div>),
-  About: jest.fn(() => <div data-testid="about">Mocked About</div>),
-  Explore: jest.fn(() => <div data-testid="explore">Mocked Explore</div>),
-  GetStarted: jest.fn(() => <div data-testid="get-started">Mocked GetStarted</div>),
-  WhatsNew: jest.fn(() => <div data-testid="whats-new">Mocked WhatsNew</div>),
-}));
+// Mock framer-motion if your Navbar or other components use animations
+// jest.mock('framer-motion', () => ({
+//   motion: {
+//     nav: (props: any) => <nav {...props} />,
+//     div: (props: any) => <div {...props} />
+//   }
+// }));
+afterEach(cleanup);
 
-describe('Home Page Component', () => {
-  it('renders all components correctly', () => {
-    const { getByTestId } = render(<Home />);
-    expect(getByTestId('navbar')).toHaveTextContent('Mocked Navbar');
-    expect(getByTestId('footer')).toHaveTextContent('Mocked Footer');
-    expect(getByTestId('hero')).toHaveTextContent('Mocked Hero');
-    expect(getByTestId('about')).toHaveTextContent('Mocked About');
-    expect(getByTestId('explore')).toHaveTextContent('Mocked Explore');
-    expect(getByTestId('get-started')).toHaveTextContent('Mocked GetStarted');
-    expect(getByTestId('whats-new')).toHaveTextContent('Mocked WhatsNew');
+describe('Home', () => {
+  it('renders a home page', () => {
+    render(<Home />);
+
+    // Check if specific elements are rendered using data-testid
+    const navbarElement = screen.getByTestId('navbar');
+    const footerElement = screen.getByTestId('footer');
+    const heroElement = screen.getByTestId('hero');
+    const aboutElement = screen.getByTestId('about');
+    const exploreElement = screen.getByTestId('explore');
+    const getStartedElement = screen.getByTestId('get-started');
+    const whatsNewElement = screen.getByTestId('whats-new');
+
+    // Assert that each element is present in the rendered DOM
+    expect(navbarElement).toBeInTheDocument();
+    expect(footerElement).toBeInTheDocument();
+    expect(heroElement).toBeInTheDocument();
+    expect(aboutElement).toBeInTheDocument();
+    expect(exploreElement).toBeInTheDocument();
+    expect(getStartedElement).toBeInTheDocument();
+    expect(whatsNewElement).toBeInTheDocument();
   });
 });
