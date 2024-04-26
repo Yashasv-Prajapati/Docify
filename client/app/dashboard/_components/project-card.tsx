@@ -101,6 +101,32 @@ const ProjectCard: FC<ProjectCardProps> = ({
     router.push(`/dependency_checker/${project_id}`);
 
   };
+  const handleCodeCoverageClick = async () => {
+    try{
+
+      console.log('Code Coverage Clicked');
+      
+      const res = await fetch('/api/code_coverage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: access_token,
+          username: username,
+          repo: repository_name,
+          lang: project_type,
+        }),
+      });
+      
+      const data = await res.json();
+      console.log(data);
+    }catch(err){
+      console.log(err);
+    }
+
+  }  
+
 
   return (
     <>
@@ -176,6 +202,10 @@ const ProjectCard: FC<ProjectCardProps> = ({
           <DropdownMenuItem>
             <button onClick={handleDependencyClick}>Dependency Checker</button>
           </DropdownMenuItem>
+          <DropdownMenuItem>
+            <button onClick={handleCodeCoverageClick}>Code Coverage</button>
+          </DropdownMenuItem>
+          
         </DropdownMenuContent>
       </DropdownMenu>
     </div>)}

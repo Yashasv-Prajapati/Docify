@@ -8,7 +8,7 @@ const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..'); /
 
 export async function POST(req: NextRequest) {
   try {
-    // console.log('Request to generate code coverage');
+    console.log('Request to generate code coverage');
     const docker = new Dockerode();
     const data = await req.json();
     const { token, username, repo } = data;
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       CMD: [
         'sh',
         '-c',
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < coverage.sh > cov.sh && chmod +x d.sh && chmod +x c.sh && chmod +x cov.sh &&./d.sh ${token} ${username} ${repo} && ./cov.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} `
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < append.sh > a.sh && tr -d "\\r" < coverage.sh > cov.sh && chmod +x d.sh && chmod +x c.sh && chmod +x a.sh && chmod +x cov.sh &&./d.sh ${token} ${username} ${repo} && ./cov.sh ${repo} && ./a.sh && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} `
       ], // "&& tail -f /dev/null" for not closing and removing the container (can be used for debugging)
       // CMD:["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"],
     };
@@ -97,6 +97,7 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (err) {
+    // console.log(err);
     if (err instanceof Error)
       return NextResponse.json(
         {
