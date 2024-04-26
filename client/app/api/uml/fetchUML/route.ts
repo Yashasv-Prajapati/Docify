@@ -4,6 +4,9 @@ import axios from 'axios';
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
+  // const username = "AtharvaMulay25"
+  // const repoName = "THE-ARCADE-GAME";
+  // const accessToken = "ghu_O9lqPkAvssahf9go2yZnxbt2gWKjxV1hYEMl";
   const username = searchParams.get('username');
   const repoName = searchParams.get('repoName');
   const accessToken = searchParams.get('accessToken');

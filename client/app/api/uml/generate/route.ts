@@ -55,7 +55,6 @@ export async function POST(req: NextRequest) {
       ? [parentDir + `/python/uml:/app`]
       : [parentDir + `/java/uml:/app`];
 
-
   if (type == 'python') {
     containerOptions = {
       Image: 'docify_python:latest',
@@ -130,13 +129,12 @@ export async function POST(req: NextRequest) {
           );
         }
         console.log('Container finished its job!');
-        return NextResponse.redirect(`${process.env.NEXT_APP_URL}/uml/${projectId}`);
       });
     });
   });
   // return res.status(200).json({ message: 'Container started successfully!' });
   return NextResponse.json(
-    { message: `Container started successfully!` },
+    { message: `UML generated successfully.` },
     { status: 200 }
   );
 }

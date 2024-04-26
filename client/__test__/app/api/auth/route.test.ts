@@ -1,8 +1,20 @@
+import { headers } from 'next/headers';
+import { NextRequest } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+import axios, { AxiosResponse } from 'axios';
+import { testApiHandler } from 'next-test-api-route-handler';
+
+// import { db } from '@/lib/db';
+import { sign } from '@/lib/jwt';
+import { GET } from '@/app/api/auth/route';
+import * as appHandler from '@/app/api/auth/route';
+
 /**
  * @jest-environment node
  */
 
-const GITHUB_APP_PRIVATE_KEY = '-----BEGIN RSA PRIVATE KEY-----test_private-----END RSA PRIVATE KEY-----' as string;
+const GITHUB_APP_PRIVATE_KEY =
+  '-----BEGIN RSA PRIVATE KEY-----test_private-----END RSA PRIVATE KEY-----' as string;
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 const crypto = require('crypto');
 
@@ -10,21 +22,9 @@ function generateTestKey() {
   return crypto.randomBytes(32).toString('hex');
 }
 
-import axios, { AxiosResponse } from 'axios';
-import { GET } from '@/app/api/auth/route';
-// import { db } from '@/lib/db';
-import { sign } from '@/lib/jwt';
-import { NextRequest } from 'next/server';
-import { headers } from 'next/headers';
-import * as appHandler from '@/app/api/auth/route';
-
-import { PrismaClient } from '@prisma/client';
-import { testApiHandler } from 'next-test-api-route-handler';
-
 const GITHUB_APP_ID = 824467;
 const mockUserFindUnique = jest.fn();
 const mockUserCreate = jest.fn();
-
 
 const requestOptions = {
   headers: {
@@ -59,7 +59,6 @@ jest.mock('@prisma/client', () => {
   };
 });
 
-
 // const GITHUB_APP_PRIVATE_KEY = process.env.PRIVATE_KEY as string;
 
 jest.mock('axios');
@@ -75,15 +74,13 @@ function generateJwtToken() {
 
   const jwt = require('jsonwebtoken');
   // const token = jwt.sign(payload, GITHUB_APP_PRIVATE_KEY, {
-    // algorithm: 'RS256',
+  // algorithm: 'RS256',
   // });
-  //mock token 
-  const token = "test_token" 
+  //mock token
+  const token = 'test_token';
 
   return token;
 }
-
-
 
 // describe('GET function', () => {
 //   beforeEach(() => {
@@ -148,7 +145,7 @@ function generateJwtToken() {
 //         github_refresh_token: 'test_refresh_token',
 //       });
 
-//       mockUserCreate.mockResolvedValue({ 
+//       mockUserCreate.mockResolvedValue({
 
 //         github_username: 'test_user',
 //       github_access_token: 'test_access_token',
@@ -160,13 +157,10 @@ function generateJwtToken() {
 
 //     (sign as jest.Mock).mockResolvedValue('test_jwt');
 
-
-
 //   });
 
 //   // // Add more test cases as needed
 // });
-
 
 it('should redirect to installation URL if app not installed', async () => {
   const req = {
@@ -200,7 +194,6 @@ it('should redirect to installation URL if app not installed', async () => {
       data: [],
     });
 
-
   const response: AxiosResponse = await axios.get(
     `${GITHUB_API_BASE_URL}/app/installations`,
     requestOptions
@@ -214,7 +207,7 @@ it('should redirect to installation URL if app not installed', async () => {
       const user_name = installations[i].account.login;
       // const installation_id = installations[i].id;
 
-      if (user_name === "test_user") {
+      if (user_name === 'test_user') {
         installed = true;
         github_installation_id = installations[i].id;
         break;

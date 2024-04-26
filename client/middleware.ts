@@ -10,13 +10,11 @@ import {
 export function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const isLoggedIn = request.cookies.has('docify-user');
-
   const isApiAuthRoute = apiAuthPrefix.some((prefix) =>
     nextUrl.pathname.startsWith(prefix)
   );
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
   if (isApiAuthRoute) {
     return null;
   }
