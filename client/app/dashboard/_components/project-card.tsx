@@ -15,6 +15,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 
 interface ProjectCardProps {
@@ -38,6 +46,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [open,setOpen]=useState<boolean>(false);
   const handleUmlClick = async () => {
     console.log('UML Clicked');
     setIsLoading(true);
@@ -112,8 +121,43 @@ const ProjectCard: FC<ProjectCardProps> = ({
     router.push(`/dependency_checker/${project_id}`);
   };
 
+  const handleOnDelete=async()=>{
+    setIsLoading(true);
+    try{
+    console.log("deleted Successfully here",project_id);
+    // const res=await axios.delete(`api/project/${project_id}`,{});
+
+    const res = await fetch(`/api/project/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        project_id: project_id,
+      }),
+    });
+    if(res.status===204)
+    {
+      window.location.reload();
+      toast.success("Deleted Project Successfully");
+    }
+    else
+      toast.error("Error in deleting project");
+
+    
+  }
+  catch(error){
+    console.log(error);
+    toast.error("Error in deleting project");
+  }
+  setOpen(false);
+    setIsLoading(false);
+
+  };
+
   return (
     <>
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       {isLoading ? (
         <div className='flex flex-row justify-center'>
           <Loader2 className='size-6 h-20 animate-spin items-center text-zinc-500' />
@@ -153,6 +197,12 @@ const ProjectCard: FC<ProjectCardProps> = ({
             </div>
           </div>
           <Separator className='my-2 lg:hidden' />
+          <div className='grid gap-1 p-2 mr-20'>
+          <Button  onClick={()=>{setOpen(true)}}>
+                  Delete
+                </Button>
+          </div>
+          <Separator className='my-2 lg:hidden' />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -190,6 +240,29 @@ const ProjectCard: FC<ProjectCardProps> = ({
           </DropdownMenu>
         </div>
       )}
+      <DialogContent className='max-h-screen overflow-y-scroll sm:max-w-[425px]'>
+        <DialogHeader>
+          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogDescription>
+            Are you sure? Clicking on Delete will remove your project from Docify.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button
+            type='submit'
+            className='w-20'
+            onClick={handleOnDelete}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className='size-6 animate-spin text-zinc-500' />
+            ) : (
+              'Delete'
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+      </Dialog>
     </>
   );
 };
