@@ -1,11 +1,11 @@
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
+import { nanoid } from 'nanoid';
 import { z } from 'zod';
 
 import getCurrentUser from '@/lib/curr';
 import { DependencyCheckerSchema } from '@/lib/validations/dependency-checker';
-import { nanoid } from 'nanoid';
 
 const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..');
 
@@ -31,10 +31,7 @@ export async function POST(request: NextRequest) {
       DependencyCheckerSchema.parse(data);
 
     const containerImage =
-      project_type === 'python'
-        ? 'docify_python:latest'
-        : 'docify_java:latest';
-
+      project_type === 'python' ? 'docify_python:latest' : 'docify_java:latest';
 
     const binds =
       project_type === 'python'
