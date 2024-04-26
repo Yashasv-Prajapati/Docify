@@ -57,8 +57,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
       });
 
       const data = await res.json();
-      console.log('Data:', data);
-      if (data) {
+      // console.log('Data:', data);
+      if (res.status === 200) {
         toast.success('UML diagram generated successfully');
         router.push(`/uml/${project_id}`);
       }
