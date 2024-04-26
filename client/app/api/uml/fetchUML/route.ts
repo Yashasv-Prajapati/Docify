@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   //specify the branch name where the uml diagram is stored
   const branch = 'docify';
   //specify the path of the uml diagram
-  const path = '.assets/output.png';
+  const path = '.docify-assets/output.png';
   const url = `https://api.github.com/repos/${username}/${repoName}/contents/${path}?ref=${branch}`;
   const headers = {
     Authorization: `token ${accessToken}`,
