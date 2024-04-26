@@ -23,7 +23,7 @@ const Hero = () => {
           className={`${styles.innerWidth} mx-auto flex flex-col`}
         >
           <div className='relative z-10 flex flex-col items-center justify-center p-9'>
-            <motion.h1 variants={textVariant(1.1)}>
+            {/* <motion.h1 variants={textVariant(1.1)}> */}
               {/* Lets Us handle  */}
               <div className='text-2xl font-bold text-white md:text-3xl lg:text-4xl xl:mt-5 xl:text-5xl'>
                 <div className='mb-1 bg-gradient-to-r from-sky-400 to-[#8e29f3] bg-clip-text text-transparent'>
@@ -72,7 +72,7 @@ const Hero = () => {
                 animationData={GradiantanimationData}
                 className='mx-auto size-[300px] object-contain xl:size-[500px]'
               />
-            </motion.h1>
+            {/* </motion.h1> */}
             <motion.div
               variants={textVariant(1.2)}
               className='flex flex-row items-center justify-center'

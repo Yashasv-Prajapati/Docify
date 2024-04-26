@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { set } from 'date-fns';
 import { Loader2, MoreHorizontalIcon } from 'lucide-react';
 import { toast } from 'sonner';
-
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -59,8 +58,10 @@ const ProjectCard: FC<ProjectCardProps> = ({
       const data = await res.json();
       // console.log('Data:', data);
       if (res.status === 200) {
-        toast.success('UML diagram generated successfully');
+        toast.success(data.message || 'UML diagram generated successfully');
         router.push(`/uml/${project_id}`);
+      }else{
+        toast.error(data.message || 'Failed to generate UML diagram');
       }
     } catch (error) {
       console.error('Error Showing UML:', error);
@@ -69,6 +70,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
       setIsLoading(false);
     }
   };
+
 
   const handleTestPlanClick = async () => {
     console.log('Test Plan Clicked');
@@ -97,23 +99,134 @@ const ProjectCard: FC<ProjectCardProps> = ({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        // accessToken: access_token,
-        // userName: username,
         repositoryName: repository_name,
         project_type: project_type,
-        // projectId: project_id,
+        projectId: project_id
       }),
     });
 
     const data = await res.json();
     console.log(data);
 
+    if(res.ok){
+      router.push(`/dependency_checker/${project_id}`);
+    }else{
+      toast.error(data.message || 'Something went wrong, Could not generate Dependency Checker Report');
+    }
+
     setIsLoading(false);
-    router.push(`/dependency_checker/${project_id}`);
+
   };
+
+  const handleCodeCoverageClick = async () => {
+    console.log('Code Coverage Clicked');
+    setIsLoading(true);
+    const res = await fetch('/api/code-coverage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        github_access_token: access_token,
+        github_username: username,
+        github_repo_name: repository_name,
+        language: project_type,
+        projectId: project_id
+      }),
+    });
+
+    const data = await res.json();
+    console.log(data);
+
+    if(res.ok){
+      router.push(`/code_coverage/${project_id}`);
+    }else{
+      toast.error(data.message || 'Something went wrong, Could not generate Code Coverage Report');
+    }
+    setIsLoading(false);
+    return;
+  }
 
   return (
     <>
+    {isLoading ? (
+      <div className='flex flex-row justify-center'>
+        <Loader2 className='size-6 h-20 animate-spin items-center text-zinc-500' />
+      </div>
+    ) : (
+    <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className='font-medium'>{repository_name}</div>
+      </div>
+      <Separator className='my-2 lg:hidden' />
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className=' my-2 flex items-start gap-2'>
+        <LogoGithub />
+            <Link href={url} className='hover:underline'>GitHub</Link>
+        </div>
+      </div>
+      <Separator className='my-2 lg:hidden' />
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className='flex items-center gap-2'>
+
+          Project type
+        </div>
+        <div className='flex items-center gap-2'>
+        <span
+            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+          />
+          {project_type}
+        </div>
+      </div>
+      <Separator className='my-2 lg:hidden' />
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className='flex items-center gap-2'>
+
+         Testing Directory
+        </div>
+        <div className='flex items-center gap-2'>
+        <span
+            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+          />
+          {testing_dir}
+        </div>
+      </div>
+      <Separator className='my-2 lg:hidden' />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            className='absolute right-4 top-4'
+            size='icon'
+            variant='ghost'
+          >
+            <MoreHorizontalIcon className='size-4' />
+            <span className='sr-only'>Toggle menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='end'>
+          <DropdownMenuItem>
+            <button
+              onClick={() => {
+                router.push(`/generate_readme/${project_id}`);
+              }}
+            >
+              Generate Readme
+            </button>
+          </DropdownMenuItem>
+          <DropdownMenuItem><button onClick={handleTestPlanClick}>Test Plan</button></DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <button onClick={handleUmlClick}>UML Diagram</button>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <button onClick={handleDependencyClick}>Dependency Checker</button>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <button onClick={handleCodeCoverageClick}>Code Coverage</button>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>)}
       {isLoading ? (
         <div className='flex flex-row justify-center'>
           <Loader2 className='size-6 h-20 animate-spin items-center text-zinc-500' />

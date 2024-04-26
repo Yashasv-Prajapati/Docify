@@ -78,6 +78,7 @@ export default function GenerateReadmeForm({ project }: Props) {
         project_goals: values.project_goals,
         project_type: values.projectType,
         repositoryName: values.repositoryName,
+        projectId: project.projectId,
       });
       // Send request to API handler to generate readme
       const { data } = await axios.post('/api/generate-readme', body);

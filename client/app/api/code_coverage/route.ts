@@ -1,22 +1,23 @@
-// 'use server'
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
-import { nanoid } from 'nanoid';
+import { update_project_branch } from '@/actions/project';
+import { CodeCoverageSchema } from '@/lib/validations/code_coverage';
 
 const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..'); //now we are pointing to the repository root
 
 export async function POST(req: NextRequest) {
   try {
-    // console.log('Request to generate code coverage');
     const docker = new Dockerode();
     const data = await req.json();
-    const { token, username, repo } = data;
+    const { github_access_token, github_username, github_repo_name, project_type:lang, projectId } = CodeCoverageSchema.parse(data);
+
+    const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
 
     const containerImg =
-      data.lang == 'python' ? 'docify_python:latest' : 'docify_java:latest';
+      lang == 'python' ? 'docify_python:latest' : 'docify_java:latest';
     const binds =
-      data.lang == 'python'
+      lang == 'python'
         ? [
             parentDir + `/python/code_coverage:/app`,
             parentDir + '/docker/docker_bash_files:/bash_files',
@@ -49,30 +50,10 @@ export async function POST(req: NextRequest) {
       CMD: [
         'sh',
         '-c',
-        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < coverage.sh > cov.sh && chmod +x d.sh && chmod +x c.sh && chmod +x cov.sh &&./d.sh ${token} ${username} ${repo} && ./cov.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID} `,
+        `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < coverage.sh > cov.sh && chmod +x d.sh && chmod +x c.sh && chmod +x cov.sh &&./d.sh ${github_access_token} ${github_username} ${github_repo_name} ${branch_name} && ./cov.sh ${github_repo_name} && ./c.sh ${github_username} ${github_repo_name} ${github_access_token} ${process.env.GITHUB_APP_ID} `,
       ], // "&& tail -f /dev/null" for not closing and removing the container (can be used for debugging)
       // CMD:["sh", "-c", "echo Hello && echo $VAR1 && ls && pip install -r requirements.txt && python Docify-Combiner.py && tail -f /dev/null && ls"],
     };
-
-    // docker.createContainer(containerOptions, (err, container) => {
-    //   if (err) {
-    //     console.error('Failed to create container:', err);
-    //     return NextResponse.json(
-    //       { message: 'Failed to create container' },
-    //       { status: 500 }
-    //     );
-    //   }
-    //   container?.start((err) => {
-    //     if (err) {
-    //       console.error('Failed to start container:', err);
-    //       return NextResponse.json(
-    //         { message: 'Failed to start container' },
-    //         { status: 500 }
-    //       );
-    //     }
-    //     // return NextResponse.json({ message: 'Successfully started the container' },{status:200});
-    //   });
-    // })
 
     await new Promise<void>((resolve, reject) => {
       docker.createContainer(containerOptions, (err, container) => {
@@ -80,20 +61,19 @@ export async function POST(req: NextRequest) {
           console.error('Failed to create container:', err);
           reject(new Error('Failed to create container'));
         }
-        container?.start((err) => {
+        container?.start(async(err) => {
           if (err) {
             console.error('Failed to start container:', err);
             reject(new Error('Failed to start container'));
           }
           resolve();
+          // update the corresponding branch name in the db for code coverage
+          await update_project_branch(projectId, branch_name, 'code_coverage');
         });
       });
     });
-    // return redirect('/dashboard');
-    // return redirect('/new')
-    // return NextResponse.redirect('https://localhost:3000/dashboard');
     return NextResponse.json(
-      { message: 'Successfully started the container' },
+      { message: 'Successfully finished with the container' },
       { status: 200 }
     );
   } catch (err) {

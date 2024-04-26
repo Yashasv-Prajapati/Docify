@@ -6,6 +6,7 @@ GITHUB_TOKEN=$3
 GITHUB_APP_ID=$4
 GITHUB_BRANCH_NAME="docify"
 cd $GITHUB_REPOSITORY
+
 ls
 if [ $# -eq 0 ]; then
     echo "Usage: $0 <github_username> <repository_name> <access_token>"

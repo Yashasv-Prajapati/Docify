@@ -55,7 +55,6 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
     where: { projectId: params.projectId },
   });
   const user = await getCurrentUser();
-  // const imageUrl = 'https://generated.vusercontent.net/placeholder.svg';
   const img_url = await fetchUML(user, project);
 
   if (!project) {

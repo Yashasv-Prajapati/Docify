@@ -38,7 +38,8 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
 
   async function handleSave() {
     setIsLoading(true);
-    const apiUrl = `https://api.github.com/repos/${github_username}/${repo}/contents/README.md?ref=docify`;
+    const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
+    const apiUrl = `https://api.github.com/repos/${github_username}/${repo}/contents/README.md?ref=${branch_name}`;
     try {
       const currentFile = await axios.get(apiUrl, {
         headers: {

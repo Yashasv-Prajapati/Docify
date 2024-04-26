@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
     const repositoryName = project.repository_name;
     const project_type = project.project_type;
     const testing_dir = project.testing_dir;
+    const dep_branch_name = project.dependency_latest_branch;
 
     // Generate UML Diagram for the test folder
     await axios.post(
@@ -66,7 +67,7 @@ export async function POST(request: NextRequest) {
     // Find the dependencies of the project
     await axios
       .head(
-        `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=docify`,
+        `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=${dep_branch_name}`,
         {
           headers: {
             Authorization: `token ${github_access_token}`,
@@ -86,7 +87,7 @@ export async function POST(request: NextRequest) {
       });
 
     const response = await axios.get(
-      `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=docify`,
+      `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=${dep_branch_name}`,
       {
         headers: {
           Authorization: `token ${github_access_token}`,
