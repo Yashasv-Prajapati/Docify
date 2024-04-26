@@ -1,2 +1,2 @@
 ### UML Diagram
-![alt-txt](.assets/output.png)
+![alt-txt](.docify-assets/output.png)

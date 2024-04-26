@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react'; // Import useState hook for managing form data and API request
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
@@ -18,11 +19,9 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import Wrapper from '@/components/wrapper';
@@ -37,8 +36,8 @@ const formSchema = z.object({
 interface FormData {
   projectType: string;
   repositoryName: string;
-  core_functionalities:string;
-  project_goals:string;
+  core_functionalities: string;
+  project_goals: string;
 }
 
 interface Project {
@@ -55,6 +54,9 @@ interface Props {
 }
 
 export default function GenerateReadmeForm({ project }: Props) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,6 +69,7 @@ export default function GenerateReadmeForm({ project }: Props) {
 
   // Function to handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     try {
       console.log('Generating Readme...');
 
@@ -81,10 +84,16 @@ export default function GenerateReadmeForm({ project }: Props) {
 
       console.log('Generated README: ', data);
       console.log('Readme generated successfully');
+
+      router.push(
+        `/editor?repo=${project.repository_name}&content=${encodeURIComponent(data.readme)}`
+      );
     } catch (error) {
       if (error instanceof Error) {
         console.error('Error generating readme:', error?.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -141,7 +150,9 @@ export default function GenerateReadmeForm({ project }: Props) {
                   name='project_goals'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Brief Description of the project goals and objectives</FormLabel>
+                      <FormLabel>
+                        Brief Description of the project goals and objectives
+                      </FormLabel>
                       <FormControl>
                         <textarea
                           placeholder='Build a software that...'
@@ -157,7 +168,10 @@ export default function GenerateReadmeForm({ project }: Props) {
                   name='core_functionalities'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Brief description of the core features and functionalities of the project</FormLabel>
+                      <FormLabel>
+                        Brief description of the core features and
+                        functionalities of the project
+                      </FormLabel>
                       <FormControl>
                         <textarea
                           placeholder='Easing the process of...'
@@ -168,7 +182,9 @@ export default function GenerateReadmeForm({ project }: Props) {
                     </FormItem>
                   )}
                 />
-                <Button type='submit'>Generate</Button>
+                <Button type='submit' disabled={isLoading}>
+                  {isLoading ? 'Loading...' : 'Generate'}
+                </Button>
               </form>
             </Form>
           </CardContent>

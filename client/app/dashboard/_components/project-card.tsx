@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { MoreHorizontalIcon } from 'lucide-react';
+import {MoreHorizontalIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -76,32 +76,42 @@ const ProjectCard: FC<ProjectCardProps> = ({
   };
 
   return (
-    <div className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'>
+    <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
       <div className='grid flex-1 gap-1 p-2'>
         <div className='font-medium'>{repository_name}</div>
       </div>
       <Separator className='my-2 lg:hidden' />
       <div className='grid flex-1 gap-1 p-2'>
         <div className=' my-2 flex items-start gap-2'>
-          <LogoGithub />
-          <Link href={url} className='hover:underline'>
-            Github
-          </Link>
+        <LogoGithub />
+            <Link href={url} className='hover:underline'>Github</Link>
         </div>
       </div>
       <Separator className='my-2 lg:hidden' />
       <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2 font-semibold'>
+        <div className='flex items-center gap-2'>
+          
           Project type
         </div>
-        <div className='flex items-center gap-2'>{project_type}</div>
+        <div className='flex items-center gap-2'>
+        <span
+            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+          />
+          {project_type}
+        </div>
       </div>
       <Separator className='my-2 lg:hidden' />
       <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2 font-semibold'>
-          Testing Directory
+        <div className='flex items-center gap-2'>
+          
+         Testing Directory
         </div>
-        <div className='flex items-center gap-2'>{testing_dir}</div>
+        <div className='flex items-center gap-2'>
+        <span
+            className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
+          />
+          {testing_dir}
+        </div>
       </div>
       <Separator className='my-2 lg:hidden' />
       <DropdownMenu>
@@ -135,16 +145,15 @@ const ProjectCard: FC<ProjectCardProps> = ({
     </div>
   );
 };
-
 function LogoGithub(props: React.SVGAttributes<SVGElement>) {
   return (
     <svg
       {...props}
       data-testid='geist-icon'
-      height={16}
+      height={22}
       strokeLinejoin='round'
       viewBox='0 0 16 16'
-      width={16}
+      width={22}
       style={{ color: 'currentcolor' }}
     >
       <g clipPath='url(#clip0_872_3147)'>
