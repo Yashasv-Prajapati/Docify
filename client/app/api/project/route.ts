@@ -30,6 +30,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check if project already exists
+    const existingProject = await db.project.findFirst({
+      where: {
+        userId: userId,
+        repository_name: repository_name,
+      },
+    });
+
+    if (existingProject) {
+      return NextResponse.json(
+        {
+          message: 'Project already exists',
+          success: false,
+        },
+        { status: 409 }
+      );
+    }
+
     // Construct URL to the README.md file
     const readmeUrl = `https://api.github.com/repos/${user.github_username}/${repository_name}/readme`;
 
