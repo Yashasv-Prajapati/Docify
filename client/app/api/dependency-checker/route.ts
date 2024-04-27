@@ -2,9 +2,9 @@ import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
 import Dockerode from 'dockerode';
 import { z } from 'zod';
-
 import getCurrentUser from '@/lib/curr';
 import { DependencyCheckerSchema } from '@/lib/validations/dependency-checker';
+import { update_project_branch } from '@/actions/project';
 
 const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..');
 
@@ -20,24 +20,20 @@ export async function POST(request: NextRequest) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) {
-    return NextResponse.json({message:'Unauthorized'}, { status: 401 });
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
   const { github_access_token, github_username } = currentUser;
 
   try {
-    const { project_type, repositoryName } =
+    const { project_type, repositoryName, projectId } =
       DependencyCheckerSchema.parse(data);
-    console.log(
-      github_access_token,
-      github_username,
-      project_type,
-      repositoryName
-    );
+
     const containerImage =
-      project_type === 'python'
-        ? 'express-test-net:latest'
-        : 'dependency-checker-java:latest';
+      project_type === 'python' ? 'docify_python:latest' : 'docify_java:latest';
+
+    const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
+
     const binds =
       project_type === 'python'
         ? [parentDir + '/python/dependency-checker:/app']
@@ -47,9 +43,13 @@ export async function POST(request: NextRequest) {
         ? [
             'sh',
             '-c',
-            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID}`,
+            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} ${branch_name} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID} `,
           ]
-        : [];
+        : [
+            'sh',
+            '-c',
+            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} ${branch_name} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID} `,
+          ];
 
     const containerOptions = {
       Image: containerImage,
@@ -61,33 +61,45 @@ export async function POST(request: NextRequest) {
       CMD: commands,
     };
 
-    dockerode.createContainer(containerOptions, (error, container) => {
-      if (error) {
-        console.log('Failed to create container', error);
-
-        return new NextResponse('Failed to create container', { status: 500 });
+    const container = await dockerode.createContainer(containerOptions);
+    await container.start((err, _)=>{
+      if(err){
+        console.error('Failed to start container:', err);
+        return NextResponse.json(
+          { message: 'Failed to start container' },
+          { status: 500 }
+        );
       }
-
-      container?.start((error) => {
-        if (error) {
-          console.log('Failed to create container', error);
-
-          return new NextResponse('Failed to create container', {
-            status: 500,
-          });
-        }
-      });
     });
-
     console.log('Container started successfully');
 
-    // return new NextResponse('Success!', { status: 200 });
-    return NextResponse.json({message:"Success!"}, {status: 200});
+    container.wait(async (err, data)=>{
+      if(err){
+        console.error('Failed to wait for container:', err);
+        return NextResponse.json(
+          { message: 'Failed to wait for container' },
+          { status: 500 }
+        );
+      }
+      // update the corresponding branch name in the db for dependency checker
+      await update_project_branch(projectId, branch_name, 'dependency_checker');
+      return;
+    });
+    console.log('Container stopped');
+
+    return NextResponse.json({ message: 'Success!' }, { status: 200 });
   } catch (error) {
+    console.log(error)
     if (error instanceof z.ZodError) {
-      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
+      return NextResponse.json(
+        { message: JSON.stringify(error.issues) },
+        { status: 422 }
+      );
     }
 
-    return new NextResponse('Internal Server Error', { status: 500 });
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

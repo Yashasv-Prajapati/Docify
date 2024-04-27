@@ -1,83 +1,84 @@
-'use client';
 
 import { Table } from 'lucide-react';
-
 import Nav from '@/components/nav';
-
-const dummyCodeCoverageHTML = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Coverage Table</title>
-</head>
-<body>
-    <table>
-        <thead>
-            <tr>
-                <th>File</th>
-                <th>Lines Covered</th>
-                <th>Lines Missed</th>
-                <th>Coverage Percentage</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>example.js</td>
-                <td>50</td>
-                <td>50</td>
-                <td>50%</td>
-            </tr>
-            <tr>
-                <td>example2.js</td>
-                <td>70</td>
-                <td>30</td>
-                <td>70%</td>
-            </tr>
-            <tr>
-                <td>example3.js</td>
-                <td>80</td>
-                <td>20</td>
-                <td>80%</td>
-            </tr>
-        </tbody>
-    </table>
-</body>
-</html>
-`;
+import axios from 'axios';
+import getCurrentUser from '@/lib/curr';
+import { redirect } from 'next/navigation';
+import ShowCoverageTable  from '../_components/ShowCoverageTable';
+import { db } from '@/lib/db';
+import { toast } from 'sonner';
+import { CodeCoverageSchema } from '@/lib/validations/code_coverage';
 
 interface CodeCoveragePageProps {
   params: { projectId: string };
 }
 
-const CodeCoveragePage = ({ params }: CodeCoveragePageProps) => {
-  const addTailwindClasses = (htmlString: string) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlString, 'text/html');
-    const elementsToAddClasses = doc.querySelectorAll('table, th, td');
+export default async function Page ({ params }: CodeCoveragePageProps) {
+  const curr_user = await getCurrentUser();
+  if(!curr_user){
+    return redirect('/auth/signup');
+  }
 
-    elementsToAddClasses.forEach((element) => {
-      element.classList.add(
-        'border',
-        'px-4',
-        'py-2',
-        'border-gray-300',
-        'text-center'
-      );
-    });
+  const github_access_token = curr_user.github_access_token;
+  const github_username = curr_user.github_username;
 
-    return doc.documentElement.outerHTML;
-  };
+  const project = await db.project.findUnique({
+    where: { projectId: params.projectId },
+    select: { repository_name: true, coverage_latest_branch: true, project_type: true},
+  });
+  if(!project){
+    toast.error('Project not found');
+    return redirect('/dashboard');
+  }
 
-  const parseHTMLString = (htmlString: string) => {
-    return <div dangerouslySetInnerHTML={{ __html: htmlString }} />;
-  };
+  const branch_name = project.coverage_latest_branch;
+  const repositoryName = project.repository_name;
+  let flag = false;
+
+  await axios
+  .head(
+    `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/COVERAGE.md?ref=${branch_name}`,
+    {
+      headers: {
+        Authorization: `token ${github_access_token}`,
+      },
+    }
+  ).catch(async (err)=>{
+    console.log('COVERAGE.md file does not exist');
+    // If head request fails, COVERAGE.md file does not exist and we need to call /api/code_coverage
+    // Or maybe the docify branch itself does not exist
+    flag = true;
+
+    return redirect('/dashboard');
+  })
+
+  if(flag){
+    await axios.post('/api/code_coverage', CodeCoverageSchema.parse({
+      github_access_token,
+      github_username,
+      github_repo_name: repositoryName,
+      project_type: project.project_type,
+      projectId: params.projectId,
+    }));
+  }
+
+  const response = await axios.get(
+    `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/COVERAGE.md?ref=${branch_name}`,
+    {
+      headers: {
+        Authorization: `token ${github_access_token}`,
+      },
+    }
+  );
+
+  const htmlTable = Buffer.from(
+    response.data.content,
+    'base64'
+  ).toString('utf-8');
 
   // Project data
   const id = params.projectId;
   const repoUrl = 'https://github.com/example/repository';
-  const codeCoverageHTML = addTailwindClasses(dummyCodeCoverageHTML);
 
   return (
     <div className='flex h-screen flex-col'>
@@ -96,11 +97,9 @@ const CodeCoveragePage = ({ params }: CodeCoveragePageProps) => {
           <h2 className='mb-2 flex items-center justify-center text-xl font-bold'>
             <Table size={24} className='mr-2' /> Code Coverage Table
           </h2>
-          {parseHTMLString(codeCoverageHTML)}
+          <ShowCoverageTable htmlTable={htmlTable} />
         </div>
       </div>
     </div>
   );
 };
-
-export default CodeCoveragePage;

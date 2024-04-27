@@ -53,8 +53,6 @@ export async function GET(req: NextRequest) {
         },
       }
     );
-
-    console.log('HELLO');
     const accessToken = oauth_response.data.access_token;
 
     // Fetch the user's details from github
@@ -140,9 +138,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const res = NextResponse.redirect(
-      `${process.env.NEXT_SERVER_URL}/dashboard`
-    );
+    const res = NextResponse.redirect(`${process.env.NEXT_APP_URL}/dashboard`);
 
     const token = await sign(
       JSON.stringify(user),

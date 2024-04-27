@@ -1,5 +1,4 @@
 import Authentication from '@/components/accountsPage/Authentication';
-import Tabs from '@/components/accountsPage/Tabs';
 import Avatar from '@/app/dashboard/_components/avatar';
 import Nav from '@/app/dashboard/_components/nav';
 
@@ -9,7 +8,7 @@ import { Navbar } from '../../components/index';
 const AccountsPage: React.FC = () => {
   const AvatarComponent = <Avatar />;
   return (
-    <div className=' h-screen overflow-hidden bg-[#d1d4db]'>
+    <div className=' h-screen overflow-hidden bg-white'>
       <Nav AvatarComponent={AvatarComponent} />
       <div className='mx-auto flex  '>
         <Sidebar />

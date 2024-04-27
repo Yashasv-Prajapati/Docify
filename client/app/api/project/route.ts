@@ -77,29 +77,41 @@ export async function POST(req: NextRequest) {
         },
       });
     });
-    return NextResponse.json({
-      project: project,
-      message: 'Project created successfully',
-      success: true,
-    });
+    return NextResponse.json(
+      {
+        project: project,
+        message: 'Project created successfully',
+        success: true,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({
-        message: 'Project creation failed ' + error.issues[0].message,
-        success: false,
-      });
+      return NextResponse.json(
+        {
+          message: 'Project creation failed ' + error.issues[0].message,
+          success: false,
+        },
+        { status: 422 }
+      );
     }
 
     if (error instanceof PrismaClientKnownRequestError) {
-      return NextResponse.json({
-        message: 'Project creation failed ' + (error?.message || ''),
-        success: false,
-      });
+      return NextResponse.json(
+        {
+          message: 'Project creation failed ' + (error?.message || ''),
+          success: false,
+        },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({
-      message: 'Project creation failed ' + (error || ''),
-      success: false,
-    });
+    return NextResponse.json(
+      {
+        message: 'Project creation failed ' + (error || ''),
+        success: false,
+      },
+      { status: 500 }
+    );
   }
 }

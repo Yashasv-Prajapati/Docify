@@ -27,17 +27,9 @@ export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
 
   return (
     <header className='flex h-16 shrink-0 items-center  bg-gray-100/40 px-4 sm:justify-between md:px-6 border-b-2'>
-     <Link
-        href='/'
-        className='flex w-full items-center justify-center gap-2 text-lg font-semibold sm:w-auto sm:justify-normal'
-      >
-        <Image
-          src='/logo-no-background.png'
-          alt='search'
-          width={150}
-          height={150}
-          className=' cursor-pointer  object-contain ' // Add cursor-pointer to show the cursor as pointer
-        />
+      <Link className='flex items-center gap-2 text-lg font-semibold' href='#'>
+        <FrameIcon className='size-6' />
+        <span className='ml-1 text-xl'>Docify</span>
       </Link>
       <nav className='mr-8 hidden w-full flex-row items-center justify-center gap-6 px-24 text-sm font-medium  sm:flex lg:gap-14'>
         <NavLink href='/' currentPath={pathname}>
@@ -105,6 +97,27 @@ export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
         )}
       </div>
     </header>
+  );
+}
+function FrameIcon(props: React.SVGAttributes<SVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns='http://www.w3.org/2000/svg'
+      width='24'
+      height='24'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+    >
+      <line x1='22' x2='2' y1='6' y2='6' />
+      <line x1='22' x2='2' y1='18' y2='18' />
+      <line x1='6' x2='6' y1='2' y2='22' />
+      <line x1='18' x2='18' y1='2' y2='22' />
+    </svg>
   );
 }
 
