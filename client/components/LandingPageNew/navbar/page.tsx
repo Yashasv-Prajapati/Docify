@@ -1,13 +1,20 @@
-import ActionButtons from './action-buttons';
+
 import Logo from './logo';
 import { NavigationMenuBar } from './navigation-bar';
 
-const Navbar = () => {
+interface NavbarProps {
+  type: 'home' | string; // Adjusted type to allow for potential future expansion
+}
+
+const Navbar: React.FC<NavbarProps> = ({ type }) => {
   return (
-    <div className='flex h-20 items-center justify-between border-b px-10 '>
+    <div className='mr-14 flex h-16  items-center border-b px-10'>
       <Logo />
-      <NavigationMenuBar />
-      <ActionButtons />
+      {type === "home" ? (
+        <div className='mx-auto'>
+          <NavigationMenuBar />
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -1,21 +1,23 @@
 import animationData from '@/public/white_wave.json';
 import Lottie from 'lottie-react';
 import { Typewriter } from 'react-simple-typewriter';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 
 const FirstSection = () => {
+  const router = useRouter();
   return (
     <section className='relative bg-gray-200 py-10 md:py-20'>
       {/* Lottie animation covering the background */}
       <div className='absolute inset-0 z-0 '>
         <Lottie
           animationData={animationData}
-          className='object-cover w-full h-full'
+          className='size-full object-cover'
         />
       </div>
 
-      <div className='container mx-auto relative z-0 text-center'>
+      <div className='container relative z-0 mx-auto text-center'>
         <div className='pb-5 text-6xl font-medium md:px-20'>
           Leverage the power of Docify:
         </div>
@@ -23,7 +25,7 @@ const FirstSection = () => {
           <span className='flex justify-center text-6xl font-medium md:px-2'>
             Create
           </span>
-          <code className='relative rounded bg-muted px-4 py-2 font-mono text-6xl font-medium text-gray-600 shadow-md'>
+          <code className='bg-muted relative rounded px-4 py-2 font-mono text-6xl font-medium text-gray-600 shadow-md'>
             <Typewriter
               words={[
                 '{Documentation}',
@@ -44,8 +46,8 @@ const FirstSection = () => {
           essentials!
         </p>
         <div className='flex justify-center gap-4 pt-10'>
-          <Button variant='bluebutton'>Get Started</Button>
-          <Button variant='secondary'>Learn More</Button>
+          <Button variant='bluebutton' onClick={() => router.push('/auth/signup')}>Get Started</Button>
+          <Button variant='outline'>Learn More</Button>
         </div>
 
         <div className='pt-10'>
