@@ -61,7 +61,7 @@ export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
         {showDropdown && (
           <div className='absolute right-0 top-full z-10 mt-2 w-48 overflow-y-auto rounded-lg border border-gray-200 bg-white py-1 shadow-md'>
             {/* we can show user profile (profile readme from github) at this page ****** */}
-            <Link href='/account' passHref>
+            <Link href='/accountsPage' passHref>
               <span className='block cursor-pointer px-4 py-2 text-gray-800 hover:bg-gray-100'>
                 Your Account
               </span>
