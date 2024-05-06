@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { get_project_branch } from '@/actions/project';
 import axios from 'axios';
 import { z } from 'zod';
+
 import getCurrentUser from '@/lib/curr';
 import { GenerateReadmeSchema } from '@/lib/validations/generate-readme';
-import { get_project_branch } from '@/actions/project';
 
 // POST method route handler to generate a project README
 // JSON payload {
@@ -30,11 +31,14 @@ export async function POST(request: NextRequest) {
       core_functionalities,
       project_type,
       repositoryName,
-      projectId
+      projectId,
     } = GenerateReadmeSchema.parse(data);
 
     // First we get the correct branch name where the dependencies are stored to be used in generating readme
-    const branch_name = await get_project_branch(projectId, 'dependency_checker');
+    const branch_name = await get_project_branch(
+      projectId,
+      'dependency_checker'
+    );
 
     await axios
       .head(
@@ -56,9 +60,12 @@ export async function POST(request: NextRequest) {
         );
 
         const lastModified = new Date(response.data[0].commit.author.date);
-        const oneDayAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        // const oneDayAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        const oneWeekAgo = new Date(
+          new Date().getTime() - 7 * 24 * 60 * 60 * 1000
+        );
 
-        if (lastModified < oneDayAgo) {
+        if (lastModified < oneWeekAgo) {
           console.log('requirements.txt file is stale');
 
           // If requirements.txt file is stale, call /api/dependency-checker
@@ -114,7 +121,7 @@ The README should offer an overview of the project's purpose, its features, inst
 
     return NextResponse.json({ readme: readme.data }, { status: 200 });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { message: JSON.stringify(error.issues) },

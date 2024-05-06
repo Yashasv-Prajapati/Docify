@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { GenerateReadmeSchema } from '@/lib/validations/generate-readme';
@@ -90,6 +91,8 @@ export default function GenerateReadmeForm({ project }: Props) {
         `/editor?repo=${project.repository_name}&content=${encodeURIComponent(data.readme)}`
       );
     } catch (error) {
+      toast.error('Something went wrong! Sorry this sucks 😔');
+
       if (error instanceof Error) {
         console.error('Error generating readme:', error?.message);
       }
@@ -183,8 +186,8 @@ export default function GenerateReadmeForm({ project }: Props) {
                     </FormItem>
                   )}
                 />
-                <Button type='submit' disabled={isLoading}>
-                  {isLoading ? 'Loading...' : 'Generate'}
+                <Button type='submit' size='lg' disabled={isLoading}>
+                  {isLoading ? 'Generating...' : 'Generate'}
                 </Button>
               </form>
             </Form>
