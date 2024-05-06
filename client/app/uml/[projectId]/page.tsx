@@ -70,7 +70,7 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
         </div>
         <div className='flex flex-col'>
           <div className='mx-auto grid w-full max-w-6xl gap-6'>
-            <header className='flex h-14 items-center gap-4 border-b px-4 lg:h-[60px] dark:border-gray-800'>
+            <header className='flex h-14 items-center gap-4 border-b px-4 dark:border-gray-800 lg:h-[60px]'>
               <Button
                 className='size-8 rounded-full'
                 size='icon'
