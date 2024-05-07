@@ -1,4 +1,3 @@
-
 import * as z from 'zod';
 
 export const UMLSchema = z.object({

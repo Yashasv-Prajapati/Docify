@@ -6,7 +6,7 @@ pip install pip-tools
 
 # Define the directory path
 path_to_directory="$1"
-new_folder_path=".test_docify"  # Change this to your desired new folder path
+new_folder_path=".docify-test"  # Change this to your desired new folder path
 
 # Step 1: Create a new folder
 cd "../repo/$path_to_directory"
@@ -29,18 +29,18 @@ source temp_env/bin/activate && pip install -r "$new_folder_path/requirements.tx
 pip freeze > all_dependencies.txt
 
 # Merge the outputs to form the final requirements.txt
-cat "$new_folder_path/requirements.txt" all_dependencies.txt | sort | uniq > merged_requirements.txt
+cat "$new_folder_path/docify-requirements.txt" all_dependencies.txt | sort | uniq > merged_requirements.txt
 
 mkdir .docify-assets
 
 # Remove redundancies
-pip-compile --output-file requirements.txt merged_requirements.txt
-grep -v '^[ ]*#' requirements.txt > .docify-assets/requirements.txt
+pip-compile --output-file docify-requirements.txt merged_requirements.txt
+grep -v '^[ ]*#' docify-requirements.txt > .docify-assets/requirements.txt
 
 # Delete requirements.txt, all_dependencies.txt
-rm "$new_folder_path/requirements.txt" all_dependencies.txt requirements.txt merged_requirements.txt
+rm "$new_folder_path/requirements.txt" all_dependencies.txt docify-requirements.txt merged_requirements.txt
 
 # Deactivate and delete the temporary virtual environment
 deactivate
 rm -rf temp_env
-rm -rf .test_docify
+rm -rf .docify-test
