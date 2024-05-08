@@ -1,7 +1,7 @@
 # Contains UML, code_coverage, dependency_checker
 #UML
-# FROM ubuntu:22.04
-# WORKDIR /app
+FROM ubuntu:22.04
+WORKDIR /app
 # COPY ./python/ /app
 RUN apt-get update && apt-get upgrade -y
 RUN apt install -y curl
