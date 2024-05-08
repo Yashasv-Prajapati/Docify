@@ -46,7 +46,7 @@ const FirstSection = () => {
           essentials!
         </p>
         <div className='flex justify-center gap-4 pt-10'>
-          <Button variant='default' onClick={() => router.push('/auth/signup')}>Get Started</Button>
+          <Button variant='bluebutton' onClick={() => router.push('/auth/signup')}>Get Started</Button>
           <Button variant='outline'>Learn More</Button>
         </div>
 
