@@ -10,7 +10,7 @@ const createJestConfig = nextJest({
 // Add any custom config to be passed to Jest
 const config: Config = {
   coverageProvider: 'v8',
-  testEnvironment: 'jest-environment-jsdom', // or node
+  testEnvironment: 'jsdom', // or node
   moduleNameMapper: {
     // Uncomment to provides the Next.js cache function
     //react: "next/dist/compiled/react/cjs/react.development.js",

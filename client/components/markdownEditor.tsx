@@ -38,7 +38,8 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
 
   async function handleSave() {
     setIsLoading(true);
-    const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
+    const branch_name = process.env.NEXT_PUBLIC_BRANCH_NAME + '-' + Date.now();
+    
     const apiUrl = `https://api.github.com/repos/${github_username}/${repo}/contents/README.md?ref=${branch_name}`;
     try {
       const currentFile = await axios.get(apiUrl, {
@@ -68,6 +69,7 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
       console.log('GitHub API response:', response.data);
       toast.success('Commited successfully 🎉. Check branch docify');
     } catch (error) {
+      console.log(error)
       console.log('GitHub API error:', error);
       toast.error('Sorry this sucks 🥺');
     } finally {
