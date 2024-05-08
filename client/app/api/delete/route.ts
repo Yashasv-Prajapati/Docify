@@ -10,19 +10,19 @@ export async function DELETE(req: NextRequest) {
     // Assuming the user ID is sent in the request body or as a query parameter
     const { userId } = await req.json();
 
+    // Delete associated Markdown data (if any)
+    await db.markdownFile.deleteMany({
+      where: {
+        authorId: userId,
+      },
+    });
+
     // Delete user data and associated project data
     await db.$transaction(async (db) => {
       // Delete associated project data
       await db.project.deleteMany({
         where: {
           userId: userId,
-        },
-      });
-      
-      // Delete associated Markdown data (if any)
-      await db.markdownFile.deleteMany({
-        where: {
-          authorId: userId,
         },
       });
 
