@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       projectId,
     } = CodeCoverageSchema.parse(data);
 
-    const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
+    const branch_name = process.env.NEXT_PUBLIC_BRANCH_NAME + '-' + Date.now();
 
     const containerImg =
       lang == 'python' ? 'docify_python:latest' : 'docify_java:latest';

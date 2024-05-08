@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
   }
 
   const { github_access_token, github_username } = currentUser;
-  const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
+  const branch_name = process.env.NEXT_PUBLIC_BRANCH_NAME + '-' + Date.now();
 
   try {
     const { project_type, repositoryName, projectId } =
