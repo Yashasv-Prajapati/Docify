@@ -1,22 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import axios from 'axios';
 import * as z from 'zod';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { createProjectSchema } from '@/lib/validations/project';
-import { db } from '@/lib/db';
+
 import getCurrentUser from '@/lib/curr';
+import { db } from '@/lib/db';
+import { createProjectSchema } from '@/lib/validations/project';
 
 export async function DELETE(req: NextRequest) {
   try {
     // Assuming the user ID is sent in the request body or as a query parameter
     const { userId } = await req.json();
-    const curr_user = await getCurrentUser();
-    if(curr_user?.id !== userId) {
-      return NextResponse.json({
-        message: 'Unauthorized access',
-        success: false,
-      }, { status: 401 });
-    }
+    // const curr_user = await getCurrentUser();
+    // if(curr_user?.id !== userId) {
+    //   return NextResponse.json({
+    //     message: 'Unauthorized access',
+    //     success: false,
+    //   }, { status: 401 });
+    // }
 
     // Delete associated Markdown data (if any)
     await db.markdownFile.deleteMany({
