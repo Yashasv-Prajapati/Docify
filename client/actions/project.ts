@@ -14,7 +14,7 @@ export async function update_project_branch(
         uml_latest_branch: branch_name,
       },
     });
-    return {status:200};
+    return { status: 200 };
   }
 
   if (feature.toLowerCase() == 'code_coverage') {
@@ -26,7 +26,7 @@ export async function update_project_branch(
         coverage_latest_branch: branch_name,
       },
     });
-    return {status:200};
+    return { status: 200 };
   }
 
   if (feature.toLowerCase() == 'dependency_checker') {
@@ -38,27 +38,28 @@ export async function update_project_branch(
         dependency_latest_branch: branch_name,
       },
     });
-    return {status:200};
+    return { status: 200 };
   }
 
-  return {status:400};
+  return { status: 400 };
 }
 
-
-export async function get_project_branch(projectId:string, feature:string): Promise<string | null>{
-
+export async function get_project_branch(
+  projectId: string,
+  feature: string
+): Promise<string | null> {
   const project = await db.project.findUnique({
     where: {
       projectId: projectId,
     },
-    select:{
-      uml_latest_branch:true,
-      coverage_latest_branch:true,
-      dependency_latest_branch:true
-    }
+    select: {
+      uml_latest_branch: true,
+      coverage_latest_branch: true,
+      dependency_latest_branch: true,
+    },
   });
 
-  if(!project){
+  if (!project) {
     return null;
   }
 

@@ -4,9 +4,7 @@
   "extends": [
     "next/core-web-vitals",
     "prettier",
-    "plugin:tailwindcss/recommended",
-    "plugin:testing-library/react",
-    "plugin:jest-dom/recommended"
+    "plugin:tailwindcss/recommended"
   ],
   "plugins": ["tailwindcss", "eslint-plugin-tailwindcss"],
   "rules": {

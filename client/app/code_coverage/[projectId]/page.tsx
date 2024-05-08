@@ -1,21 +1,22 @@
-
-import { Table } from 'lucide-react';
-import Nav from '@/components/nav';
-import axios from 'axios';
-import getCurrentUser from '@/lib/curr';
 import { redirect } from 'next/navigation';
-import ShowCoverageTable  from '../_components/ShowCoverageTable';
-import { db } from '@/lib/db';
+import axios from 'axios';
+import { Table } from 'lucide-react';
 import { toast } from 'sonner';
+
+import getCurrentUser from '@/lib/curr';
+import { db } from '@/lib/db';
 import { CodeCoverageSchema } from '@/lib/validations/code_coverage';
+import Nav from '@/components/nav';
+
+import ShowCoverageTable from '../_components/ShowCoverageTable';
 
 interface CodeCoveragePageProps {
   params: { projectId: string };
 }
 
-export default async function Page ({ params }: CodeCoveragePageProps) {
+export default async function Page({ params }: CodeCoveragePageProps) {
   const curr_user = await getCurrentUser();
-  if(!curr_user){
+  if (!curr_user) {
     return redirect('/auth/signup');
   }
 
@@ -24,9 +25,13 @@ export default async function Page ({ params }: CodeCoveragePageProps) {
 
   const project = await db.project.findUnique({
     where: { projectId: params.projectId },
-    select: { repository_name: true, coverage_latest_branch: true, project_type: true},
+    select: {
+      repository_name: true,
+      coverage_latest_branch: true,
+      project_type: true,
+    },
   });
-  if(!project){
+  if (!project) {
     toast.error('Project not found');
     return redirect('/dashboard');
   }
@@ -36,30 +41,34 @@ export default async function Page ({ params }: CodeCoveragePageProps) {
   let flag = false;
 
   await axios
-  .head(
-    `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/COVERAGE.md?ref=${branch_name}`,
-    {
-      headers: {
-        Authorization: `token ${github_access_token}`,
-      },
-    }
-  ).catch(async (err)=>{
-    console.log('COVERAGE.md file does not exist');
-    // If head request fails, COVERAGE.md file does not exist and we need to call /api/code_coverage
-    // Or maybe the docify branch itself does not exist
-    flag = true;
+    .head(
+      `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/COVERAGE.md?ref=${branch_name}`,
+      {
+        headers: {
+          Authorization: `token ${github_access_token}`,
+        },
+      }
+    )
+    .catch(async (err) => {
+      console.log('COVERAGE.md file does not exist');
+      // If head request fails, COVERAGE.md file does not exist and we need to call /api/code_coverage
+      // Or maybe the docify branch itself does not exist
+      flag = true;
 
-    return redirect('/dashboard');
-  })
+      return redirect('/dashboard');
+    });
 
-  if(flag){
-    await axios.post('/api/code_coverage', CodeCoverageSchema.parse({
-      github_access_token,
-      github_username,
-      github_repo_name: repositoryName,
-      project_type: project.project_type,
-      projectId: params.projectId,
-    }));
+  if (flag) {
+    await axios.post(
+      '/api/code_coverage',
+      CodeCoverageSchema.parse({
+        github_access_token,
+        github_username,
+        github_repo_name: repositoryName,
+        project_type: project.project_type,
+        projectId: params.projectId,
+      })
+    );
   }
 
   const response = await axios.get(
@@ -71,10 +80,9 @@ export default async function Page ({ params }: CodeCoveragePageProps) {
     }
   );
 
-  const htmlTable = Buffer.from(
-    response.data.content,
-    'base64'
-  ).toString('utf-8');
+  const htmlTable = Buffer.from(response.data.content, 'base64').toString(
+    'utf-8'
+  );
 
   // Project data
   const id = params.projectId;
@@ -102,4 +110,4 @@ export default async function Page ({ params }: CodeCoveragePageProps) {
       </div>
     </div>
   );
-};
+}

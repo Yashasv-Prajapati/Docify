@@ -1,4 +1,3 @@
-
 import * as z from 'zod';
 
 export const UMLSchema = z.object({
@@ -9,3 +8,12 @@ export const UMLSchema = z.object({
   projectId: z.string(),
   folderPath: z.string(),
 });
+
+// export const UMLSchema = z.object({
+//   token: z.string(),
+//   username: z.string(),
+//   repo: z.string(),
+//   type: z.string(),
+//   projectId: z.string(),
+//   folderPath: z.string(),
+// });

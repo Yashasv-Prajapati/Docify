@@ -28,16 +28,24 @@ cd "$project_directory" || exit
 # Step 3: Generate JaCoCo report
 ./gradlew jacocoTestReport
 
-# Navigation to index.html
-jacoco_report_directory=$(find "$project_directory" -type d -name "jacoco")
-cd "$jacoco_report_directory" || exit
-
-# Find index.html and pass its absolute path to the Python script
-index_html_path=$(find . -type f -name "index.html")
-if [ -z "$index_html_path" ]; then
-  echo "Error: index.html not found"
+# Locate the JaCoCo report directory
+jacoco_report_directory="$project_directory/build/reports/jacoco"
+if [ ! -d "$jacoco_report_directory" ]; then
+  echo "Error: JaCoCo report directory not found"
   exit 1
 fi
 
-# Run the Python script with the absolute path to index.html
-python3 test_java.py "$index_html_path" >> README.md
+# Navigate to the JaCoCo report directory
+cd "$jacoco_report_directory" || exit
+
+# Find index.html within the JaCoCo report directory
+index_html_path="index.html"
+if [ ! -f "$index_html_path" ]; then
+  echo "Error: index.html not found in JaCoCo report directory"
+  exit 1
+fi
+
+# Print the path to index.html (for debugging purposes)
+echo "Found index.html at: $jacoco_report_directory/$index_html_path"
+
+python3 coverage_readme_java.py "$jacoco_report_directory/$index_html_path" >> README.md

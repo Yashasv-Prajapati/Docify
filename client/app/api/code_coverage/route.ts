@@ -1,7 +1,8 @@
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
-import Dockerode from 'dockerode';
 import { update_project_branch } from '@/actions/project';
+import Dockerode from 'dockerode';
+
 import { CodeCoverageSchema } from '@/lib/validations/code_coverage';
 
 const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..'); //now we are pointing to the repository root
@@ -10,7 +11,13 @@ export async function POST(req: NextRequest) {
   try {
     const docker = new Dockerode();
     const data = await req.json();
-    const { github_access_token, github_username, github_repo_name, project_type:lang, projectId } = CodeCoverageSchema.parse(data);
+    const {
+      github_access_token,
+      github_username,
+      github_repo_name,
+      project_type: lang,
+      projectId,
+    } = CodeCoverageSchema.parse(data);
 
     const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
 
@@ -61,7 +68,7 @@ export async function POST(req: NextRequest) {
           console.error('Failed to create container:', err);
           reject(new Error('Failed to create container'));
         }
-        container?.start(async(err) => {
+        container?.start(async (err) => {
           if (err) {
             console.error('Failed to start container:', err);
             reject(new Error('Failed to start container'));

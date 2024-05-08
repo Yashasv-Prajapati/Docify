@@ -1,13 +1,13 @@
 FROM ubuntu:22.04
 WORKDIR /app
-COPY . /app
+# COPY . /app
 RUN apt-get update && apt-get upgrade -y
 RUN apt install -y curl
 RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 RUN apt-get install -y git
 RUN apt-get install -y graphviz
-RUN pip3 install -r requirements.txt
+RUN pip3 install astroid==3.0.3 dill==0.3.8 gitdb==4.0.11 GitPython==3.1.42 isort==5.13.2 lint==1.2.1 mccabe==0.7.0 platformdirs==4.2.0 pylint==3.0.3 smmap==5.0.1 tomlkit==0.12.3 
 # RUN git config --global user.name "docify"
 # RUN git clone https://github.com/sarvo314/StepsByKnightVisualiser.git
 # RUN
