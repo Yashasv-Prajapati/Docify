@@ -35,14 +35,6 @@ export async function POST(req: NextRequest) {
       folderPath: folderPath,
     } = UMLSchema.parse(data);
 
-    // const {
-    //   accessToken: token,
-    //   userName: username,
-    //   repoName: repo,
-    //   projectType: type,
-    //   projectId: projectId,
-    // } = data;
-    // const folderPath = '/';
     const path = folderPath == '/' ? repo : repo + folderPath;
     let containerOptions;
     const binds =
@@ -91,7 +83,7 @@ export async function POST(req: NextRequest) {
         Cmd: [
           'sh',
           '-c',
-          `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
+          `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < uml.sh > u.sh && chmod +x d.sh && chmod +x c.sh && chmod +x u.sh &&./d.sh ${token} ${username} ${repo} ${branch_name} && ./u.sh ${repo} && ./c.sh ${username} ${repo} ${token} ${process.env.GITHUB_APP_ID}`,
         ],
         //this is a dummy command, will be replaced by the bash script
       };

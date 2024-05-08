@@ -11,6 +11,7 @@ import { GenerateTestingPlanSchema } from '@/lib/validations/generate-testing-pl
 // project_id: 'string', (project id)
 //  project_description: 'string', (project description)
 // }
+
 export async function POST(request: NextRequest) {
   const data = await request.json();
   const currentUser = await getCurrentUser();

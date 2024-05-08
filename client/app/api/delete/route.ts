@@ -45,12 +45,12 @@ export async function DELETE(req: NextRequest) {
     // Redirect the user to the Docify GitHub app configure page for further account deletion
     const appId = process.env.GITHUB_APP_ID;
     const installationUrl = `https://github.com/apps/docify-wiki/installations/new?target_id=${appId}&target_type=app`;
-    return NextResponse.redirect(installationUrl);
+    return NextResponse.redirect(installationUrl, { status: 200 });
   } catch (error) {
     console.error('Error deleting user account:', error);
     return NextResponse.json({
       message: 'Failed to delete user account',
       success: false,
-    });
+    }, { status: 500 });
   }
 }
