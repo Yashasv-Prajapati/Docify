@@ -6,4 +6,5 @@ export const GenerateReadmeSchema = z.object({
   repositoryName: z.string(),
   core_functionalities: z.string(),
   project_goals: z.string(),
+  projectId: z.string(),
 });

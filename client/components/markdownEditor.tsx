@@ -38,7 +38,8 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
 
   async function handleSave() {
     setIsLoading(true);
-    const apiUrl = `https://api.github.com/repos/${github_username}/${repo}/contents/README.md?ref=docify`;
+    const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
+    const apiUrl = `https://api.github.com/repos/${github_username}/${repo}/contents/README.md?ref=${branch_name}`;
     try {
       const currentFile = await axios.get(apiUrl, {
         headers: {
@@ -171,7 +172,7 @@ const Preview: FC<PreviewProps> = ({ markdown }) => {
       </div>
       <div className='h-[400px] overflow-y-auto'>
         <div
-          className='prose prose-pre:bg-[#1a1b26] size-full break-words bg-gray-100 p-6'
+          className='prose size-full break-words bg-gray-100 p-6 prose-pre:bg-[#1a1b26]'
           dangerouslySetInnerHTML={{
             __html: parsedMarkdown,
           }}

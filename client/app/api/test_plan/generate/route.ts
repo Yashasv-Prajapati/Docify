@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
     const repositoryName = project.repository_name;
     const project_type = project.project_type;
     const testing_dir = project.testing_dir;
+    const dep_branch_name = project.dependency_latest_branch;
 
     // Generate UML Diagram for the test folder
     await axios.post(
@@ -63,30 +64,63 @@ export async function POST(request: NextRequest) {
       }
     );
 
+    // To check whether we need to call /api/dependency-checker
+    let flag = false;
+
     // Find the dependencies of the project
     await axios
       .head(
-        `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=docify`,
+        `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=${dep_branch_name}`,
         {
           headers: {
             Authorization: `token ${github_access_token}`,
           },
         }
       )
-      .catch(async () => {
-        await axios.post(
-          `${process.env.NEXT_APP_URL}/api/dependency-checker`,
-          { project_type, repositoryName },
+      .then(async () => {
+        const response = await axios.get(
+          `https://api.github.com/repos/${github_username}/${repositoryName}/commits?sha=${dep_branch_name}&?path=.docify-assets/requirements.txt`,
           {
             headers: {
-              Cookie: request.headers.get('Cookie'),
+              Authorization: `token ${github_access_token}`,
             },
           }
         );
+
+        const lastModified = new Date(response.data[0].commit.author.date);
+        // const oneDayAgo = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+        const oneWeekAgo = new Date(
+          new Date().getTime() - 7 * 24 * 60 * 60 * 1000
+        );
+
+        if (lastModified < oneWeekAgo) {
+          console.log('requirements.txt file is stale');
+
+          // If requirements.txt file is stale, call /api/dependency-checker
+          flag = true;
+        }
+      })
+      .catch(async () => {
+        console.log('requirements.txt file does not exist');
+        // If head request fails, requirements.txt file does not exist and we need to call /api/dependency-checker
+        // Or maybe the docify branch itself does not exist
+        flag = true;
       });
 
+    if (flag) {
+      await axios.post(
+        `${process.env.NEXT_APP_URL}/api/dependency-checker`,
+        { project_type, repositoryName, projectId: project_id },
+        {
+          headers: {
+            Cookie: request.headers.get('Cookie'),
+          },
+        }
+      );
+    }
+
     const response = await axios.get(
-      `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=docify`,
+      `https://api.github.com/repos/${github_username}/${repositoryName}/contents/.docify-assets/requirements.txt?ref=${dep_branch_name}`,
       {
         headers: {
           Authorization: `token ${github_access_token}`,

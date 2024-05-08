@@ -1,7 +1,7 @@
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
+import { update_project_branch } from '@/actions/project';
 import Dockerode from 'dockerode';
-import { nanoid } from 'nanoid';
 import { z } from 'zod';
 
 import getCurrentUser from '@/lib/curr';
@@ -25,9 +25,10 @@ export async function POST(request: NextRequest) {
   }
 
   const { github_access_token, github_username } = currentUser;
+  const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
 
   try {
-    const { project_type, repositoryName } =
+    const { project_type, repositoryName, projectId } =
       DependencyCheckerSchema.parse(data);
 
     const containerImage =
@@ -42,12 +43,12 @@ export async function POST(request: NextRequest) {
         ? [
             'sh',
             '-c',
-            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID} `,
+            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} ${branch_name} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID} ${branch_name}`,
           ]
         : [
             'sh',
             '-c',
-            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID} `,
+            `tr -d "\\r" < download.sh > d.sh && tr -d "\\r" < commit.sh > c.sh && tr -d "\\r" < dependency-checker.sh > dep.sh && chmod +x d.sh c.sh dep.sh && ./d.sh ${github_access_token} ${github_username} ${repositoryName} ${branch_name} && ./dep.sh ${repositoryName} && ./c.sh ${github_username} ${repositoryName} ${github_access_token} ${process.env.GITHUB_APP_ID} `,
           ];
 
     const containerOptions = {
@@ -64,11 +65,29 @@ export async function POST(request: NextRequest) {
     await container.start();
     console.log('Container started successfully');
 
-    await container.wait();
-    console.log('Container stopped');
+    await new Promise((resolve, reject) => {
+      container.wait((error, data) => {
+        if (error) {
+          console.error('Error waiting for container: ', error);
+          reject(error);
+        } else {
+          console.log('Container stopped: ', data);
+
+          if (data.StatusCode !== 0) {
+            console.error('Container exited with non-zero exit code');
+            reject(new Error('Container execution failed'));
+          } else {
+            // update the corresponding branch name in the db for dependency checker
+            update_project_branch(projectId, branch_name, 'dependency_checker');
+            resolve(data);
+          }
+        }
+      });
+    });
 
     return NextResponse.json({ message: 'Success!' }, { status: 200 });
   } catch (error) {
+    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { message: JSON.stringify(error.issues) },

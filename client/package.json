@@ -35,6 +35,7 @@
     "framer": "^2.4.1",
     "highlight.js": "^11.9.0",
     "isomorphic-dompurify": "^2.3.0",
+    "jest-canvas-mock": "^2.5.2",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.323.0",

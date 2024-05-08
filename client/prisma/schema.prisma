@@ -26,6 +26,9 @@ model Project {
   userId          String
   testing_dir     String
   project_type    String
+  coverage_latest_branch String   @default("docify")
+  uml_latest_branch String        @default("docify")
+  dependency_latest_branch String @default("docify")
   user            User           @relation(fields: [userId], references: [id])
   files           MarkdownFile[]
 

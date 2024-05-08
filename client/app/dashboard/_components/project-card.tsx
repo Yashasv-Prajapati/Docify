@@ -3,8 +3,8 @@
 import { FC, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { set } from 'date-fns';
-import { Loader2, MoreHorizontalIcon } from 'lucide-react';
+import axios from 'axios';
+import { MoreHorizontalIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -38,170 +38,188 @@ const ProjectCard: FC<ProjectCardProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const handleUmlClick = async () => {
+
+  async function handleUmlClick() {
     console.log('UML Clicked');
+
     setIsLoading(true);
-    try {
-      const res = await fetch('/api/uml/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+
+    const promise = () =>
+      axios
+        .post('/api/uml/generate', {
           accessToken: access_token,
           userName: username,
           repoName: repository_name,
           projectType: project_type,
           projectId: project_id,
-        }),
-      });
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            router.push(`/uml/${project_id}`);
+          }
+        })
+        .finally(() => setIsLoading(false));
 
-      const data = await res.json();
-      // console.log('Data:', data);
-      if (res.status === 200) {
-        toast.success('UML diagram generated successfully');
-        router.push(`/uml/${project_id}`);
-      }
-    } catch (error) {
-      console.error('Error Showing UML:', error);
-      toast.error('Failed to generate UML diagram');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    toast.promise(promise, {
+      loading: 'Generating UML diagram...',
+      success: 'UML diagram generated successfully',
+      error: 'Failed to generate UML diagram',
+    });
+  }
 
-  const handleTestPlanClick = async () => {
+  async function handleTestPlanClick() {
     console.log('Test Plan Clicked');
 
-    const res = await fetch('/api/test_plan/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        project_id: project_id,
-        project_description: `This is a ${project_type} project.`,
-      }),
-    });
-
-    const data = await res.json();
-    console.log(data);
-  };
-
-  const handleDependencyClick = async () => {
-    console.log('Dependency Checker Clicked');
     setIsLoading(true);
-    const res = await fetch('/api/dependency-checker', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        // accessToken: access_token,
-        // userName: username,
-        repositoryName: repository_name,
-        project_type: project_type,
-        // projectId: project_id,
-      }),
+
+    const promise = () =>
+      axios
+        .post('/api/test_plan/generate', {
+          project_id: project_id,
+          project_description: `This is a ${project_type} project.`,
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .finally(() => setIsLoading(false));
+
+    toast.promise(promise, {
+      loading: 'Generating test plan...',
+      success: 'Test plan generated successfully',
+      error: 'Failed to generate test plan',
     });
+  }
 
-    const data = await res.json();
-    console.log(data);
+  async function handleDependencyClick() {
+    console.log('Dependency Checker Clicked');
 
-    setIsLoading(false);
-    router.push(`/dependency_checker/${project_id}`);
-  };
+    setIsLoading(true);
+
+    const promise = () =>
+      axios
+        .post('/api/dependency-checker', {
+          repositoryName: repository_name,
+          project_type: project_type,
+          projectId: project_id,
+        })
+        .then(() => router.push(`/dependency_checker/${project_id}`))
+        .finally(() => setIsLoading(false));
+
+    toast.promise(promise, {
+      loading: 'Running dependency checker...',
+      success: 'Dependency checker ran successfully',
+      error: 'Error',
+    });
+  }
+
+  async function handleCodeCoverageClick() {
+    console.log('Code Coverage Clicked');
+
+    setIsLoading(true);
+
+    const promise = () =>
+      axios
+        .post('/api/code-coverage', {
+          github_access_token: access_token,
+          github_username: username,
+          github_repo_name: repository_name,
+          language: project_type,
+          projectId: project_id,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            router.push(`/code_coverage/${project_id}`);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+
+    toast.promise(promise, {
+      loading: 'Generating code coverage report...',
+      success: 'Code coverage report generated successfully',
+      error: 'Failed to generate code coverage report',
+    });
+  }
 
   return (
-    <>
-      {isLoading ? (
-        <div className='flex flex-row justify-center'>
-          <Loader2 className='size-6 h-20 animate-spin items-center text-zinc-500' />
+    <div className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'>
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className='font-medium'>{repository_name}</div>
+      </div>
+      <Separator className='my-2 lg:hidden' />
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className=' my-2 flex items-start gap-2'>
+          <LogoGithub />
+          <Link href={url} className='hover:underline'>
+            Github
+          </Link>
         </div>
-      ) : (
-        <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
-          <div className='grid flex-1 gap-1 p-2'>
-            <div className='font-medium'>{repository_name}</div>
-          </div>
-          <Separator className='my-2 lg:hidden' />
-          <div className='grid flex-1 gap-1 p-2'>
-            <div className=' my-2 flex items-start gap-2'>
-              <LogoGithub />
-              <Link href={url} className='hover:underline'>
-                Github
-              </Link>
-            </div>
-          </div>
-          <Separator className='my-2 lg:hidden' />
-          <div className='grid flex-1 gap-1 p-2'>
-            <div className='flex items-center gap-2'>Project type</div>
-            <div className='flex items-center gap-2'>
-              <span
-                className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
-              />
-              {project_type}
-            </div>
-          </div>
-          <Separator className='my-2 lg:hidden' />
-          <div className='grid flex-1 gap-1 p-2'>
-            <div className='flex items-center gap-2'>Testing Directory</div>
-            <div className='flex items-center gap-2'>
-              <span
-                className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
-              />
-              {testing_dir}
-            </div>
-          </div>
-          <Separator className='my-2 lg:hidden' />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                className='absolute right-4 top-4'
-                size='icon'
-                variant='ghost'
-              >
-                <MoreHorizontalIcon className='size-4' />
-                <span className='sr-only'>Toggle menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuItem>
-                <button
-                  onClick={() => {
-                    router.push(`/generate_readme/${project_id}`);
-                  }}
-                >
-                  Generate Readme
-                </button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <button onClick={handleTestPlanClick}>Test Plan</button>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <button onClick={handleUmlClick}>UML Diagram</button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <button onClick={handleDependencyClick}>
-                  Dependency Checker
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+      </div>
+      <Separator className='my-2 lg:hidden' />
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className='flex items-center gap-2 font-semibold'>
+          Project type
         </div>
-      )}
-    </>
+        <div className='flex items-center gap-2'>{project_type}</div>
+      </div>
+      <Separator className='my-2 lg:hidden' />
+      <div className='grid flex-1 gap-1 p-2'>
+        <div className='flex items-center gap-2 font-semibold'>
+          Testing Directory
+        </div>
+        <div className='flex items-center gap-2'>{testing_dir}</div>
+      </div>
+      <Separator className='my-2 lg:hidden' />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            className='absolute right-4 top-4'
+            size='icon'
+            variant='ghost'
+          >
+            <MoreHorizontalIcon className='size-4' />
+            <span className='sr-only'>Toggle menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='end'>
+          <DropdownMenuItem disabled={isLoading}>
+            <Link href={`/generate_readme/${project_id}`}>Generate Readme</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled={isLoading} onClick={handleTestPlanClick}>
+            Test Plan
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem disabled={isLoading} onClick={handleUmlClick}>
+            UML Diagram
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={handleDependencyClick}
+          >
+            Dependency Checker
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={handleCodeCoverageClick}
+          >
+            Code Coverage
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
+
 function LogoGithub(props: React.SVGAttributes<SVGElement>) {
   return (
     <svg
       {...props}
       data-testid='geist-icon'
-      height={22}
+      height={16}
       strokeLinejoin='round'
       viewBox='0 0 16 16'
-      width={22}
+      width={16}
       style={{ color: 'currentcolor' }}
     >
       <g clipPath='url(#clip0_872_3147)'>
