@@ -3,8 +3,8 @@
  */
 import Dockerode, { Container } from 'dockerode';
 import { testApiHandler } from 'next-test-api-route-handler';
-import * as appHandler from '@/app/api/code_coverage/route';
 
+import * as appHandler from '@/app/api/code_coverage/route';
 
 describe('POST /api/code_coverage', () => {
   // everything goooooood
@@ -31,17 +31,18 @@ describe('POST /api/code_coverage', () => {
   });
 
   it('POST returns 500', async () => {
-
     // mock the createContainer method to throw an error
     // we want the error to be thrown to test this case
-    const createContainerSpy = jest.spyOn(Dockerode.prototype, 'createContainer')
-      .mockImplementation((options):Promise<Container> => {
-         throw new Error('Mocked Docker error');
+    const createContainerSpy = jest
+      .spyOn(Dockerode.prototype, 'createContainer')
+      .mockImplementation((options): Promise<Container> => {
+        throw new Error('Mocked Docker error');
       });
 
     // mock the start method to throw an error
-    const startSpy = jest.spyOn(Dockerode.Container.prototype, 'start')
-      .mockImplementation((options):Promise<Container> => {
+    const startSpy = jest
+      .spyOn(Dockerode.Container.prototype, 'start')
+      .mockImplementation((options): Promise<Container> => {
         throw new Error('Mocked Docker error');
       });
 

@@ -10,25 +10,25 @@ const createJestConfig = nextJest({
 // Add any custom config to be passed to Jest
 const config: Config = {
   coverageProvider: 'v8',
-  testEnvironment: 'jsdom', // or node
+  testEnvironment: 'jest-environment-jsdom', // or node
   moduleNameMapper: {
     // Uncomment to provides the Next.js cache function
     //react: "next/dist/compiled/react/cjs/react.development.js",
     '^@/(.*)$': '<rootDir>/$1',
   },
-  setupFilesAfterEnv: ["./jest.setup.ts"],
-  preset: "ts-jest",
+  setupFilesAfterEnv: ['./jest.setup.ts'],
+  preset: 'ts-jest',
 };
 // module.exports = createJestConfig(config);
-// module.exports = { 
+// module.exports = {
 // // //   // other configuration...
 //   setupFiles: ['<rootDir>/jest.setup.ts'],
 // };
 // module.exports = {
-  // clearMocks: true,
-  // preset: 'ts-jest',
-  // testEnvironment: 'node',
-  // setupFilesAfterEnv: ['<rootDir>/singleton.ts'],
+// clearMocks: true,
+// preset: 'ts-jest',
+// testEnvironment: 'node',
+// setupFilesAfterEnv: ['<rootDir>/singleton.ts'],
 // }
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 export default createJestConfig(config);

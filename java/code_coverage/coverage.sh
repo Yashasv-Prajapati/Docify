@@ -1,3 +1,4 @@
+cp coverage_readme_java.py ../repo
 cd ..
 cd repo
 apk add gradle
@@ -42,3 +43,5 @@ fi
 
 # Run the Python script with the absolute path to index.html
 python3 coverage_readme_java.py "$index_html_path" >> README.md
+
+rm coverage_readme_java.py

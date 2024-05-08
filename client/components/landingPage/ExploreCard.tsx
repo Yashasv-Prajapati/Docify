@@ -33,7 +33,7 @@ const ExploreCard: React.FC<ExploreCardProps> = ({
       className='absolute size-full rounded-[24px] object-cover'
     />
     {active !== id ? (
-      <h3 className='absolute z-0 text-[18px] font-semibold text-white sm:text-[26px] lg:bottom-20 lg:origin-[0,0] lg:rotate-[-90deg]'>
+      <h3 className='absolute z-0 text-[18px] font-semibold text-white sm:text-[26px] lg:bottom-20 lg:origin-[0,0] lg:-rotate-90'>
         {title}
       </h3>
     ) : (

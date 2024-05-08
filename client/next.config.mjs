@@ -13,6 +13,7 @@ const nextConfig = {
         port: '',
       },
     ],
+    domains: ['avatars.githubusercontent.com', 'raw.githubusercontent.com']
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Add custom webpack configuration here

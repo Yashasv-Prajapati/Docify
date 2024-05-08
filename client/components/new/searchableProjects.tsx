@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Fragment, useState } from 'react';
+import Link from 'next/link';
 
 import {
   Card,
@@ -108,9 +109,12 @@ const SearchableProjects: React.FC<SearchableProjectsParams> = ({
                             <p className='text-m font-medium leading-none'>
                               {repo.name}
                             </p>
-                            <p className='text-sm text-muted-foreground'>
+                            <Link
+                              className='text-sm text-muted-foreground hover:underline'
+                              href={repo.clone_url}
+                            >
                               {repo.clone_url}
-                            </p>
+                            </Link>
                           </div>
                           <div className=''>
                             <ImportBtn

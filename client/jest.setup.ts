@@ -10,9 +10,9 @@ import '@testing-library/jest-dom';
 //     __esModule: true,
 //     default: mockDeep<PrismaClient>(),
 //   }))
-  
+
 //   beforeEach(() => {
 //     mockReset(db)
 //   })
-  
+
 //   export const prismaMock = db as unknown as DeepMockProxy<PrismaClient>

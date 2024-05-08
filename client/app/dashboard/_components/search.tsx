@@ -2,17 +2,9 @@
 
 import { FC, useState } from 'react';
 import Link from 'next/link';
-import { ChevronDownIcon } from 'lucide-react';
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
-import { Button } from '../../../components/ui/button';
 
 type SearchParams = {
   data: any;
@@ -44,19 +36,9 @@ const Search: FC<SearchParams> = ({ data, onfilteredData }) => {
         onChange={handleSearch}
       />
       <div className='flex items-center gap-4'>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className='bg-white dark:bg-gray-950' variant='outline'>
-              Add New...
-              <ChevronDownIcon className='ml-2 size-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuCheckboxItem checked>
-              <Link href='/new'>Project</Link>
-            </DropdownMenuCheckboxItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Link className={buttonVariants({ variant: 'outline' })} href='/new'>
+          Add New...
+        </Link>
       </div>
     </div>
   );

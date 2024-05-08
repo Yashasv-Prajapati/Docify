@@ -30,6 +30,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check if project already exists
+    const existingProject = await db.project.findFirst({
+      where: {
+        userId: userId,
+        repository_name: repository_name,
+      },
+    });
+
+    if (existingProject) {
+      return NextResponse.json(
+        {
+          message: 'Project already exists',
+          success: false,
+        },
+        { status: 409 }
+      );
+    }
+
     // Construct URL to the README.md file
     const readmeUrl = `https://api.github.com/repos/${user.github_username}/${repository_name}/readme`;
 
@@ -77,29 +95,41 @@ export async function POST(req: NextRequest) {
         },
       });
     });
-    return NextResponse.json({
-      project: project,
-      message: 'Project created successfully',
-      success: true,
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        project: project,
+        message: 'Project created successfully',
+        success: true,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({
-        message: 'Project creation failed ' + error.issues[0].message,
-        success: false,
-      }, { status: 422 });
+      return NextResponse.json(
+        {
+          message: 'Project creation failed ' + error.issues[0].message,
+          success: false,
+        },
+        { status: 422 }
+      );
     }
 
     if (error instanceof PrismaClientKnownRequestError) {
-      return NextResponse.json({
-        message: 'Project creation failed ' + (error?.message || ''),
-        success: false,
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          message: 'Project creation failed ' + (error?.message || ''),
+          success: false,
+        },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({
-      message: 'Project creation failed ' + (error || ''),
-      success: false,
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: 'Project creation failed ' + (error || ''),
+        success: false,
+      },
+      { status: 500 }
+    );
   }
 }
