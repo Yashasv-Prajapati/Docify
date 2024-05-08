@@ -19,7 +19,7 @@ const parentDir = path.resolve(
 export async function POST(req: NextRequest) {
   try {
     console.log('Request to generate UML');
-    const branch_name = process.env.BRANCH_NAME + '-' + Date.now();
+    const branch_name = process.env.NEXT_PUBLIC_BRANCH_NAME + '-' + Date.now();
 
     console.log(parentDir);
     const docker = new Dockerode();
