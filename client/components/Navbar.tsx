@@ -1,20 +1,14 @@
 'use client';
-
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Dropdown } from 'react-day-picker';
-
 import '../styles/globals.css';
-
 import { useState } from 'react';
-import Image from 'next/image';
-
 import styles from '../styles';
 import { navVariants } from '../utils/motion';
+import Image from 'next/image';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-  const router = useRouter(); // Initialize useRouter
+  // const router = useRouter(); // Initialize useRouter
 
   return (
     <motion.nav
@@ -36,20 +30,19 @@ function Navbar() {
         />
         <div className='menu-container'>
           <Image
-            width={1000}
-            height={500}
+          width={1000}
+          height={500}
             className='size-10 rounded-full p-1 ring-2 ring-gray-500 '
             src='/cover.png'
             alt='Bordered avatar'
             onClick={() => setOpen(!open)}
+            data-testid='navbar-toggle'
           />
-          <div
-            className={`dropdown-menu rounded-lg bg-neutral-200 ${open ? 'active' : 'inactive'} absolute right-0 top-full z-50 `}
-          >
+          <div className={`dropdown-menu ${open ? 'active' : 'inactive'} `} data-testid="navbar-dropdown">
             <h3 className='bg-gradient-to-r from-sky-400 to-[#8e29f3] bg-clip-text font-medium text-transparent'>
-              DOCIFY
+              DOCIFY EASTER
               <br />
-              <span className='text-gray-600'>docifywiki</span>
+              <span className='text-white'>DOCIFY</span>
             </h3>
             <ul>
               <DropdownItem text={'My Profile'} />
@@ -67,7 +60,7 @@ function Navbar() {
 function DropdownItem(props: { text: string }) {
   return (
     <li className='flex'>
-      <a className='text-gray-500'>{props.text}</a>
+      <a className='text-gray-400'>{props.text}</a>
     </li>
   );
 }
