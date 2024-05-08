@@ -72,28 +72,28 @@ const ProjectCard: FC<ProjectCardProps> = ({
     });
   }
 
-  async function handleTestPlanClick() {
-    console.log('Test Plan Clicked');
+  // async function handleTestPlanClick() {
+  //   console.log('Test Plan Clicked');
 
-    setIsLoading(true);
+  //   setIsLoading(true);
 
-    const promise = () =>
-      axios
-        .post('/api/test_plan/generate', {
-          project_id: project_id,
-          project_description: `This is a ${project_type} project.`,
-        })
-        .then((res) => {
-          console.log(res.data);
-        })
-        .finally(() => setIsLoading(false));
+  //   const promise = () =>
+  //     axios
+  //       .post('/api/test_plan/generate', {
+  //         project_id: project_id,
+  //         project_description: `This is a ${project_type} project.`,
+  //       })
+  //       .then((res) => {
+  //         console.log(res.data);
+  //       })
+  //       .finally(() => setIsLoading(false));
 
-    toast.promise(promise, {
-      loading: 'Generating test plan...',
-      success: 'Test plan generated successfully',
-      error: 'Failed to generate test plan',
-    });
-  }
+  //   toast.promise(promise, {
+  //     loading: 'Generating test plan...',
+  //     success: 'Test plan generated successfully',
+  //     error: 'Failed to generate test plan',
+  //   });
+  // }
 
   async function handleDependencyClick() {
     console.log('Dependency Checker Clicked');
@@ -194,8 +194,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
           <DropdownMenuItem disabled={isLoading}>
             <Link href={`/generate_readme/${project_id}`}>Generate Readme</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem disabled={isLoading} onClick={handleTestPlanClick}>
-            Test Plan
+          <DropdownMenuItem disabled={isLoading}>
+            <Link href={`/test_plan/${project_id}`}>Test Plan</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem disabled={isLoading} onClick={handleUmlClick}>
