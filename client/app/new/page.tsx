@@ -1,10 +1,8 @@
 import { URLSearchParams } from 'url';
 import { notFound } from 'next/navigation';
 import axios, { AxiosResponse } from 'axios';
-
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
-
 import SearchableProjects from '../../components/new/searchableProjects';
 import Avatar from '../dashboard/_components/avatar';
 import Nav from '../dashboard/_components/nav';

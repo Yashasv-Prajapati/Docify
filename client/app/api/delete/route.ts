@@ -10,13 +10,6 @@ export async function DELETE(req: NextRequest) {
   try {
     // Assuming the user ID is sent in the request body or as a query parameter
     const { userId } = await req.json();
-    const curr_user = await getCurrentUser();
-    if(curr_user?.id !== userId) {
-      return NextResponse.json({
-        message: 'Unauthorized access',
-        success: false,
-      }, { status: 401 });
-    }
 
     // Delete associated Markdown data (if any)
     await db.markdownFile.deleteMany({
@@ -45,12 +38,12 @@ export async function DELETE(req: NextRequest) {
     // Redirect the user to the Docify GitHub app configure page for further account deletion
     const appId = process.env.GITHUB_APP_ID;
     const installationUrl = `https://github.com/apps/docify-wiki/installations/new?target_id=${appId}&target_type=app`;
-    return NextResponse.redirect(installationUrl);
+    return NextResponse.redirect(installationUrl, { status: 200 });
   } catch (error) {
     console.error('Error deleting user account:', error);
     return NextResponse.json({
       message: 'Failed to delete user account',
       success: false,
-    });
+    }, { status: 500 });
   }
 }
