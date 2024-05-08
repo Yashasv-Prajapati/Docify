@@ -106,8 +106,7 @@
   position: absolute;
   top: 100%;
   right: 20px;
-  background-color: #374151;
-  border-radius: var(--border-radius);
+  /* background-color : #7a8494; */
   padding: 10px 20px;
   width: 200px;
 }

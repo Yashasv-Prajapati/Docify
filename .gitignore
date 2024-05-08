@@ -11,3 +11,10 @@ package-lock*.json
 
 dev.db*
 
+u.sh
+d.sh
+c.sh
+
+__pycache__
+
+dep.sh

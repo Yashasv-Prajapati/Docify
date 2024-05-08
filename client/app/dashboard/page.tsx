@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation';
+
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
 import Avatar from '@/app/dashboard/_components/avatar';
@@ -8,13 +10,17 @@ import ImportedProjects from './_components/ImportedProjects';
 const Page = async () => {
   const user = await getCurrentUser();
 
-  const projects = await db.$transaction(async(db)=>{
+  if (!user) {
+    return redirect('/auth/signup');
+  }
+
+  const projects = await db.$transaction(async (db) => {
     return await db.project.findMany({
       where: {
-        userId: user!.id,
+        userId: user.id,
       },
     });
-  })
+  });
 
   const AvatarComponent = <Avatar />;
 
@@ -22,7 +28,7 @@ const Page = async () => {
     <div key='1' className='flex h-screen flex-col'>
       <Nav AvatarComponent={AvatarComponent} />
 
-      <ImportedProjects imported_projects={projects} />
+      <ImportedProjects imported_projects={projects} user={user} />
     </div>
   );
 };

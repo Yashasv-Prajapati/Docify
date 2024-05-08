@@ -10,6 +10,7 @@ import SecondSection from '@/components/LandingPageNew/second-section/page';
 const Home = () => {
   return (
     <div>
+<<<<<<< HEAD
       <div data-testid ="navbar"> 
       <Navbar type ="home"/>
       </div>
@@ -19,6 +20,11 @@ const Home = () => {
       <div data-testid ="secondsection"> 
       <SecondSection/>
       </div>
+=======
+      <Navbar type ="home"/>
+      <FirstSection/>
+      <SecondSection/>
+>>>>>>> main
     </div>
   );
 };

@@ -1,0 +1,15 @@
+FROM frolvlad/alpine-java
+
+# Install necessary tools for networking
+RUN apk update && \
+    apk add --no-cache \
+        curl \
+        wget \
+        iputils \
+        bind-tools \
+        git \
+        && \
+    rm -rf /var/cache/apk/*
+
+WORKDIR /app
+EXPOSE 8000

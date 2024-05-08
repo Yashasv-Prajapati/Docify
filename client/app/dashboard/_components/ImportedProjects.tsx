@@ -8,9 +8,19 @@ import Search from '@/app/dashboard/_components/search';
 
 type ImportedProjectsParams = {
   imported_projects: any;
+  user: {
+    id: string;
+    github_access_token: string;
+    github_access_token_expiry: Date;
+    github_refresh_token: string;
+    github_username: string;
+    github_installation_id: string;
+    avatar_url: string;
+  };
 };
 const ImportedProjects: FC<ImportedProjectsParams> = ({
   imported_projects,
+  user,
 }) => {
   const [filteredProjects, setFilteredProjects] = useState(
     imported_projects as any[]
@@ -34,6 +44,10 @@ const ImportedProjects: FC<ImportedProjectsParams> = ({
               <ProjectCard
                 key={project.projectId}
                 url={project.url}
+                project_id={project.projectId}
+                project_type={project.project_type}
+                access_token={user.github_access_token}
+                username={user.github_username}
                 repository_name={project.repository_name}
                 testing_dir={project.testing_dir}
               />

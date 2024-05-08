@@ -1,9 +1,9 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { buttonVariants } from '@/components/ui/button';
 
-import { Navbar } from '../../../components/index';
+import AnimationContainer from '../_components/animation-container';
+import Navbar from '@/components/LandingPageNew/navbar/page'
 
 function Signup() {
   const client_id = process.env.GITHUB_CLIENT_ID;
@@ -12,25 +12,27 @@ function Signup() {
   const installationUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
 
   return (
-    <div className='h-screen overflow-hidden bg-[#1b222f]'>
-      <Navbar />
-      <div className='flex h-full justify-between'>
-        <div className='flex min-h-full w-1/2 flex-col place-content-center border-2 border-transparent px-6'>
-          <h1 className='mb-4 text-2xl font-extrabold leading-none tracking-tight text-white md:text-3xl lg:text-4xl'>
+    <div className='h-screen overflow-hidden '>
+      <Navbar type="login" />
+      <div className='m-auto flex h-screen justify-between'>
+        <div className='flex w-1/2 flex-col justify-center border-2 border-transparent p-6'>
+          <h1 className='mb-4 text-2xl font-bold leading-none tracking-tight text-black md:text-3xl lg:text-4xl'>
             Let&apos;s build something new.
           </h1>
-          <div className='mb-16 text-lg font-normal text-gray-500 lg:text-xl xl:px-48 dark:text-gray-400 '>
+          <div className='mb-16 text-left text-lg font-normal text-gray-500 dark:text-gray-400 lg:text-xl  '>
             To get the insights, import an existing Git Repository.
           </div>
+
           <Link
             className={buttonVariants({
               size: 'sm',
+              variant: 'secondary',
             })}
             rel='noreferrer noopener'
             href={installationUrl}
           >
             <svg
-              className='me-2 size-4'
+              className='me-2 mr-4 size-4'
               aria-hidden='true'
               xmlns='http://www.w3.org/2000/svg'
               fill='currentColor'
@@ -45,22 +47,7 @@ function Signup() {
             Sign in with Github
           </Link>
         </div>
-        <div className='flex items-center'>
-          <Image
-            src={'/cover.png'}
-            width={800}
-            height={700}
-            alt={'image design'}
-            className='relative z-10 w-full rounded-tl-[140px] object-cover'
-          />
-          <a href='#explore'>
-            <div className=' relative z-10 mt-[-50px] flex w-full  justify-end sm:mt-[-70px] '>
-              <span className='pr-11 '>
-                <span className='relative z-10 mt-[-50px] flex w-min  justify-end rounded-full  bg-gradient-to-r from-[#250b47] to-[#2a0670] sm:mt-[-70px]'></span>
-              </span>
-            </div>
-          </a>
-        </div>
+        <AnimationContainer />
       </div>
     </div>
   );
