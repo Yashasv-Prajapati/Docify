@@ -191,11 +191,12 @@ const ProjectCard: FC<ProjectCardProps> = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuItem disabled={isLoading}>
-            <Link href={`/generate_readme/${project_id}`}>Generate Readme</Link>
+        <DropdownMenuItem disabled={isLoading} onClick={()=>router.push(`/generate_readme/${project_id}`)}>
+            Generate Readme
           </DropdownMenuItem>
-          <DropdownMenuItem disabled={isLoading}>
-            <Link href={`/test_plan/${project_id}`}>Test Plan</Link>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem disabled={isLoading} onClick={()=>router.push(`/test_plan/${project_id}`)}>
+            Test Plan
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem disabled={isLoading} onClick={handleUmlClick}>
