@@ -51,7 +51,7 @@ const FirstSection = () => {
         </div>
 
         <div className='pt-10'>
-          <video className='rounded-xl' autoPlay muted loop>
+          <video className='rounded-xl' autoPlay muted loop data-testid="video">
             <source src='/content/hero-1.mp4' type='video/mp4' />
           </video>
         </div>

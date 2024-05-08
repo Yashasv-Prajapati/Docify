@@ -10,9 +10,15 @@ import SecondSection from '@/components/LandingPageNew/second-section/page';
 const Home = () => {
   return (
     <div>
+      <div data-testid ="navbar"> 
       <Navbar type ="home"/>
+      </div>
+      <div data-testid ="firstsection"> 
       <FirstSection/>
+      </div>
+      <div data-testid ="secondsection"> 
       <SecondSection/>
+      </div>
     </div>
   );
 };

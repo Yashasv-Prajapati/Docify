@@ -1,3 +1,4 @@
+//navbar.tsx
 
 import Logo from './logo';
 import { NavigationMenuBar } from './navigation-bar';
@@ -9,9 +10,11 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ type }) => {
   return (
     <div className='mr-14 flex h-16  items-center border-b px-10'>
+      <div data-testid="logo">
       <Logo />
+      </div>
       {type === "home" ? (
-        <div className='mx-auto'>
+        <div className='mx-auto' data-testid="navigation-menu-bar">
           <NavigationMenuBar />
         </div>
       ) : null}
