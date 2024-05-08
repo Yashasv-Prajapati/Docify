@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
+import { UMLSchema } from '@/lib/validations/uml';
 
 interface ProjectCardProps {
   url: string;
@@ -44,15 +45,19 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
     setIsLoading(true);
 
+    console.log(access_token);
+    const body = UMLSchema.parse({
+      github_access_token: access_token,
+      github_username: username,
+      github_repo_name: repository_name,
+      project_type: project_type,
+      projectId: project_id,
+      folderPath: '/'
+    });
+
     const promise = () =>
       axios
-        .post('/api/uml/generate', {
-          accessToken: access_token,
-          userName: username,
-          repoName: repository_name,
-          projectType: project_type,
-          projectId: project_id,
-        })
+        .post('/api/uml/generate', body)
         .then((res) => {
           if (res.status === 200) {
             router.push(`/uml/${project_id}`);
@@ -111,7 +116,10 @@ const ProjectCard: FC<ProjectCardProps> = ({
       error: 'Error',
     });
   }
-
+  async function handleLatestUmlClick() {
+    //just redirect to the uml viewing page
+    router.push(`/uml/${project_id}?latest=true`); 
+  }
   async function handleCodeCoverageClick() {
     console.log('Code Coverage Clicked');
 
@@ -204,6 +212,13 @@ const ProjectCard: FC<ProjectCardProps> = ({
             onClick={handleCodeCoverageClick}
           >
             Code Coverage
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={handleLatestUmlClick}
+          >
+            View Latest UML
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
