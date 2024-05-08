@@ -13,7 +13,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ImportProject from '@/components/modal/ImportProject';
-import Navbar from '@/components/Navbar';
 import Wrapper from '@/components/wrapper';
 
 import ImportBtn from './import-btn';

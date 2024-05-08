@@ -1,33 +1,23 @@
+
 'use client';
 
 import Image from 'next/image';
 
-import MarkdownEditor from '@/components/markdownEditor';
-
-import { Footer, Navbar } from '../components/index';
-import {
-  About,
-  Explore,
-  GetStarted,
-  Hero,
-  WhatsNew,
-} from '../components/landingPage';
+import Navbar from '@/components/LandingPageNew/navbar/page'
+import FirstSection from '@/components/LandingPageNew/first-section/page';
+import SecondSection from '@/components/LandingPageNew/second-section/page';
 
 const Home = () => {
   return (
     <div>
-      <div className='overflow-hidden bg-[#d1d4db]'>
-        <Navbar />
-        <Hero />
-        <div className='relative'>
-          <About />
-          <div className='gradient-03 z-0' />
-          {/* <Explore /> */}
-        </div>
-        <div className='relative'>
-          <GetStarted />
-          <div className='gradient-04 z-0' />
-        </div>
+      <div data-testid ="navbar"> 
+      <Navbar type ="home"/>
+      </div>
+      <div data-testid ="firstsection"> 
+      <FirstSection/>
+      </div>
+      <div data-testid ="secondsection"> 
+      <SecondSection/>
       </div>
     </div>
   );
