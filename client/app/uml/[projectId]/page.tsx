@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { cookies } from 'next/headers';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import axios from 'axios';
 import { LoaderIcon, Package2Icon } from 'lucide-react';
@@ -13,14 +14,17 @@ import Nav from '@/app/dashboard/_components/nav';
 
 import DownloadBtn from '../_components/download-btn';
 import UML from '../_components/UML';
-import Image from 'next/image';
 
 interface PageProps {
   params: { projectId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-const fetchUML = async (user: any, project: any, latest: boolean): Promise<string> => {
+const fetchUML = async (
+  user: any,
+  project: any,
+  latest: boolean
+): Promise<string> => {
   const cookieStore = cookies();
   const arr = cookieStore
     .getAll()
@@ -30,8 +34,8 @@ const fetchUML = async (user: any, project: any, latest: boolean): Promise<strin
     const repoName = project?.repository_name;
     const accessToken = user?.github_access_token;
     var branch_name = 'docify';
-    if (latest){
-      branch_name=project?.uml_latest_branch;
+    if (latest) {
+      branch_name = project?.uml_latest_branch;
     }
     //sending cookie explicitly, otherwise won't work**
     const res = await fetch(
@@ -58,16 +62,17 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
   const project = await db.project.findUnique({
     where: { projectId: params.projectId },
   });
-  let latest=searchParams['latest'];
-  console.log('Latest: ',latest);
-  console.log(typeof latest)
+  let latest = searchParams['latest'];
+  console.log('Latest: ', latest);
+  console.log(typeof latest);
   //type cast latest to boolean
   var lat;
-  if (latest==='true')
-    lat=true;
-  else{lat=false}
+  if (latest === 'true') lat = true;
+  else {
+    lat = false;
+  }
   const user = await getCurrentUser();
-  const img_url = await fetchUML(user, project,lat);
+  const img_url = await fetchUML(user, project, lat);
 
   if (!project) {
     notFound();
@@ -98,7 +103,6 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
             <div className='flex justify-center'>
               <div className='grid w-full max-w-6xl gap-4'>
                 <div className='relative aspect-video overflow-hidden rounded-lg'>
-                  
                   {img_url ? (
                     <Image
                       alt='Github Image'
@@ -109,9 +113,9 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
                       }}
                       width='1920'
                     />
-                  ):
-                  <LoaderIcon/>
-                  }
+                  ) : (
+                    <LoaderIcon />
+                  )}
                 </div>
                 <Card>
                   <CardContent className='p-4'>
