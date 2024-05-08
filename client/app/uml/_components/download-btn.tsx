@@ -32,13 +32,19 @@ const DownloadBtn: FC<DownloadBtnProps> = ({ imageUrl }) => {
       })
       .catch((error) => {
         console.error('Error fetching image:', error);
-      }).finally(()=>{
+      })
+      .finally(() => {
         setLoading(false);
       });
   }
 
   return (
-    <Button size='sm' className='flex gap-2' onClick={downloadImage} disabled={loading}>
+    <Button
+      size='sm'
+      className='flex gap-2'
+      onClick={downloadImage}
+      disabled={loading}
+    >
       <DownloadIcon className='size-4' />
       <span>Download</span>
     </Button>

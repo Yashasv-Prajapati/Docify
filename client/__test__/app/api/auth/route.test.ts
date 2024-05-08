@@ -13,7 +13,8 @@ import * as appHandler from '@/app/api/auth/route';
  * @jest-environment node
  */
 
-const GITHUB_APP_PRIVATE_KEY = '-----BEGIN RSA PRIVATE KEY-----test_private-----END RSA PRIVATE KEY-----';
+const GITHUB_APP_PRIVATE_KEY =
+  '-----BEGIN RSA PRIVATE KEY-----test_private-----END RSA PRIVATE KEY-----';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com';
 const crypto = require('crypto');
@@ -216,4 +217,3 @@ it('should redirect to installation URL if app not installed', async () => {
   }
   expect(installed).toBe(false);
 });
-

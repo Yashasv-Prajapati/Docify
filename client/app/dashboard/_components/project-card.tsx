@@ -7,6 +7,7 @@ import axios from 'axios';
 import { MoreHorizontalIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { UMLSchema } from '@/lib/validations/uml';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -16,7 +17,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
-import { UMLSchema } from '@/lib/validations/uml';
 
 interface ProjectCardProps {
   url: string;
@@ -52,7 +52,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
       github_repo_name: repository_name,
       project_type: project_type,
       projectId: project_id,
-      folderPath: '/'
+      folderPath: '/',
     });
 
     const promise = () =>
@@ -118,7 +118,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
   }
   async function handleLatestUmlClick() {
     //just redirect to the uml viewing page
-    router.push(`/uml/${project_id}?latest=true`); 
+    router.push(`/uml/${project_id}?latest=true`);
   }
   async function handleCodeCoverageClick() {
     console.log('Code Coverage Clicked');
@@ -214,10 +214,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
             Code Coverage
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            disabled={isLoading}
-            onClick={handleLatestUmlClick}
-          >
+          <DropdownMenuItem disabled={isLoading} onClick={handleLatestUmlClick}>
             View Latest UML
           </DropdownMenuItem>
         </DropdownMenuContent>

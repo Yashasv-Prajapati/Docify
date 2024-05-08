@@ -2,15 +2,16 @@
  * @jest-environment node
  */
 import { testApiHandler } from 'next-test-api-route-handler';
-import * as appHandler from '@/app/api/delete/route';
+
 import getCurrentUser from '@/lib/curr';
+import * as appHandler from '@/app/api/delete/route';
 
 jest.mock('@/lib/curr', () => ({
   __esModule: true,
   default: jest.fn().mockReturnValue({
     github_access_token: 'mock-access-token',
     github_username: 'mock-username',
-  }),
+  }),
 }));
 
 describe('DELETE /api/delete for account delete', () => {
