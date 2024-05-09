@@ -93,36 +93,61 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    docker.createContainer(containerOptions, (err, container) => {
-      if (err) {
-        console.error('Failed to create container:', err);
-        // res.status(500).json({ message: 'Failed to create container' });
-        return;
-      }
-      container?.start((err) => {
-        if (err) {
-          console.error('Failed to start container:', err);
-          // res.status(500).json({ message: 'Failed to start container' });
-          return NextResponse.json(
-            { message: 'Error starting container' },
-            { status: 500 }
-          );
-        }
-        console.log('Container started successfully!');
-        container.wait(async (err, data) => {
-          if (err) {
-            console.error('Error waiting for container:', err);
-            return NextResponse.json(
-              { message: 'Error waiting for container' },
-              { status: 500 }
-            );
+
+    const container = await docker.createContainer(containerOptions);
+    await container.start();
+    console.log('Container started successfully');
+
+    await new Promise((resolve, reject) => {
+      container.wait((error, data) => {
+        if (error) {
+          console.error('Error waiting for container: ', error);
+          reject(error);
+        } else {
+          console.log('Container stopped: ', data);
+
+          if (data.StatusCode !== 0) {
+            console.error('Container exited with non-zero exit code');
+            reject(new Error('Container execution failed'));
+          } else {
+            // update the corresponding branch name in the db for dependency checker
+            update_project_branch(projectId, branch_name, 'dependency_checker');
+            resolve(data);
           }
-          // update the corresponding branch name in the db for UML generation
-          await update_project_branch(projectId, branch_name, 'uml');
-          console.log('Container finished its job!');
-        });
+        }
       });
     });
+
+    // docker.createContainer(containerOptions, (err, container) => {
+    //   if (err) {
+    //     console.error('Failed to create container:', err);
+    //     // res.status(500).json({ message: 'Failed to create container' });
+    //     return;
+    //   }
+    //   container?.start((err) => {
+    //     if (err) {
+    //       console.error('Failed to start container:', err);
+    //       // res.status(500).json({ message: 'Failed to start container' });
+    //       return NextResponse.json(
+    //         { message: 'Error starting container' },
+    //         { status: 500 }
+    //       );
+    //     }
+    //     console.log('Container started successfully!');
+    //     container.wait(async (err, data) => {
+    //       if (err) {
+    //         console.error('Error waiting for container:', err);
+    //         return NextResponse.json(
+    //           { message: 'Error waiting for container' },
+    //           { status: 500 }
+    //         );
+    //       }
+    //       // update the corresponding branch name in the db for UML generation
+    //       await update_project_branch(projectId, branch_name, 'uml');
+    //       console.log('Container finished its job!');
+    //     });
+    //   });
+    // });
     // return res.status(200).json({ message: 'Container started successfully!' });
     return NextResponse.json(
       { message: `UML generated successfully.` },
