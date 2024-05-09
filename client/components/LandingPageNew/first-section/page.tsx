@@ -1,7 +1,7 @@
+import { useRouter } from 'next/navigation';
 import animationData from '@/public/white_wave.json';
 import Lottie from 'lottie-react';
 import { Typewriter } from 'react-simple-typewriter';
-import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 
@@ -46,12 +46,17 @@ const FirstSection = () => {
           essentials!
         </p>
         <div className='flex justify-center gap-4 pt-10'>
-          <Button variant='bluebutton' onClick={() => router.push('/auth/signup')}>Get Started</Button>
+          <Button
+            variant='bluebutton'
+            onClick={() => router.push('/auth/signup')}
+          >
+            Get Started
+          </Button>
           <Button variant='outline'>Learn More</Button>
         </div>
 
         <div className='pt-10'>
-          <video className='rounded-xl' autoPlay muted loop data-testid="video">
+          <video className='rounded-xl' autoPlay muted loop data-testid='video'>
             <source src='/content/hero-1.mp4' type='video/mp4' />
           </video>
         </div>

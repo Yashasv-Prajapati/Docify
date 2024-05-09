@@ -1,10 +1,14 @@
 'use client';
+
 import { motion } from 'framer-motion';
+
 import '../styles/globals.css';
+
 import { useState } from 'react';
+import Image from 'next/image';
+
 import styles from '../styles';
 import { navVariants } from '../utils/motion';
-import Image from 'next/image';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -30,15 +34,18 @@ function Navbar() {
         />
         <div className='menu-container'>
           <Image
-          width={1000}
-          height={500}
+            width={1000}
+            height={500}
             className='size-10 rounded-full p-1 ring-2 ring-gray-500 '
             src='/cover.png'
             alt='Bordered avatar'
             onClick={() => setOpen(!open)}
             data-testid='navbar-toggle'
           />
-          <div className={`dropdown-menu ${open ? 'active' : 'inactive'} `} data-testid="navbar-dropdown">
+          <div
+            className={`dropdown-menu ${open ? 'active' : 'inactive'} `}
+            data-testid='navbar-dropdown'
+          >
             <h3 className='bg-gradient-to-r from-sky-400 to-[#8e29f3] bg-clip-text font-medium text-transparent'>
               DOCIFY EASTER
               <br />

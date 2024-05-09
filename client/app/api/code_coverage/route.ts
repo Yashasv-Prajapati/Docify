@@ -9,10 +9,10 @@ const parentDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '..'); /
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("Code Coverage API called!!!")
+    console.log('Code Coverage API called!!!');
     const dockerode = new Dockerode();
     const data = await req.json();
-    console.log("Data: ", data)
+    console.log('Data: ', data);
     // const {
     //   github_access_token,
     //   github_username,
@@ -27,10 +27,10 @@ export async function POST(req: NextRequest) {
       language: lang,
       projectId,
     } = data;
-    console.log("Data: ", data)
+    console.log('Data: ', data);
     const branch_name = process.env.NEXT_PUBLIC_BRANCH_NAME + '-' + Date.now();
-    console.log("Branch Name: ", branch_name)
-    console.log(lang)
+    console.log('Branch Name: ', branch_name);
+    console.log(lang);
     const containerImg =
       lang == 'python' ? 'docify_python:latest' : 'docify_java:latest';
     const binds =
@@ -88,8 +88,7 @@ export async function POST(req: NextRequest) {
     //       // update the corresponding branch name in the db for code coverage
     //       await update_project_branch(projectId, branch_name, 'code_coverage');
     //     });
-        
-        
+
     //   });
 
     // });

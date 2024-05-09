@@ -1,19 +1,30 @@
 //test
-import { render, screen, cleanup, fireEvent, Matcher} from '@testing-library/react';
+import {
+  cleanup,
+  fireEvent,
+  Matcher,
+  render,
+  screen,
+} from '@testing-library/react';
+
 import 'intersection-observer';
 import '@testing-library/jest-dom'; // Import jest-dom for custom matchers
-import Home from '../page';
+
 import Router from 'next/router';
+
 import features from '@/components/LandingPageNew/second-section/page';
+
+import Home from '../page';
+
 // import { JSX, ClassAttributes, ImgHTMLAttributes } from 'react';
 
 // Mock useRouter:
-jest.mock("next/navigation", () => ({
+jest.mock('next/navigation', () => ({
   useRouter() {
     return {
-      prefetch: () => null
+      prefetch: () => null,
     };
-  }
+  },
 }));
 
 afterEach(cleanup);
@@ -39,8 +50,14 @@ describe('Home', () => {
     expect(screen.getByTestId('navigation-menu-bar')).toBeInTheDocument();
 
     //tests for FirstSection
-    expect(screen.getByText('Leverage the power of Docify:')).toBeInTheDocument();
-    expect(screen.getByText('Streamline your project documentation: Automate analysis, Generate essentials!')).toBeInTheDocument();
+    expect(
+      screen.getByText('Leverage the power of Docify:')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Streamline your project documentation: Automate analysis, Generate essentials!'
+      )
+    ).toBeInTheDocument();
     // Check if buttons are rendered
     expect(screen.getByText('Get Started')).toBeInTheDocument();
     expect(screen.getByText('Learn More')).toBeInTheDocument();
@@ -48,14 +65,17 @@ describe('Home', () => {
     expect(screen.getByTestId('video')).toBeInTheDocument();
 
     //tests for SecondSection
-    expect(screen.getByText('Streamline your project with docify. Get all the capabilities,')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Streamline your project with docify. Get all the capabilities,'
+      )
+    ).toBeInTheDocument();
     expect(screen.getByText('without the complexity.')).toBeInTheDocument();
     if (Array.isArray(features)) {
-        features.forEach((feature: { name: Matcher; description: Matcher; }) => {
-            expect(screen.getByText(feature.name)).toBeInTheDocument();
-            expect(screen.getByText(feature.description)).toBeInTheDocument();
-        });
+      features.forEach((feature: { name: Matcher; description: Matcher }) => {
+        expect(screen.getByText(feature.name)).toBeInTheDocument();
+        expect(screen.getByText(feature.description)).toBeInTheDocument();
+      });
     }
-    
   });
 });

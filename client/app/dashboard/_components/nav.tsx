@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'sonner';
 
 import { Button } from '../../../components/ui/button';
-import Image from 'next/image';
 
 export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -26,7 +26,7 @@ export default function Nav({ AvatarComponent }: { AvatarComponent: any }) {
   }
 
   return (
-    <header className='flex h-16 shrink-0 items-center  bg-gray-100/40 px-4 sm:justify-between md:px-6 border-b-2'>
+    <header className='flex h-16 shrink-0 items-center  border-b-2 bg-gray-100/40 px-4 sm:justify-between md:px-6'>
       <Link className='flex items-center gap-2 text-lg font-semibold' href='#'>
         <FrameIcon className='size-6' />
         <span className='ml-1 text-xl'>Docify</span>

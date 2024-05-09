@@ -1,12 +1,9 @@
+'use client';
 
-'use client'
+import * as React from 'react';
+import Link from 'next/link';
 
-import * as React from "react"
-
-import Link from "next/link"
-
-import { cn } from "@/lib/utils"
-
+import { cn } from '@/lib/utils';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -16,79 +13,68 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
+} from '@/components/ui/navigation-menu';
 
-import Logo from "./logo"
+import Logo from './logo';
 
-const components: { title: string, description: string }[] = [
+const components: { title: string; description: string }[] = [
   {
-    title: "UML Generation",
+    title: 'UML Generation',
 
     description:
-      "Automate your UML generation process of any java/python project",
+      'Automate your UML generation process of any java/python project',
   },
   {
-    title: "Testing Plans",
+    title: 'Testing Plans',
+
+    description: 'Generate testing plans',
+  },
+  {
+    title: 'Dependency checker',
 
     description:
-      "Generate testing plans",
+      'Analyizes your codebase and remove any reduntant/extra dependencies',
   },
   {
-    title: "Dependency checker",
+    title: 'README',
+
+    description: 'Generate Readme and customize it accordingly',
+  },
+  {
+    title: 'Code coverage',
 
     description:
-      "Analyizes your codebase and remove any reduntant/extra dependencies",
+      'Generate reports to visualize code coverage and identify areas that require additional testing.',
   },
-  {
-    title: "README",
-
-    description: "Generate Readme and customize it accordingly",
-  },
-  {
-    title: "Code coverage",
-
-    description: "Generate reports to visualize code coverage and identify areas that require additional testing.",
-  }
-]
-
-
+];
 
 export function NavigationMenuBar() {
   return (
     <NavigationMenu>
-      <NavigationMenuList
-        className="hidden md:flex md:space-x-4"
-
-
-
-      >
+      <NavigationMenuList className='hidden md:flex md:space-x-4'>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
+            <ul className='grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
+              <li className='row-span-3'>
                 <NavigationMenuLink asChild>
                   <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
+                    className='from-muted/50 to-muted flex size-full select-none flex-col justify-end rounded-md bg-gradient-to-b p-6 no-underline outline-none focus:shadow-md'
+                    href='/'
                   >
                     <Logo />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      Docify
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      Software to help streamline  project documentation
+                    <div className='mb-2 mt-4 text-lg font-medium'>Docify</div>
+                    <p className='text-muted-foreground text-sm leading-tight'>
+                      Software to help streamline project documentation
                     </p>
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem title="Github">
-                Connect your github account
-              </ListItem>
-              <ListItem title="Import">
+              <ListItem title='Github'>Connect your github account</ListItem>
+              <ListItem title='Import'>
                 Import any of the python/java repositories
               </ListItem>
-              <ListItem title="Automate">
+              <ListItem title='Automate'>
                 Create UML diagrams,test plans and README.
               </ListItem>
             </ul>
@@ -97,13 +83,9 @@ export function NavigationMenuBar() {
         <NavigationMenuItem>
           <NavigationMenuTrigger>Features</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+            <ul className='grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] '>
               {components.map((component) => (
-                <ListItem
-                  key={component.title}
-                  title={component.title}
-
-                >
+                <ListItem key={component.title} title={component.title}>
                   {component.description}
                 </ListItem>
               ))}
@@ -111,10 +93,8 @@ export function NavigationMenuBar() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink
-              className="font-medium text-sm mr-2"
-            >
+          <Link href='/' legacyBehavior passHref>
+            <NavigationMenuLink className='mr-2 text-sm font-medium'>
               Documentation
             </NavigationMenuLink>
           </Link>
@@ -128,15 +108,14 @@ export function NavigationMenuBar() {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem> */}
-
       </NavigationMenuList>
     </NavigationMenu>
-  )
+  );
 }
 
 const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
+  React.ElementRef<'a'>,
+  React.ComponentPropsWithoutRef<'a'>
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>
@@ -144,18 +123,18 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
             className
           )}
           {...props}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <div className='text-sm font-medium leading-none'>{title}</div>
+          <p className='text-muted-foreground line-clamp-2 text-sm leading-snug'>
             {children}
           </p>
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = 'ListItem';

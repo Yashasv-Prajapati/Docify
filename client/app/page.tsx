@@ -1,23 +1,22 @@
-
 'use client';
 
 import Image from 'next/image';
 
-import Navbar from '@/components/LandingPageNew/navbar/page'
 import FirstSection from '@/components/LandingPageNew/first-section/page';
+import Navbar from '@/components/LandingPageNew/navbar/page';
 import SecondSection from '@/components/LandingPageNew/second-section/page';
 
 const Home = () => {
   return (
     <div>
-      <div data-testid ="navbar"> 
-      <Navbar type ="home"/>
+      <div data-testid='navbar'>
+        <Navbar type='home' />
       </div>
-      <div data-testid ="firstsection"> 
-      <FirstSection/>
+      <div data-testid='firstsection'>
+        <FirstSection />
       </div>
-      <div data-testid ="secondsection"> 
-      <SecondSection/>
+      <div data-testid='secondsection'>
+        <SecondSection />
       </div>
     </div>
   );

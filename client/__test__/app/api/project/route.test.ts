@@ -5,7 +5,6 @@ import axios from 'axios';
 import { testApiHandler } from 'next-test-api-route-handler';
 
 import { db } from '@/lib/db';
-
 import * as appHandler from '@/app/api/project/route';
 
 describe('POST /api/project', () => {

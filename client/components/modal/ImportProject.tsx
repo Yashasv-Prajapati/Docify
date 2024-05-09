@@ -152,7 +152,7 @@ function ImportProject({
                         </div>
                       </div>
                       <svg
-                        className='ms-3 size-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
+                        className='ms-3 size-4 text-gray-500 rtl:rotate-180 dark:text-gray-400'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -193,7 +193,7 @@ function ImportProject({
                         </div>
                       </div>
                       <svg
-                        className='ms-3 size-4 text-gray-500 dark:text-gray-400 rtl:rotate-180'
+                        className='ms-3 size-4 text-gray-500 rtl:rotate-180 dark:text-gray-400'
                         aria-hidden='true'
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -240,9 +240,9 @@ function ImportProject({
                 >
                   <path
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
                   />
                 </svg>
@@ -258,9 +258,9 @@ function ImportProject({
                 >
                   <path
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
                     d='M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z'
                   />
                 </svg>

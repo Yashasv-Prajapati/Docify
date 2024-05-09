@@ -4,11 +4,19 @@ import { FC, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { MoreHorizontalIcon } from 'lucide-react';
+import { Loader2, MoreHorizontalIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { UMLSchema } from '@/lib/validations/uml';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,6 +47,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   async function handleUmlClick() {
     console.log('UML Clicked');
@@ -150,77 +159,147 @@ const ProjectCard: FC<ProjectCardProps> = ({
     });
   }
 
+  const handleOnDelete = async () => {
+    setIsLoading(true);
+    try {
+      console.log('deleted Successfully here', project_id);
+      // const res=await axios.delete(`api/project/${project_id}`,{});
+
+      const res = await fetch(`/api/project/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          project_id: project_id,
+        }),
+      });
+      if (res.status === 204) {
+        window.location.reload();
+        toast.success('Deleted Project Successfully');
+      } else toast.error('Error in deleting project');
+    } catch (error) {
+      console.log(error);
+      toast.error('Error in deleting project');
+    } finally {
+      setOpen(false);
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className='relative flex flex-col bg-white p-2 text-sm dark:bg-gray-950 lg:flex-row'>
-      <div className='grid flex-1 gap-1 p-2'>
-        <div className='font-medium'>{repository_name}</div>
-      </div>
-      <Separator className='my-2 lg:hidden' />
-      <div className='grid flex-1 gap-1 p-2'>
-        <div className=' my-2 flex items-start gap-2'>
-          <LogoGithub />
-          <Link href={url} className='hover:underline'>
-            Github
-          </Link>
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+      <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
+        <div className='grid flex-1 gap-1 p-2'>
+          <div className='font-medium'>{repository_name}</div>
         </div>
-      </div>
-      <Separator className='my-2 lg:hidden' />
-      <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2 font-semibold'>
-          Project type
+        <Separator className='my-2 lg:hidden' />
+        <div className='grid flex-1 gap-1 p-2'>
+          <div className=' my-2 flex items-start gap-2'>
+            <LogoGithub />
+            <Link href={url} className='hover:underline'>
+              Github
+            </Link>
+          </div>
         </div>
-        <div className='flex items-center gap-2'>{project_type}</div>
-      </div>
-      <Separator className='my-2 lg:hidden' />
-      <div className='grid flex-1 gap-1 p-2'>
-        <div className='flex items-center gap-2 font-semibold'>
-          Testing Directory
+        <Separator className='my-2 lg:hidden' />
+        <div className='grid flex-1 gap-1 p-2'>
+          <div className='flex items-center gap-2 font-semibold'>
+            Project type
+          </div>
+          <div className='flex items-center gap-2'>{project_type}</div>
         </div>
-        <div className='flex items-center gap-2'>{testing_dir}</div>
+        <Separator className='my-2 lg:hidden' />
+        <div className='grid flex-1 gap-1 p-2'>
+          <div className='flex items-center gap-2 font-semibold'>
+            Testing Directory
+          </div>
+          <div className='flex items-center gap-2'>{testing_dir}</div>
+        </div>
+        <Separator className='my-2 lg:hidden' />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              className='absolute right-4 top-4'
+              size='icon'
+              variant='ghost'
+            >
+              <MoreHorizontalIcon className='size-4' />
+              <span className='sr-only'>Toggle menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={() => router.push(`/generate_readme/${project_id}`)}
+            >
+              Generate Readme
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={() => router.push(`/test_plan/${project_id}`)}
+            >
+              Test Plan
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem disabled={isLoading} onClick={handleUmlClick}>
+              UML Diagram
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={handleDependencyClick}
+            >
+              Dependency Checker
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={handleCodeCoverageClick}
+            >
+              Code Coverage
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={handleLatestUmlClick}
+            >
+              View Latest UML
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              Delete Project
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-      <Separator className='my-2 lg:hidden' />
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      <DialogContent className='max-h-screen overflow-y-scroll sm:max-w-[425px]'>
+        <DialogHeader>
+          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogDescription>
+            Are you sure? Clicking on Delete will remove your project from
+            Docify.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
           <Button
-            className='absolute right-4 top-4'
-            size='icon'
-            variant='ghost'
+            type='submit'
+            className='w-20'
+            onClick={handleOnDelete}
+            disabled={isLoading}
           >
-            <MoreHorizontalIcon className='size-4' />
-            <span className='sr-only'>Toggle menu</span>
+            {isLoading ? (
+              <Loader2 className='size-6 animate-spin text-zinc-500' />
+            ) : (
+              'Delete'
+            )}
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-        <DropdownMenuItem disabled={isLoading} onClick={()=>router.push(`/generate_readme/${project_id}`)}>
-            Generate Readme
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem disabled={isLoading} onClick={()=>router.push(`/test_plan/${project_id}`)}>
-            Test Plan
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem disabled={isLoading} onClick={handleUmlClick}>
-            UML Diagram
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={isLoading}
-            onClick={handleDependencyClick}
-          >
-            Dependency Checker
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={isLoading}
-            onClick={handleCodeCoverageClick}
-          >
-            Code Coverage
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem disabled={isLoading} onClick={handleLatestUmlClick}>
-            View Latest UML
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

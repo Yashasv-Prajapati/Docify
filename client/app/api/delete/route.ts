@@ -49,9 +49,12 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.redirect(installationUrl, { status: 200 });
   } catch (error) {
     console.error('Error deleting user account:', error);
-    return NextResponse.json({
-      message: 'Failed to delete user account',
-      success: false,
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        message: 'Failed to delete user account',
+        success: false,
+      },
+      { status: 500 }
+    );
   }
 }

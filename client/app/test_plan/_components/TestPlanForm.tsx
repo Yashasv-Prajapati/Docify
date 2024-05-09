@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -37,13 +38,10 @@ interface FormData {
   project_description: string;
 }
 
-
-
 const TestPlanSchema = z.object({
-    project_description: z.string(),
-    project_id: z.string(),
-  });
-  
+  project_description: z.string(),
+  project_id: z.string(),
+});
 
 interface Project {
   projectId: string;
@@ -74,7 +72,6 @@ export default function TestPlanForm({ project }: Props) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-
       console.log('Generating Test Plan...');
 
       const body = TestPlanSchema.parse({
@@ -87,9 +84,7 @@ export default function TestPlanForm({ project }: Props) {
       console.log('Generated Test Plan: ', data);
       console.log('Test Plan successfully');
 
-      router.push(
-        `/dashboard`
-      );
+      router.push(`/dashboard`);
     } catch (error) {
       toast.error('Something went wrong! Sorry 😔');
 
@@ -108,7 +103,8 @@ export default function TestPlanForm({ project }: Props) {
           <CardHeader>
             <CardTitle>Test Plan</CardTitle>
             <CardDescription>
-              Provide a basic description of your project to generate a Test Plan
+              Provide a basic description of your project to generate a Test
+              Plan
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -154,9 +150,7 @@ export default function TestPlanForm({ project }: Props) {
                   name='project_description'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Brief Description of the project.
-                      </FormLabel>
+                      <FormLabel>Brief Description of the project.</FormLabel>
                       <FormControl>
                         <textarea
                           placeholder='Build a software that...'

@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
-import getCurrentUser from '@/lib/curr';
 
+import getCurrentUser from '@/lib/curr';
 
 export default async function Sidebar() {
   const curr_user = await getCurrentUser();
@@ -16,7 +16,9 @@ export default async function Sidebar() {
             height={100}
             className='mb-3 size-56 rounded-full  shadow-lg'
           />
-          <span className='mb-1 text-xl font-medium text-black'>{curr_user?.github_username|| 'username'}</span>
+          <span className='mb-1 text-xl font-medium text-black'>
+            {curr_user?.github_username || 'username'}
+          </span>
           <button
             type='button'
             className='mb-2 me-2 mt-3 w-2/3 rounded-lg border border-gray-300 bg-gray-500 px-2 py-2.5 text-sm font-medium text-white hover:bg-gray-700 hover:text-white focus:z-10  focus:outline-none focus:ring-1 focus:ring-gray-700 '
@@ -27,4 +29,4 @@ export default async function Sidebar() {
       </div>
     </aside>
   );
-};
+}

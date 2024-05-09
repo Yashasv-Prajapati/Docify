@@ -2,16 +2,17 @@
  * @jest-environment node
  */
 import { testApiHandler } from 'next-test-api-route-handler';
-import * as appHandler from '@/app/api/delete/route';
+
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
+import * as appHandler from '@/app/api/delete/route';
 
 jest.mock('@/lib/curr', () => ({
   __esModule: true,
   default: jest.fn().mockReturnValue({
     github_access_token: 'mock-access-token',
     github_username: 'mock-username',
-  }),
+  }),
 }));
 
 describe('DELETE /api/delete for account delete', () => {
@@ -24,8 +25,12 @@ describe('DELETE /api/delete for account delete', () => {
     const appId = process.env.GITHUB_APP_ID;
     const installationUrl = `https://github.com/apps/docify-wiki/installations/new?target_id=${appId}&target_type=app`;
 
-    const deleteManyFile = jest.spyOn(db.markdownFile, 'deleteMany').mockImplementation();
-    const deleteManyProject = jest.spyOn(db.project, 'deleteMany').mockImplementation();
+    const deleteManyFile = jest
+      .spyOn(db.markdownFile, 'deleteMany')
+      .mockImplementation();
+    const deleteManyProject = jest
+      .spyOn(db.project, 'deleteMany')
+      .mockImplementation();
     const deleteUser = jest.spyOn(db.user, 'delete').mockImplementation();
 
     // send a request to the handler
@@ -45,7 +50,6 @@ describe('DELETE /api/delete for account delete', () => {
     });
 
     jest.clearAllMocks();
-
   });
 
   it('DELETE returns 500', async () => {
