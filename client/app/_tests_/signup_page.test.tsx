@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import 'intersection-observer';
 import '@testing-library/jest-dom';
-import Signup from './signup/page';
+import Signup from '../auth/signup/page';
 // Mock useRouter:
 jest.mock("next/navigation", () => ({
     useRouter() {
