@@ -84,7 +84,9 @@ export default function TestPlanForm({ project }: Props) {
       console.log('Generated Test Plan: ', data);
       console.log('Test Plan successfully');
 
-      router.push(`/dashboard`);
+      router.push(
+        `/editor?repo=${project.repository_name}&content=${encodeURIComponent(data.testingPlan)}`
+      );
     } catch (error) {
       toast.error('Something went wrong! Sorry 😔');
 

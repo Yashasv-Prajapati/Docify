@@ -30,7 +30,7 @@ git config --global user.email $GITHUB_APP_ID+docify[bot]@users.noreply.github.c
 # git checkout docify
 
 # Add all files
-git add .
+git add .docify-assets/output.png
 
 # Commit with message
 git commit -m "Docify changes to repository, changes made in ./docify-assets folder"

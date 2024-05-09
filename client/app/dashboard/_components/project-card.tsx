@@ -69,7 +69,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
         .post('/api/uml/generate', body)
         .then((res) => {
           if (res.status === 200) {
-            router.push(`/uml/${project_id}`);
+            router.push(`/uml/${project_id}?latest=true`);
           }
         })
         .finally(() => setIsLoading(false));
