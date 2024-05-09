@@ -3,12 +3,14 @@ import { getByAltText, getByTestId, render } from '@testing-library/react';
 import Page from './[projectId]/page'; // Assuming this is the name of the component
 import Nav from '@/app/dashboard/_components/nav';
 import Avatar from '../dashboard/_components/avatar';
+import 'intersection-observer';
+import '@testing-library/jest-dom';
 
 
 const AvatarComponent = <Avatar />;
 
 describe('Page Component', () => {
-  test('renders Projects heading', () => {
+  it('renders Projects heading', () => {
     // const { getByText, getByAltText, getByTestId } = render(<Page params={{
     //     projectId: ''
     // }} searchParams={{}} />);
