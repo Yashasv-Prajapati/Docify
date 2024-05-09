@@ -101,7 +101,7 @@ export default async function Page({ params }: CodeCoveragePageProps) {
           <p className='text-gray-600'>Repository URL: {repoUrl}</p>
           <hr className='my-4' />
         </div>
-        <div>
+        <div className='w-full'>
           <h2 className='mb-2 flex items-center justify-center text-xl font-bold'>
             <Table size={24} className='mr-2' /> Code Coverage Table
           </h2>
