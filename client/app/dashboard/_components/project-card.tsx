@@ -127,7 +127,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
     const promise = () =>
       axios
-        .post('/api/code-coverage', {
+        .post('/api/code_coverage', {
           github_access_token: access_token,
           github_username: username,
           github_repo_name: repository_name,
