@@ -14,6 +14,11 @@ coverage report
 #To get the result on the web
 coverage html
 
-python3 test_python.py  >> README.md
-
+python3 test_python.py  >> COVERAGE.md
+mkdir -p .docify-assets
+cp COVERAGE.md ./.docify-assets
+cat COVERAGE.md >> README.md
 rm test_python.py
+rm -rf __pycache__
+rm .coverage
+# rm pytest_cache -r
