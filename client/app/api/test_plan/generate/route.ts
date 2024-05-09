@@ -51,10 +51,10 @@ export async function POST(request: NextRequest) {
     await axios.post(
       `${process.env.NEXT_APP_URL}/api/uml/generate`,
       {
-        accessToken: github_access_token,
-        userName: github_username,
-        repoName: repositoryName,
-        projectType: project_type,
+        github_access_token: github_access_token,
+        github_username: github_username,
+        github_repo_name: repositoryName,
+        project_type: project_type,
         projectId: project_id,
         folderPath: testing_dir,
       },
