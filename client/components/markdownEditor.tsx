@@ -13,6 +13,8 @@ import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import { toast } from 'sonner';
 
+import { create_new_branch } from '@/lib/gh';
+
 import { Button } from './ui/button';
 
 interface MarkdownEditorProps {
@@ -38,8 +40,17 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
 
   async function handleSave() {
     setIsLoading(true);
-    const apiUrl = `https://api.github.com/repos/${github_username}/${repo}/contents/README.md?ref=docify`;
+    const branch_name = process.env.NEXT_PUBLIC_BRANCH_NAME + '-' + Date.now();
+
+    const apiUrl = `https://api.github.com/repos/${github_username}/${repo}/contents/README.md?ref=${branch_name}`;
     try {
+      await create_new_branch(
+        github_username,
+        repo,
+        github_access_token,
+        branch_name
+      );
+
       const currentFile = await axios.get(apiUrl, {
         headers: {
           Authorization: `token ${github_access_token}`,
@@ -49,8 +60,8 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
       const response = await axios.put(
         apiUrl,
         {
-          message: 'Docify modified README.md',
-          branch: 'docify',
+          message: 'docs: docify Updated README.md',
+          branch: branch_name,
           content: Buffer.from(value).toString('base64'),
           sha: currentFile.data.sha,
           committer: {
@@ -67,6 +78,7 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
       console.log('GitHub API response:', response.data);
       toast.success('Commited successfully 🎉. Check branch docify');
     } catch (error) {
+      console.log(error);
       console.log('GitHub API error:', error);
       toast.error('Sorry this sucks 🥺');
     } finally {

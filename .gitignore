@@ -14,7 +14,7 @@ dev.db*
 u.sh
 d.sh
 c.sh
-
+cov.sh
 __pycache__
 
 dep.sh

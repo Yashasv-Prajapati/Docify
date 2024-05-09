@@ -10,7 +10,6 @@ const projectSchema = z.object({
   project_id: z.string(),
 });
 
-
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
@@ -32,6 +31,24 @@ export async function POST(req: NextRequest) {
           success: false,
         },
         { status: 401 }
+      );
+    }
+
+    // Check if project already exists
+    const existingProject = await db.project.findFirst({
+      where: {
+        userId: userId,
+        repository_name: repository_name,
+      },
+    });
+
+    if (existingProject) {
+      return NextResponse.json(
+        {
+          message: 'Project already exists',
+          success: false,
+        },
+        { status: 409 }
       );
     }
 
@@ -121,38 +138,37 @@ export async function POST(req: NextRequest) {
   }
 }
 
+export async function DELETE(request: NextRequest) {
+  try {
+    const data = await request.json();
+    const { project_id } = projectSchema.parse(data);
+    const project = await db.project.findUnique({
+      where: { projectId: project_id },
+      include: { files: true },
+    });
 
-export async function DELETE( request: NextRequest){
-    
-    try {      
-      const data = await request.json();
-      const { project_id} = projectSchema.parse(data);
-      const project = await db.project.findUnique({
-        where: { projectId: project_id },
-        include:{files:true},
+    if (!project) {
+      return new NextResponse(JSON.stringify('Error in finding project'), {
+        status: 422,
       });
-  
-      if (!project) {
-        return  new NextResponse(JSON.stringify("Error in finding project"), { status: 422 });
-      }
-      for (const file of project.files) {
-        await db.markdownFile.delete({
-          where: { id: file.id },
-        });
-      }
-
-      const res=await db.project.delete({
-        where: { projectId: project.projectId ,userId:project.userId},
+    }
+    for (const file of project.files) {
+      await db.markdownFile.delete({
+        where: { id: file.id },
       });
-
-      return new NextResponse(null, { status: 204 });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return new NextResponse(JSON.stringify(error.issues), { status: 422 });
-      }
-      console.log(error);
-  
-      return new NextResponse('Internal Server Error', { status: 500 });
     }
 
+    const res = await db.project.delete({
+      where: { projectId: project.projectId, userId: project.userId },
+    });
+
+    return new NextResponse(null, { status: 204 });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
+    }
+    console.log(error);
+
+    return new NextResponse('Internal Server Error', { status: 500 });
+  }
 }

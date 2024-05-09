@@ -7,7 +7,7 @@ import { DownloadIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface DownloadBtnProps {
-  project_dependencies:string;
+  project_dependencies: string;
 }
 
 const DownloadBtn: FC<DownloadBtnProps> = ({ project_dependencies }) => {

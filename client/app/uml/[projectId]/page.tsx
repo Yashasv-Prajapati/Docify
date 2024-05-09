@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { cookies } from 'next/headers';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import axios from 'axios';
-import { Package2Icon } from 'lucide-react';
+import { LoaderIcon, Package2Icon } from 'lucide-react';
 
 import getCurrentUser from '@/lib/curr';
 import { db } from '@/lib/db';
@@ -19,7 +20,11 @@ interface PageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-const fetchUML = async (user: any, project: any): Promise<string> => {
+const fetchUML = async (
+  user: any,
+  project: any,
+  latest: boolean
+): Promise<string> => {
   const cookieStore = cookies();
   const arr = cookieStore
     .getAll()
@@ -28,10 +33,13 @@ const fetchUML = async (user: any, project: any): Promise<string> => {
     const username = user?.github_username;
     const repoName = project?.repository_name;
     const accessToken = user?.github_access_token;
-
+    var branch_name = 'docify';
+    if (latest) {
+      branch_name = project?.uml_latest_branch;
+    }
     //sending cookie explicitly, otherwise won't work**
     const res = await fetch(
-      `http://localhost:3000/api/uml/fetchUML?username=${username}&repoName=${repoName}&accessToken=${accessToken}`,
+      `http://localhost:3000/api/uml/fetchUML?username=${username}&repoName=${repoName}&accessToken=${accessToken}&branchName=${branch_name}`,
       {
         method: 'GET',
         headers: {
@@ -43,7 +51,7 @@ const fetchUML = async (user: any, project: any): Promise<string> => {
     );
 
     const data = await res.json();
-    // console.log('Data:', data);
+    console.log('Data:', data);
     return data.data.download_url;
   } catch (error) {
     console.error('Error Showing UML:', error);
@@ -54,9 +62,17 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
   const project = await db.project.findUnique({
     where: { projectId: params.projectId },
   });
+  let latest = searchParams['latest'];
+  console.log('Latest: ', latest);
+  console.log(typeof latest);
+  //type cast latest to boolean
+  var lat;
+  if (latest === 'true') lat = true;
+  else {
+    lat = false;
+  }
   const user = await getCurrentUser();
-  // const imageUrl = 'https://generated.vusercontent.net/placeholder.svg';
-  const img_url = await fetchUML(user, project);
+  const img_url = await fetchUML(user, project, lat);
 
   if (!project) {
     notFound();
@@ -87,7 +103,19 @@ const Page: FC<PageProps> = async ({ params, searchParams }) => {
             <div className='flex justify-center'>
               <div className='grid w-full max-w-6xl gap-4'>
                 <div className='relative aspect-video overflow-hidden rounded-lg'>
-                  <UML imageUrl={img_url as string} />
+                  {img_url ? (
+                    <Image
+                      alt='Github Image'
+                      height='1080'
+                      src={img_url as string}
+                      style={{
+                        aspectRatio: '1920/1080',
+                      }}
+                      width='1920'
+                    />
+                  ) : (
+                    <LoaderIcon />
+                  )}
                 </div>
                 <Card>
                   <CardContent className='p-4'>

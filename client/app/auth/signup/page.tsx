@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 import { buttonVariants } from '@/components/ui/button';
+import Navbar from '@/components/LandingPageNew/navbar/page';
 
 import AnimationContainer from '../_components/animation-container';
-import { Navbar } from '../../../components/index';
 
 function Signup() {
   const client_id = process.env.GITHUB_CLIENT_ID;
@@ -12,11 +12,11 @@ function Signup() {
   const installationUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
 
   return (
-    <div className='h-screen overflow-hidden bg-[#d1d4db]'>
-      <Navbar />
+    <div className='h-screen overflow-hidden '>
+      <Navbar type='login' />
       <div className='m-auto flex h-screen justify-between'>
         <div className='flex w-1/2 flex-col justify-center border-2 border-transparent p-6'>
-          <h1 className='mb-4 bg-gradient-to-r from-sky-400 to-[#0508be] bg-clip-text text-2xl font-extrabold leading-none tracking-tight text-transparent md:text-3xl lg:text-4xl'>
+          <h1 className='mb-4 text-2xl font-bold leading-none tracking-tight text-black md:text-3xl lg:text-4xl'>
             Let&apos;s build something new.
           </h1>
           <div className='mb-16 text-left text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400  '>

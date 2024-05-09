@@ -3,18 +3,12 @@
 import { FC, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { set } from 'date-fns';
+import axios from 'axios';
 import { Loader2, MoreHorizontalIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { UMLSchema } from '@/lib/validations/uml';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
@@ -23,6 +17,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 
 interface ProjectCardProps {
@@ -46,205 +47,241 @@ const ProjectCard: FC<ProjectCardProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [open,setOpen]=useState<boolean>(false);
-  const handleUmlClick = async () => {
+  const [open, setOpen] = useState<boolean>(false);
+
+  async function handleUmlClick() {
     console.log('UML Clicked');
+
+    setIsLoading(true);
+
+    console.log(access_token);
+    const body = UMLSchema.parse({
+      github_access_token: access_token,
+      github_username: username,
+      github_repo_name: repository_name,
+      project_type: project_type,
+      projectId: project_id,
+      folderPath: '/',
+    });
+
+    const promise = () =>
+      axios
+        .post('/api/uml/generate', body)
+        .then((res) => {
+          if (res.status === 200) {
+            router.push(`/uml/${project_id}`);
+          }
+        })
+        .finally(() => setIsLoading(false));
+
+    toast.promise(promise, {
+      loading: 'Generating UML diagram...',
+      success: 'UML diagram generated successfully',
+      error: 'Failed to generate UML diagram',
+    });
+  }
+
+  // async function handleTestPlanClick() {
+  //   console.log('Test Plan Clicked');
+
+  //   setIsLoading(true);
+
+  //   const promise = () =>
+  //     axios
+  //       .post('/api/test_plan/generate', {
+  //         project_id: project_id,
+  //         project_description: `This is a ${project_type} project.`,
+  //       })
+  //       .then((res) => {
+  //         console.log(res.data);
+  //       })
+  //       .finally(() => setIsLoading(false));
+
+  //   toast.promise(promise, {
+  //     loading: 'Generating test plan...',
+  //     success: 'Test plan generated successfully',
+  //     error: 'Failed to generate test plan',
+  //   });
+  // }
+
+  async function handleDependencyClick() {
+    console.log('Dependency Checker Clicked');
+
+    setIsLoading(true);
+
+    const promise = () =>
+      axios
+        .post('/api/dependency-checker', {
+          repositoryName: repository_name,
+          project_type: project_type,
+          projectId: project_id,
+        })
+        .then(() => router.push(`/dependency_checker/${project_id}`))
+        .finally(() => setIsLoading(false));
+
+    toast.promise(promise, {
+      loading: 'Running dependency checker...',
+      success: 'Dependency checker ran successfully',
+      error: 'Error',
+    });
+  }
+  async function handleLatestUmlClick() {
+    //just redirect to the uml viewing page
+    router.push(`/uml/${project_id}?latest=true`);
+  }
+  async function handleCodeCoverageClick() {
+    console.log('Code Coverage Clicked');
+
+    setIsLoading(true);
+
+    const promise = () =>
+      axios
+        .post('/api/code_coverage', {
+          github_access_token: access_token,
+          github_username: username,
+          github_repo_name: repository_name,
+          language: project_type,
+          projectId: project_id,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            router.push(`/code_coverage/${project_id}`);
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+
+    toast.promise(promise, {
+      loading: 'Generating code coverage report...',
+      success: 'Code coverage report generated successfully',
+      error: 'Failed to generate code coverage report',
+    });
+  }
+
+  const handleOnDelete = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/uml/generate', {
-        method: 'POST',
+      console.log('deleted Successfully here', project_id);
+      // const res=await axios.delete(`api/project/${project_id}`,{});
+
+      const res = await fetch(`/api/project/`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          accessToken: access_token,
-          userName: username,
-          repoName: repository_name,
-          projectType: project_type,
-          projectId: project_id,
+          project_id: project_id,
         }),
       });
-
-      const data = await res.json();
-      // console.log('Data:', data);
-      if (res.status === 200) {
-        toast.success('UML diagram generated successfully');
-        router.push(`/uml/${project_id}`);
-      }
+      if (res.status === 204) {
+        window.location.reload();
+        toast.success('Deleted Project Successfully');
+      } else toast.error('Error in deleting project');
     } catch (error) {
-      console.error('Error Showing UML:', error);
-      toast.error('Failed to generate UML diagram');
+      console.log(error);
+      toast.error('Error in deleting project');
     } finally {
+      setOpen(false);
       setIsLoading(false);
     }
   };
 
-  const handleTestPlanClick = async () => {
-    console.log('Test Plan Clicked');
-
-    const res = await fetch('/api/test_plan/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        project_id: project_id,
-        project_description: `This is a ${project_type} project.`,
-      }),
-    });
-
-    const data = await res.json();
-    console.log(data);
-  };
-
-  const handleDependencyClick = async () => {
-    console.log('Dependency Checker Clicked');
-    setIsLoading(true);
-    const res = await fetch('/api/dependency-checker', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        // accessToken: access_token,
-        // userName: username,
-        repositoryName: repository_name,
-        project_type: project_type,
-        // projectId: project_id,
-      }),
-    });
-
-    const data = await res.json();
-    console.log(data);
-
-    setIsLoading(false);
-    router.push(`/dependency_checker/${project_id}`);
-  };
-
-  const handleOnDelete=async()=>{
-    setIsLoading(true);
-    try{
-    console.log("deleted Successfully here",project_id);
-    // const res=await axios.delete(`api/project/${project_id}`,{});
-
-    const res = await fetch(`/api/project/`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        project_id: project_id,
-      }),
-    });
-    if(res.status===204)
-    {
-      window.location.reload();
-      toast.success("Deleted Project Successfully");
-    }
-    else
-      toast.error("Error in deleting project");
-
-    
-  }
-  catch(error){
-    console.log(error);
-    toast.error("Error in deleting project");
-  }
-  setOpen(false);
-    setIsLoading(false);
-
-  };
-
   return (
-    <>
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-      {isLoading ? (
-        <div className='flex flex-row justify-center'>
-          <Loader2 className='size-6 h-20 animate-spin items-center text-zinc-500' />
+      <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
+        <div className='grid flex-1 gap-1 p-2'>
+          <div className='font-medium'>{repository_name}</div>
         </div>
-      ) : (
-        <div className='relative flex flex-col bg-white p-2 text-sm lg:flex-row dark:bg-gray-950'>
-          <div className='grid flex-1 gap-1 p-2'>
-            <div className='font-medium'>{repository_name}</div>
+        <Separator className='my-2 lg:hidden' />
+        <div className='grid flex-1 gap-1 p-2'>
+          <div className=' my-2 flex items-start gap-2'>
+            <LogoGithub />
+            <Link href={url} className='hover:underline'>
+              Github
+            </Link>
           </div>
-          <Separator className='my-2 lg:hidden' />
-          <div className='grid flex-1 gap-1 p-2'>
-            <div className=' my-2 flex items-start gap-2'>
-              <LogoGithub />
-              <Link href={url} className='hover:underline'>
-                Github
-              </Link>
-            </div>
-          </div>
-          <Separator className='my-2 lg:hidden' />
-          <div className='grid flex-1 gap-1 p-2'>
-            <div className='flex items-center gap-2'>Project type</div>
-            <div className='flex items-center gap-2'>
-              <span
-                className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
-              />
-              {project_type}
-            </div>
-          </div>
-          <Separator className='my-2 lg:hidden' />
-          <div className='grid flex-1 gap-1 p-2'>
-            <div className='flex items-center gap-2'>Testing Directory</div>
-            <div className='flex items-center gap-2'>
-              <span
-                className={`inline-flex size-3 translate-y-1 rounded-full bg-green-400`}
-              />
-              {testing_dir}
-            </div>
-          </div>
-          <Separator className='my-2 lg:hidden' />
-          <div className='grid gap-1 p-2 mr-20'>
-          <Button  onClick={()=>{setOpen(true)}}>
-                  Delete
-                </Button>
-          </div>
-          <Separator className='my-2 lg:hidden' />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                className='absolute right-4 top-4'
-                size='icon'
-                variant='ghost'
-              >
-                <MoreHorizontalIcon className='size-4' />
-                <span className='sr-only'>Toggle menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuItem>
-                <button
-                  onClick={() => {
-                    router.push(`/generate_readme/${project_id}`);
-                  }}
-                >
-                  Generate Readme
-                </button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <button onClick={handleTestPlanClick}>Test Plan</button>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <button onClick={handleUmlClick}>UML Diagram</button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <button onClick={handleDependencyClick}>
-                  Dependency Checker
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
-      )}
+        <Separator className='my-2 lg:hidden' />
+        <div className='grid flex-1 gap-1 p-2'>
+          <div className='flex items-center gap-2 font-semibold'>
+            Project type
+          </div>
+          <div className='flex items-center gap-2'>{project_type}</div>
+        </div>
+        <Separator className='my-2 lg:hidden' />
+        <div className='grid flex-1 gap-1 p-2'>
+          <div className='flex items-center gap-2 font-semibold'>
+            Testing Directory
+          </div>
+          <div className='flex items-center gap-2'>{testing_dir}</div>
+        </div>
+        <Separator className='my-2 lg:hidden' />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              className='absolute right-4 top-4'
+              size='icon'
+              variant='ghost'
+            >
+              <MoreHorizontalIcon className='size-4' />
+              <span className='sr-only'>Toggle menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={() => router.push(`/generate_readme/${project_id}`)}
+            >
+              Generate Readme
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={() => router.push(`/test_plan/${project_id}`)}
+            >
+              Test Plan
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem disabled={isLoading} onClick={handleUmlClick}>
+              UML Diagram
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={handleDependencyClick}
+            >
+              Dependency Checker
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={handleCodeCoverageClick}
+            >
+              Code Coverage
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={handleLatestUmlClick}
+            >
+              View Latest UML
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isLoading}
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              Delete Project
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <DialogContent className='max-h-screen overflow-y-scroll sm:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
           <DialogDescription>
-            Are you sure? Clicking on Delete will remove your project from Docify.
+            Are you sure? Clicking on Delete will remove your project from
+            Docify.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -262,19 +299,19 @@ const ProjectCard: FC<ProjectCardProps> = ({
           </Button>
         </DialogFooter>
       </DialogContent>
-      </Dialog>
-    </>
+    </Dialog>
   );
 };
+
 function LogoGithub(props: React.SVGAttributes<SVGElement>) {
   return (
     <svg
       {...props}
       data-testid='geist-icon'
-      height={22}
+      height={16}
       strokeLinejoin='round'
       viewBox='0 0 16 16'
-      width={22}
+      width={16}
       style={{ color: 'currentcolor' }}
     >
       <g clipPath='url(#clip0_872_3147)'>

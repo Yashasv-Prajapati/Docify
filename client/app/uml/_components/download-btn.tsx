@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import axios from 'axios';
 import { DownloadIcon } from 'lucide-react';
 
@@ -11,7 +11,9 @@ interface DownloadBtnProps {
 }
 
 const DownloadBtn: FC<DownloadBtnProps> = ({ imageUrl }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   function downloadImage() {
+    setLoading(true);
     return axios
       .get(imageUrl, { responseType: 'blob' })
       .then((response) => {
@@ -30,11 +32,19 @@ const DownloadBtn: FC<DownloadBtnProps> = ({ imageUrl }) => {
       })
       .catch((error) => {
         console.error('Error fetching image:', error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
   return (
-    <Button size='sm' className='flex gap-2' onClick={downloadImage}>
+    <Button
+      size='sm'
+      className='flex gap-2'
+      onClick={downloadImage}
+      disabled={loading}
+    >
       <DownloadIcon className='size-4' />
       <span>Download</span>
     </Button>
