@@ -1,6 +1,5 @@
 # Docify
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/Yashasv-Prajapati/docify/build.yml)](https://github.com/Yashasv-Prajapati/docify/actions)
 [![GitHub stars](https://img.shields.io/github/stars/Yashasv-Prajapati/docify)](https://github.com/Yashasv-Prajapati/docify/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/Yashasv-Prajapati/docify)](https://github.com/yourusername/docify/network)
 
