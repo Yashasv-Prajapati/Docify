@@ -6,7 +6,7 @@
 Docify simplifies the process of generating essential project documentation such as UML diagrams, code coverage reports, generic READMEs, test plans, and lists of external dependencies. Connect your GitHub account, import your repositories, and start generating the documentation you need with ease.
 
 ## Watch a demo here 
-![Youtube](https://youtu.be/2u4ifIhH8lM)
+[Youtube](https://youtu.be/2u4ifIhH8lM)
 
 ## Features
 
